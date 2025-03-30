@@ -1,6 +1,5 @@
 package co.edu.udes.backend.models;
 
-import co.edu.udes.backend.models.inheritance.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,21 +7,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "employee")
+@Table(name = "answer_documents")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Employee extends User {
+public class AnswerDocument {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(name="work_space")
-    private String workSpace;
+    @Column(name = "file_name")
+    private String fileName;
 
+    @Column(name = "file_path")
+    private String filePath;
 
-    public void createBorrow(){}
-
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
+    private Activity activity;
 }

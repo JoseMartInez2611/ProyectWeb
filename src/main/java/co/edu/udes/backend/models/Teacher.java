@@ -8,21 +8,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "employee")
+@Table(name = "teacher")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Employee extends User {
+public class Teacher extends User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name="work_space")
-    private String workSpace;
+    @Column(name = "speciality")
+    private String speciality;
 
+    private void registerGrade(){}
+    private void createExam(){}
+    private void createActivity(){}
 
-    public void createBorrow(){}
 
 }
