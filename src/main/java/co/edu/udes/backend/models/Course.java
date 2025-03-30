@@ -33,8 +33,8 @@ public class Course {
     )
     private List<Course> prerequisites;
 
-    @Column(name = "theorical_hours")
-    private int teoricalHours;
+    @Column(name = "theoretical_hours")
+    private int theoreticalHours;
 
     @Column(name = "practical_hours")
     private int practicalHours;
