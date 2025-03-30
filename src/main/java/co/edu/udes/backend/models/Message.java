@@ -1,8 +1,8 @@
 package co.edu.udes.backend.models;
 
 
+import co.edu.udes.backend.models.inheritance.Communication;
 import co.edu.udes.backend.models.inheritance.User;
-import co.edu.udes.backend.models.inheritance.communication;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +15,7 @@ import lombok.*;
 @Setter
 @ToString
 
-public class Message extends communication {
+public class Message extends Communication {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,6 @@
 package co.edu.udes.backend.models;
 
-import co.edu.udes.backend.models.inheritance.communication;
+import co.edu.udes.backend.models.inheritance.Communication;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,7 +14,7 @@ import lombok.*;
 @ToString
 
 
-public class Notification extends communication {
+public class Notification extends Communication {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
