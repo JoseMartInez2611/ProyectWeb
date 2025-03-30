@@ -15,9 +15,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class Report {
 
-    private String reportType;
+    private String reportType, content;
     private Date generationDate;
-    private String content;
     private User requestingUser;
     private List<File> files;
 
