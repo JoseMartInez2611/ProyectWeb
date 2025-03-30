@@ -1,11 +1,10 @@
 package co.edu.udes.backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "academic resource")
+@Table(name = "academic_resource")
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -16,7 +15,17 @@ import lombok.*;
 
 public class AcademicResource {
 
-    private String name,description, category;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "category")
+    private String category;
+
+    @Column(name = "availability")
     private boolean availability;
 
 }

@@ -1,7 +1,6 @@
 package co.edu.udes.backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -18,8 +17,24 @@ import java.util.List;
 
 public class Room {
 
-    private int capacity, number, floor;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "capacity")
+    private int capacity;
+
+    @Column(name = "number")
+    private String number;
+
+    @Column(name = "floor")
+    private String floor;
+
+    @Column(name = "building")
     private char building;
-    private List<AcademicResource> resources;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "room_id", nullable = false)
+    private List<AcademicResource> resources ;
 
 }

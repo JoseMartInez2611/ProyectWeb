@@ -2,8 +2,7 @@ package co.edu.udes.backend.models;
 
 
 import co.edu.udes.backend.models.inheritance.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.File;
@@ -22,9 +21,26 @@ import java.util.List;
 
 public class Report {
 
-    private String reportType, content;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "report_type")
+    private String reportType;
+
+    @Column(name = "content")
+    private String content;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "generation_date")
     private Date generationDate;
+
+    @ManyToOne
+    @JoinColumn(name = "requesting_user_id")
     private User requestingUser;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "report_id")
     private List<File> files;
 
     public void generateReport() {
