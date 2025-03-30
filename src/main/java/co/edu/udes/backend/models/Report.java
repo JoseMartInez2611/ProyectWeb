@@ -2,9 +2,7 @@ package co.edu.udes.backend.models;
 
 
 import co.edu.udes.backend.models.inheritance.User;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.io.File;
 import java.util.Date;
@@ -13,6 +11,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Getter
+@Setter
 public class Report {
 
     private String reportType, content;

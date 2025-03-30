@@ -1,14 +1,14 @@
 package co.edu.udes.backend.models;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Getter
+@Setter
 public class Borrow {
     private Date borrowDate, returnDate;
     private String duration;
