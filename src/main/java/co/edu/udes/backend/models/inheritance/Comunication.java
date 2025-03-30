@@ -1,7 +1,7 @@
-package co.edu.udes.backend.models.message;
+package co.edu.udes.backend.models.inheritance;
 
 public class Comunication {
 
-    
+
 
 }
