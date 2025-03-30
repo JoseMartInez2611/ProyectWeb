@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -14,4 +15,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class Report {
 
+    private String reportType;
+    private Date generationDate;
+    private String content;
+    private User requestingUser;
+    private List<File> files;
+
+    public void generateReport() {
+    }
+    public void viewReport() {
+    }
+    public void saveReport() {
+    }
+    public void editReport() {
+    }
+    public void deleteReport() {
+    }
 }

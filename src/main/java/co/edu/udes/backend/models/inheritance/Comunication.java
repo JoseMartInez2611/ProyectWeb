@@ -15,7 +15,6 @@ public class Comunication {
     private Date sentDate;
     private String content;
     private boolean read;
-    private User sender;
 
     public void markAsRead() {
         this.read = true;
