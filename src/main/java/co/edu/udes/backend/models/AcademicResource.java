@@ -1,29 +1,31 @@
 package co.edu.udes.backend.models;
 
-import co.edu.udes.backend.models.inheritance.communication;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "comunication")
+@Table(name = "academic_resource")
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 
-
-public class Notification extends communication {
+public class AcademicResource {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "type")
-    private String type;
+    @Column(name = "name")
+    private String name;
 
-    public void send() {
-       // send notificación
-    }
+    @Column(name = "category")
+    private String category;
+
+    @Column(name = "availability")
+    private boolean availability;
+
 }
