@@ -1,15 +1,19 @@
 package co.edu.udes.backend.models.inheritance;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.util.Date;
 import java.util.List;
 
-@Data
+
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter
 @Setter
+@Entity
+@Table (name = "comunication")
 public class Comunication {
 
     private List<User> reciver;

@@ -1,13 +1,16 @@
 package co.edu.udes.backend.models;
 
 import co.edu.udes.backend.models.inheritance.Comunication;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 
-@Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter
 @Setter
+@Entity
+@Table(name = "comunication")
 public class Notification extends Comunication {
     private String type;
 

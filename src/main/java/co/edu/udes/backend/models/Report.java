@@ -2,17 +2,20 @@ package co.edu.udes.backend.models;
 
 
 import co.edu.udes.backend.models.inheritance.User;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.io.File;
 import java.util.Date;
 import java.util.List;
 
-@Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter
 @Setter
+@Entity
+@Table (name = "report")
 public class Report {
 
     private String reportType, content;
