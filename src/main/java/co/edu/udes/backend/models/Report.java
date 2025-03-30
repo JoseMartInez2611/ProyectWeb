@@ -13,14 +13,5 @@ import java.util.List;
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class Report {
-    private List<User> reciver;
-    private Date sentDate;
-    private String content;
-    private boolean read;
-    private User sender;
-
-    public void markAsRead() {
-        this.read = true;
-    }
 
 }
