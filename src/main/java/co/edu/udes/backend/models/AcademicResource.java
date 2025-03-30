@@ -4,12 +4,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 
-@NoArgsConstructor
-@RequiredArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "academic resource")
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+
 public class AcademicResource {
 
     private String name,description, category;

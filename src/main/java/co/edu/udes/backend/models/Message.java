@@ -7,12 +7,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 
-@NoArgsConstructor
-@RequiredArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table (name = "message")
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+
 public class Message extends Comunication {
     private String subject;
     private User sender;

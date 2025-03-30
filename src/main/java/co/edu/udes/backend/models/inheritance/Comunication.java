@@ -7,19 +7,23 @@ import lombok.*;
 import java.util.Date;
 import java.util.List;
 
-
-@NoArgsConstructor
-@RequiredArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table (name = "comunication")
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+
+
 public class Comunication {
 
     private List<User> reciver;
     private Date sentDate;
     private String content;
-    private boolean read;
+    private boolean read = false;
 
     public void markAsRead() {
         this.read = true;

@@ -6,12 +6,16 @@ import lombok.*;
 
 import java.util.Date;
 
-@NoArgsConstructor
-@RequiredArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table (name = "borrow")
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+
 public class Borrow {
     private Date borrowDate, returnDate;
     private String duration;

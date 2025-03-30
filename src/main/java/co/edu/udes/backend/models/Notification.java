@@ -5,12 +5,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 
-@NoArgsConstructor
-@RequiredArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "comunication")
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+
+
 public class Notification extends Comunication {
     private String type;
 

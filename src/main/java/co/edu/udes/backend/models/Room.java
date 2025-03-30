@@ -6,12 +6,16 @@ import lombok.*;
 
 import java.util.List;
 
-@NoArgsConstructor
-@RequiredArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "room")
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+
 public class Room {
 
     private int capacity, number, floor;

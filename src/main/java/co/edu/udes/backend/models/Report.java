@@ -10,12 +10,16 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
-@NoArgsConstructor
-@RequiredArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table (name = "report")
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+
 public class Report {
 
     private String reportType, content;
