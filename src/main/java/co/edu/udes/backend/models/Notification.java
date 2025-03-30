@@ -1,4 +1,4 @@
-package co.edu.udes.backend.models.message;
+package co.edu.udes.backend.models;
 
 public class Notification {
 }
