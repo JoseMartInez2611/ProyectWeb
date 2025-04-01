@@ -1,6 +1,7 @@
 package co.edu.udes.backend.models.inheritance;
 
 
+import co.edu.udes.backend.models.Group;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
