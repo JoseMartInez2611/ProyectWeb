@@ -14,6 +14,7 @@ import java.util.Date;
 @Setter
 @ToString
 @EqualsAndHashCode
+@Builder
 
 public class Borrow {
     @Id

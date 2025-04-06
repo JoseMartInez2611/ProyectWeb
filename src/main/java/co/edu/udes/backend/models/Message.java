@@ -14,6 +14,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
+@Builder
 
 public class Message extends Communication {
 

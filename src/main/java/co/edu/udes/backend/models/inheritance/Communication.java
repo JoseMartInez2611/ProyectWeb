@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode
-
+@Builder
 
 public class Communication {
 

@@ -12,6 +12,7 @@ import lombok.*;
 @Setter
 @ToString
 @EqualsAndHashCode
+@Builder
 
 public class AcademicResource {
 
