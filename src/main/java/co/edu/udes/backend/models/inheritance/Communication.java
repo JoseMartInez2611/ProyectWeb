@@ -2,7 +2,6 @@ package co.edu.udes.backend.models.inheritance;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.Date;
 import java.util.List;
 

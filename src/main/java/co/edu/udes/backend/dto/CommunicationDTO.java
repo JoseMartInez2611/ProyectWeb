@@ -2,7 +2,7 @@ package co.edu.udes.backend.dto;
 
 import lombok.Data;
 import lombok.Builder;
-
+import co.edu.udes.backend.dto.UserDTO;
 import java.util.Date;
 import java.util.List;
 
