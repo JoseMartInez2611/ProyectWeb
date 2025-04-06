@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "comunication")
+@Table(name = "notification")
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -15,10 +15,6 @@ import lombok.*;
 @Builder
 
 public class Notification extends Communication {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
 
     @Column(name = "type")
     private String type;

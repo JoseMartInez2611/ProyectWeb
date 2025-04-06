@@ -16,6 +16,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @Builder
+@Inheritance(strategy = InheritanceType.JOINED)
 
 public class Communication {
 

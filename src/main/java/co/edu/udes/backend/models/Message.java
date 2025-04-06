@@ -18,10 +18,6 @@ import lombok.*;
 
 public class Message extends Communication {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
     @Column(name = "subject")
     private String subject;
 
