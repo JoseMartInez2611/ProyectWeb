@@ -10,7 +10,6 @@ import java.util.List;
 @Entity
 @Table (name = "communication")
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter

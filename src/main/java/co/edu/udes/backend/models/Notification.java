@@ -8,7 +8,6 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = "notification")
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter

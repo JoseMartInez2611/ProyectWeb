@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "borrow")
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
@@ -32,14 +31,14 @@ public class Borrow {
     private String duration;
 
     @ManyToOne (targetEntity = AcademicResource.class)
-    @Column(name = "resource", nullable = false, columnDefinition = "varchar(255)")
+    @JoinColumn(name = "resource", nullable = false, columnDefinition = "varchar(255)")
     private AcademicResource resource;
 
-    @ManyToOne (targetEntity = Employee.class)
-    @Column(name = "lender", nullable = false, columnDefinition = "varchar(255)")
+    @ManyToOne(targetEntity = Employee.class)
+    @JoinColumn(name = "lender", nullable = false, columnDefinition = "varchar(255)")
     private Employee lender;
 
-    @ManyToOne (targetEntity = User.class)
-    @Column (name = "petitioner", nullable = false, columnDefinition = "varchar(255)")
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "petitioner", nullable = false, columnDefinition = "varchar(255)")
     private User petitioner;
 }

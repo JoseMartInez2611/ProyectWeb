@@ -10,7 +10,6 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table (name = "message")
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter

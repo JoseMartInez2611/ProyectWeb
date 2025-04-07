@@ -6,7 +6,6 @@ import lombok.*;
 @Entity
 @Table(name = "academic_resource")
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter

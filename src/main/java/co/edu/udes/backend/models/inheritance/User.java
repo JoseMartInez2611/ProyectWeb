@@ -58,7 +58,7 @@ public class User {
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            mappedBy = "user"
+            mappedBy = "requestingUser"
     )
     Report report;
 
@@ -67,7 +67,7 @@ public class User {
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            mappedBy = "user"
+            mappedBy = "petitioner"
     )
     Borrow borrow;
 

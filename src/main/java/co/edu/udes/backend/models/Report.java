@@ -12,7 +12,6 @@ import java.util.List;
 @Entity
 @Table (name = "report")
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
