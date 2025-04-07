@@ -1,9 +1,7 @@
 package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.RoomDTO;
-import co.edu.udes.backend.models.AcademicResource;
 import co.edu.udes.backend.models.Room;
-import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 

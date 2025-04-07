@@ -1,9 +1,7 @@
 package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.BorrowDTO;
-import co.edu.udes.backend.dto.EmployeeDTO;
 import co.edu.udes.backend.models.Borrow;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
