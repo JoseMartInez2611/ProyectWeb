@@ -2,7 +2,8 @@ package co.edu.udes.backend.models.inheritance;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.Date;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -23,17 +24,15 @@ public class Communication {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToMany(mappedBy = "communication", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> receiver;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "sent_date")
-    private Date sentDate;
+    @Column(name = "sent_date",nullable=false, columnDefinition = "DATE")
+    private LocalDate sentDate;
 
-    @Column(name = "content")
+    @Column(name = "content",nullable=false, columnDefinition = "varchar(255)")
     private String content;
 
-    @Column(name = "read")
+    @Column(name = "read", nullable = false, columnDefinition = "boolean")
     private boolean read = false;
 
     public void markAsRead() {

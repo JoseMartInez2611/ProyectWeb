@@ -19,11 +19,11 @@ import lombok.experimental.SuperBuilder;
 
 public class Message extends Communication {
 
-    @Column(name = "subject")
+    @Column(name = "subject", nullable = false, columnDefinition = "varchar(255)")
     private String subject;
 
     @ManyToOne
-    @JoinColumn(name = "sender_id")
+    @JoinColumn(name = "sender_id", nullable = false, referencedColumnName = "id")
     private User sender;
 
     public void send() {

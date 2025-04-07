@@ -3,7 +3,8 @@ package co.edu.udes.backend.dto;
 import lombok.Data;
 import lombok.Builder;
 import co.edu.udes.backend.dto.UserDTO;
-import java.util.Date;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -11,7 +12,7 @@ import java.util.List;
 public class CommunicationDTO {
     private Long id;
     private List<UserDTO> receiver;
-    private Date sentDate;
+    private LocalDate sentDate;
     private String content;
     private boolean read;
 }

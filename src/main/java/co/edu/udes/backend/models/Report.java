@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.File;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -26,22 +26,21 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "report_type")
+    @Column(name = "report_type", nullable = false, columnDefinition = "varchar(255)")
     private String reportType;
 
-    @Column(name = "content")
+    @Column(name = "content", nullable = false, columnDefinition = "varchar(255)")
     private String content;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "generation_date")
-    private Date generationDate;
+    @Column(name = "generation_date", nullable = false, columnDefinition = "DATE")
+    private LocalDate generationDate;
 
     @ManyToOne
-    @JoinColumn(name = "requesting_user_id")
+    @JoinColumn(name = "requesting_user_id", nullable = false, columnDefinition = "varchar(255)")
     private User requestingUser;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "report_id")
+    @JoinColumn(name = "report_id", nullable = false, columnDefinition = "varchar(255)")
     private List<File> files;
 
     public void generateReport() {

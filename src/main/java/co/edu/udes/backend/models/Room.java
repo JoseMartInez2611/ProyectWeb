@@ -22,16 +22,16 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "capacity")
+    @Column(name = "capacity", nullable = false, columnDefinition = "int")
     private int capacity;
 
-    @Column(name = "number")
+    @Column(name = "number", nullable = false, columnDefinition = "varchar(255)")
     private String number;
 
-    @Column(name = "floor")
+    @Column(name = "floor", nullable = false, columnDefinition = "varchar(255)")
     private String floor;
 
-    @Column(name = "building")
+    @Column(name = "building", nullable = false, columnDefinition = "char")
     private char building;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
