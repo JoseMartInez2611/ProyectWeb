@@ -2,10 +2,7 @@ package co.edu.udes.backend.models;
 
 import java.time.LocalTime;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "schedules")
@@ -13,19 +10,30 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@EqualsAndHashCode
 public class Schedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column (name = "start_hour")
+    @Column (name = "start_hour",
+            nullable = false,
+            columnDefinition = "TIME"
+    )
     private LocalTime startHour;
 
-    @Column (name = "end_hour")
+    @Column (name = "end_hour",
+            nullable = false,
+            columnDefinition = "TIME"
+    )
     private LocalTime endHour;
 
     @ManyToOne
-    @JoinColumn(name = "day_id", nullable = false)
+    @JoinColumn(name = "id_day",
+            nullable = false,
+            columnDefinition = "BIGINT"
+    )
     private DayOfWeek dayOfWeek;
 }

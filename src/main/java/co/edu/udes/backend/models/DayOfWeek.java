@@ -9,12 +9,18 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@EqualsAndHashCode
 public class DayOfWeek {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name", unique = true)
-    private String name;
+    @Column(name = "day",
+            unique = true,
+            nullable = false,
+            columnDefinition = "VARCHAR(255)"
+    )
+    private String day;
 }
