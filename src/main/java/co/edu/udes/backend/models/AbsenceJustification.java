@@ -1,10 +1,7 @@
 package co.edu.udes.backend.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "absence_justifications")
@@ -12,18 +9,26 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@EqualsAndHashCode
 public class AbsenceJustification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "motive")
+    @Column(name = "motive",
+            nullable = false,
+            columnDefinition = "VARCHAR(255)"
+    )
     private String motive;
 
-    @Column(name = "description")
+    @Column(name = "description",
+            nullable = false,
+            columnDefinition = "VARCHAR(255)"
+    )
     private String description;
 
-    @Column(name = "justified")
+    @Column(name = "justified", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean justified;
 }

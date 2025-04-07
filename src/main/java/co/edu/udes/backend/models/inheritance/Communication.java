@@ -25,7 +25,7 @@ public class Communication {
     private long id;
 
     private List<User> receiver;
-
+  
     @Column(name = "sent_date",nullable=false, columnDefinition = "DATE")
     private LocalDate sentDate;
 
@@ -39,4 +39,4 @@ public class Communication {
         this.read = true;
     }
 
-}
+

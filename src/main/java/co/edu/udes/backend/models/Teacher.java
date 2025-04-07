@@ -2,10 +2,11 @@ package co.edu.udes.backend.models;
 
 import co.edu.udes.backend.models.inheritance.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @Entity
 @Table(name = "teacher")
@@ -13,18 +14,23 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level= AccessLevel.PRIVATE)
+@ToString(includeFieldNames = false, callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
+
 public class Teacher extends User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Column(name = "speciality", columnDefinition = "VARCHAR(255)", nullable = false)
+    String speciality;
 
-    @Column(name = "speciality")
-    private String speciality;
-
-    private void registerGrade(){}
-    private void createExam(){}
-    private void createActivity(){}
-
+    @OneToMany(
+            targetEntity = Group.class,
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "teacher"
+    )
+    List<Group> groups;
 
 }

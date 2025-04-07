@@ -1,10 +1,7 @@
 package co.edu.udes.backend.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "groups")
@@ -12,6 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@EqualsAndHashCode
 public class Group {
 
     @Id
@@ -19,13 +18,22 @@ public class Group {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
+    @JoinColumn(name = "id_course",
+            nullable = false,
+            columnDefinition = "BIGINT"
+    )
     private Course course;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id", nullable = false)
+    @JoinColumn(name = "id_teacher",
+            nullable = false,
+            columnDefinition = "BIGINT"
+    )
     private Teacher teacher;
 
-    @Column(name = "academic_period")
+    @Column(name = "academic_period",
+            nullable = false,
+            columnDefinition = "VARCHAR(5)"
+    )
     private String academicPeriod;
 }

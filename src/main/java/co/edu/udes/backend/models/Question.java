@@ -1,10 +1,8 @@
 package co.edu.udes.backend.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Table(name = "question")
@@ -12,22 +10,26 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level= AccessLevel.PRIVATE)
+@ToString(includeFieldNames = false)
+@EqualsAndHashCode
+@Builder
+
 public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    long id;
 
-    @Column(name = "question", nullable = false)
-    private String question;
+    @Column(name = "question", nullable = false, columnDefinition = "VARCHAR(1024)")
+    String question;
 
-    @Column(name = "question_type", nullable = false)
-    private String questionType;
+    @Column(name = "question_type", nullable = false, columnDefinition = "VARCHAR(255)")
+    String questionType;
 
-    @Column(name = "answer", nullable = false)
-    private String answer;
+    @Column(name = "answer", nullable = false, columnDefinition = "VARCHAR(1024)")
+    String answer;
 
-    @ManyToOne
-    @JoinColumn(name = "exam_id", nullable = false)
-    private Exam exam;
+    @ManyToOne(targetEntity = Exam.class)
+    Exam exam;
 }

@@ -1,10 +1,10 @@
 package co.edu.udes.backend.models;
 
+import co.edu.udes.backend.models.inheritance.Evaluation;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -14,18 +14,25 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Activity {
+@FieldDefaults(level= AccessLevel.PRIVATE)
+@ToString(includeFieldNames = false, callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Activity extends Evaluation {
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "description", columnDefinition = "VARCHAR(1024)", nullable = false)
+    String description;
 
-    @Column(name = "answer_text")
-    private String answerText;
+    @Column(name = "answer_text", columnDefinition = "VARCHAR(1024)", nullable = false)
+    String answerText;
 
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AnswerDocument> answerDocuments;
+    @OneToMany(
+            targetEntity = AnswerDocument.class,
+            fetch = FetchType.LAZY,
+            mappedBy = "activity",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    List<AnswerDocument> answerDocuments;
 }
