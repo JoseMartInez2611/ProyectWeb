@@ -3,6 +3,8 @@ package co.edu.udes.backend.mapper;
 import co.edu.udes.backend.dto.AcademicResourceDTO;
 import co.edu.udes.backend.models.AcademicResource;
 import org.springframework.stereotype.Component;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class AcademicResourceMapper {
@@ -29,5 +31,23 @@ public class AcademicResourceMapper {
                 .category(academicResourceDTO.getCategory())
                 .availability(academicResourceDTO.isAvailability())
                 .build();
+    }
+
+    public List<AcademicResourceDTO> toDTOList(List<AcademicResource> academicResources) {
+        if (academicResources == null) {
+            return null;
+        }
+        return academicResources.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<AcademicResource> toEntityList(List<AcademicResourceDTO> academicResourceDTOs) {
+        if (academicResourceDTOs == null) {
+            return null;
+        }
+        return academicResourceDTOs.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
     }
 }

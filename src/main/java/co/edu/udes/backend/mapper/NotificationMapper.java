@@ -3,7 +3,11 @@ package co.edu.udes.backend.mapper;
 import co.edu.udes.backend.dto.CommunicationDTO;
 import co.edu.udes.backend.dto.NotificationDTO;
 import co.edu.udes.backend.models.Notification;
+import co.edu.udes.backend.models.inheritance.Communication;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class NotificationMapper {
@@ -18,33 +22,46 @@ public class NotificationMapper {
         if (notification == null) {
             return null;
         }
-        NotificationDTO.NotificationDTOBuilder builder = NotificationDTO.builder()
-                .type(notification.getType());
 
-        CommunicationDTO communicationDTO = communicationMapper.toDTO(notification);
-        builder.id(communicationDTO.getId())
-                .receiver(communicationDTO.getReceiver())
-                .sentDate(communicationDTO.getSentDate())
-                .content(communicationDTO.getContent())
-                .read(communicationDTO.isRead());
-
-        return builder.build();
+        return NotificationDTO.builder()
+                .id(notification.getId())
+                .receiver(userMapper.toDTOList(notification.getReceiver()))
+                .sentDate(notification.getSentDate())
+                .content(notification.getContent())
+                .read(notification.isRead())
+                .type(notification.getType())
+                .build();
     }
 
     public Notification toEntity(NotificationDTO notificationDTO) {
         if (notificationDTO == null) {
             return null;
         }
-        Notification.NotificationBuilder builder = Notification.builder()
-                .type(notificationDTO.getType());
+        Notification notification = new Notification();
+        notification.setId(notificationDTO.getId());
+        notification.setReceiver(userMapper.toEntityList(notificationDTO.getReceiver()));
+        notification.setSentDate(notificationDTO.getSentDate());
+        notification.setContent(notificationDTO.getContent());
+        notification.setRead(notificationDTO.isRead());
+        notification.setType(notificationDTO.getType());
+        return notification;
+    }
 
-        Notification notification = (Notification) communicationMapper.toEntity(notificationDTO);
-        builder.id(notification.getId())
-                .receiver(notification.getReceiver())
-                .sentDate(notification.getSentDate())
-                .content(notification.getContent())
-                .read(notification.isRead());
+    public List<NotificationDTO> toDTOList(List<Notification> notifications) {
+        if (notifications == null) {
+            return null;
+        }
+        return notifications.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
 
-        return builder.build();
+    public List<Notification> toEntityList(List<NotificationDTO> notificationDTOs) {
+        if (notificationDTOs == null) {
+            return null;
+        }
+        return notificationDTOs.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
     }
 }

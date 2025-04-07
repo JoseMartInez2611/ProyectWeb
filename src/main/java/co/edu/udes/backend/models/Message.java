@@ -5,6 +5,7 @@ import co.edu.udes.backend.models.inheritance.Communication;
 import co.edu.udes.backend.models.inheritance.User;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table (name = "message")
@@ -14,7 +15,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@Builder
+@SuperBuilder
 
 public class Message extends Communication {
 

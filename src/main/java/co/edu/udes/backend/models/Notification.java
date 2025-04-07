@@ -3,6 +3,7 @@ package co.edu.udes.backend.models;
 import co.edu.udes.backend.models.inheritance.Communication;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "notification")
@@ -12,7 +13,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@Builder
+@SuperBuilder
 
 public class Notification extends Communication {
 

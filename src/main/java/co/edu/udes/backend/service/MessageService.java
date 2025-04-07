@@ -1,38 +1,51 @@
 package co.edu.udes.backend.service;
 
+import co.edu.udes.backend.dto.MessageDTO;
+import co.edu.udes.backend.mapper.MessageMapper;
 import co.edu.udes.backend.models.Message;
 import co.edu.udes.backend.repositories.MessageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import co.edu.udes.backend.utils.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MessageService {
 
-    private final MessageRepository messageRepository;
+    private final MessageRepository entityNameRepository;
+    private final MessageMapper entityNameMapper;
 
-    @Autowired
-    public MessageService(MessageRepository messageRepository) {
-        this.messageRepository = messageRepository;
+    public List<MessageDTO> getAll() {
+        return entityNameRepository.findAll().stream()
+                .map(entityNameMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Message> getAllMessages() {
-        return messageRepository.findAll();
+    public MessageDTO getById(Long id) {
+        Message entity = entityNameRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
+        return entityNameMapper.toDTO(entity);
     }
 
-    public Optional<Message> getMessageById(Long id) {
-        return messageRepository.findById(id);
+    public MessageDTO create(MessageDTO dto) {
+        Message entity = entityNameMapper.toEntity(dto);
+        return entityNameMapper.toDTO(entityNameRepository.save(entity));
     }
 
-    public Message saveMessage(Message message) {
-        return messageRepository.save(message);
+    public MessageDTO update(Long id, MessageDTO dto) {
+        entityNameRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
+        dto.setId(id);
+        Message updated = entityNameRepository.save(entityNameMapper.toEntity(dto));
+        return entityNameMapper.toDTO(updated);
     }
 
-    public void deleteMessage(Long id) {
-        messageRepository.deleteById(id);
+    public void delete(Long id) {
+        Message entity = entityNameRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
+        entityNameRepository.delete(entity);
     }
-
-    // Add specific business logic for messages (e.g., send message, find by sender)
 }

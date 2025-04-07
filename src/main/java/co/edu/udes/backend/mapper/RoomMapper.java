@@ -1,10 +1,9 @@
-package co.edu.udes.backend.mappers;
+package co.edu.udes.backend.mapper;
 
 import co.edu.udes.backend.dto.RoomDTO;
 import co.edu.udes.backend.models.AcademicResource;
 import co.edu.udes.backend.models.Room;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,14 +36,25 @@ public class RoomMapper {
         room.setNumber(roomDTO.getNumber());
         room.setFloor(roomDTO.getFloor());
         room.setBuilding(roomDTO.getBuilding());
-        // Note: Setting the resources requires fetching them from the database
-        // based on the resourceIds in the DTO. This is typically done in the service layer.
-        // For a basic mapper, you might just set an empty list or handle it differently.
-        // Example (requires an AcademicResourceService):
-        // room.setResources(roomDTO.getResourceIds().stream()
-        //         .map(academicResourceService::findById)
-        //         .collect(Collectors.toList()));
-        room.setResources(new java.util.ArrayList<>()); // Or handle in service layer
+        room.setResources(new java.util.ArrayList<>());
         return room;
+    }
+
+    public List<RoomDTO> toDTOList(List<Room> rooms) {
+        if (rooms == null) {
+            return null;
+        }
+        return rooms.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<Room> toEntityList(List<RoomDTO> roomDTOs) {
+        if (roomDTOs == null) {
+            return null;
+        }
+        return roomDTOs.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
     }
 }

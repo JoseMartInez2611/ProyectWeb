@@ -1,38 +1,52 @@
 package co.edu.udes.backend.service;
 
+
+import co.edu.udes.backend.dto.AcademicResourceDTO;
+import co.edu.udes.backend.utils.ResourceNotFoundException;
+import co.edu.udes.backend.mapper.AcademicResourceMapper;
 import co.edu.udes.backend.models.AcademicResource;
 import co.edu.udes.backend.repositories.AcademicResourceRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AcademicResourceService {
 
-    private final AcademicResourceRepository academicResourceRepository;
+    private final AcademicResourceRepository entityNameRepository;
+    private final AcademicResourceMapper entityNameMapper;
 
-    @Autowired
-    public AcademicResourceService(AcademicResourceRepository academicResourceRepository) {
-        this.academicResourceRepository = academicResourceRepository;
+    public List<AcademicResourceDTO> getAll() {
+        return entityNameRepository.findAll().stream()
+                .map(entityNameMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<AcademicResource> getAllAcademicResources() {
-        return academicResourceRepository.findAll();
+    public AcademicResourceDTO getById(Long id) {
+        AcademicResource entity = entityNameRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
+        return entityNameMapper.toDTO(entity);
     }
 
-    public Optional<AcademicResource> getAcademicResourceById(Long id) {
-        return academicResourceRepository.findById(id);
+    public AcademicResourceDTO create(AcademicResourceDTO dto) {
+        AcademicResource entity = entityNameMapper.toEntity(dto);
+        return entityNameMapper.toDTO(entityNameRepository.save(entity));
     }
 
-    public AcademicResource saveAcademicResource(AcademicResource academicResource) {
-        return academicResourceRepository.save(academicResource);
+    public AcademicResourceDTO update(Long id, AcademicResourceDTO dto) {
+        entityNameRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
+        dto.setId(id);
+        AcademicResource updated = entityNameRepository.save(entityNameMapper.toEntity(dto));
+        return entityNameMapper.toDTO(updated);
     }
 
-    public void deleteAcademicResource(Long id) {
-        academicResourceRepository.deleteById(id);
+    public void delete(Long id) {
+        AcademicResource entity = entityNameRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
+        entityNameRepository.delete(entity);
     }
-
-    // Add other business logic methods as needed (e.g., find by category, update availability)
 }

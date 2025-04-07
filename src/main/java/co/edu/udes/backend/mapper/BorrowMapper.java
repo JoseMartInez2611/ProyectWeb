@@ -8,6 +8,9 @@ import co.edu.udes.backend.models.Borrow;
 import co.edu.udes.backend.models.Employee;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class BorrowMapper {
 
@@ -45,5 +48,23 @@ public class BorrowMapper {
         borrow.setResource(academicResourceMapper.toEntity(borrowDTO.getResource()));
         borrow.setLender(employeeMapper.toEntity(borrowDTO.getLender()));
         return borrow;
+    }
+
+    public List<BorrowDTO> toDTOList(List<Borrow> borrows) {
+        if (borrows == null) {
+            return null;
+        }
+        return borrows.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<Borrow> toEntityList(List<BorrowDTO> borrowDTOs) {
+        if (borrowDTOs == null) {
+            return null;
+        }
+        return borrowDTOs.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
     }
 }

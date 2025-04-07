@@ -1,12 +1,12 @@
-package co.edu.udes.backend.mappers;
+package co.edu.udes.backend.mapper;
 
 import co.edu.udes.backend.dto.ReportDTO;
 import co.edu.udes.backend.dto.UserDTO;
 import co.edu.udes.backend.models.Report;
 import co.edu.udes.backend.models.inheritance.User;
 import org.springframework.stereotype.Component;
-
 import java.io.File;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -44,5 +44,23 @@ public class ReportMapper {
         report.setRequestingUser(userMapper.toEntity(reportDTO.getRequestingUserId()));
         report.setFiles(reportDTO.getFile()); // Be cautious about transferring File objects directly
         return report;
+    }
+
+    public List<ReportDTO> toDTOList(List<Report> reports) {
+        if (reports == null) {
+            return null;
+        }
+        return reports.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<Report> toEntityList(List<ReportDTO> reportDTOs) {
+        if (reportDTOs == null) {
+            return null;
+        }
+        return reportDTOs.stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
     }
 }
