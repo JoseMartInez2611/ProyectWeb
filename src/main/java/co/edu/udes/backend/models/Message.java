@@ -1,10 +1,11 @@
 package co.edu.udes.backend.models;
 
 
-import co.edu.udes.backend.models.inheritance.User;
 import co.edu.udes.backend.models.inheritance.Communication;
+import co.edu.udes.backend.models.inheritance.User;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table (name = "message")
@@ -14,18 +15,15 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
+@SuperBuilder
 
 public class Message extends Communication {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Column(name = "subject")
+    @Column(name = "subject", nullable = false, columnDefinition = "varchar(255)")
     private String subject;
 
     @ManyToOne
-    @JoinColumn(name = "sender_id")
+    @JoinColumn(name = "sender_id", nullable = false, referencedColumnName = "id")
     private User sender;
 
     public void send() {

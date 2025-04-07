@@ -12,6 +12,7 @@ import lombok.*;
 @Setter
 @ToString
 @EqualsAndHashCode
+@Builder
 
 public class AcademicResource {
 
@@ -19,13 +20,13 @@ public class AcademicResource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, columnDefinition = "varchar(255)")
     private String name;
 
-    @Column(name = "category")
+    @Column(name = "category", nullable = false, columnDefinition = "varchar(255)")
     private String category;
 
-    @Column(name = "availability")
+    @Column(name = "availability", nullable = false, columnDefinition = "boolean")
     private boolean availability;
 
 }
