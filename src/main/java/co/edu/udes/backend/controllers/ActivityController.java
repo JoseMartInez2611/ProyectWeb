@@ -44,6 +44,10 @@ public class ActivityController {
         Activity existingActivity = activityRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("activity not exist with id: "+id));
 
+        existingActivity.setEvaluationRubric(activity.getEvaluationRubric());
+        existingActivity.setDate(activity.getDate());
+        existingActivity.setGroup(activity.getGroup());
+
         existingActivity.setDescription(activity.getDescription());
         existingActivity.setAnswerText(activity.getAnswerText());
         existingActivity.setAnswerDocuments(activity.getAnswerDocuments());

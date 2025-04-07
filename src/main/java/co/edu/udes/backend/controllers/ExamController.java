@@ -45,6 +45,10 @@ public class ExamController {
         Exam existingExam = examRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("exam not exist with id: "+id));
 
+        existingExam.setEvaluationRubric(exam.getEvaluationRubric());
+        existingExam.setDate(exam.getDate());
+        existingExam.setGroup(exam.getGroup());
+
         existingExam.setQuestions(exam.getQuestions());
 
         Exam updatedExam = examRepository.save(existingExam);

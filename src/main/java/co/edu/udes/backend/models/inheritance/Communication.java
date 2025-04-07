@@ -17,7 +17,7 @@ import java.util.List;
 @EqualsAndHashCode
 
 
-public class communication {
+public class Communication {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)

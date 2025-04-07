@@ -36,6 +36,14 @@ public class TeacherController {
     public ResponseEntity<Teacher> updateTeacher(@PathVariable Long id, @RequestBody Teacher teacher){
         Teacher existingTeacher = teacherRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Teacher not exist with id :" + id));
+
+        existingTeacher.setFirstName(teacher.getFirstName());
+        existingTeacher.setLastName(teacher.getLastName());
+        existingTeacher.setEmail(teacher.getEmail());
+        existingTeacher.setPhone(teacher.getPhone());
+        existingTeacher.setPassword(teacher.getPassword());
+        existingTeacher.setUserName(teacher.getUserName());
+
         existingTeacher.setSpeciality(teacher.getSpeciality());
         Teacher updatedTeacher = teacherRepository.save(existingTeacher);
         return ResponseEntity.ok(updatedTeacher);
