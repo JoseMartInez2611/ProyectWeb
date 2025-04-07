@@ -1,34 +1,40 @@
 package co.edu.udes.backend.models.inheritance;
 
 
+import co.edu.udes.backend.models.Group;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "evaluation")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level= AccessLevel.PRIVATE)
+@ToString(includeFieldNames = false)
+@EqualsAndHashCode
+@SuperBuilder
+
 
 public class Evaluation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    long id;
 
-    @Column(name = "evaluation_rubric")
-    private String evaluationRubric;
+    @Column(name = "evaluation_rubric", columnDefinition = "VARCHAR(1024)", nullable = false)
+    String evaluationRubric;
 
-    @Column(name="date")
-    private Date date;
+    @Column(name="date", columnDefinition = "DATE", nullable = false)
+    Date date;
 
-    @ManyToOne
-    @JoinColumn(name="group_id", nullable = false)
-    private Group group;
+    @ManyToOne(targetEntity = Group.class)
+    Group group;
+
 }
