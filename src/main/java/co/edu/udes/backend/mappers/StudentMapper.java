@@ -7,6 +7,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class StudentMapper {
+    private final MessageMapper messageMapper = new MessageMapper();
+    private final ReportMapper reportMapper = new ReportMapper();
+    private final BorrowMapper borrowMapper = new BorrowMapper();
+    private final CommunicationMapper communicationMapper = new CommunicationMapper();
+
     public StudentDTO toDTO(Student student){
         return StudentDTO.builder()
                 //Datos Clase padre
@@ -25,10 +30,10 @@ public class StudentMapper {
                 .address(student.getAddress())
                 .career(student.getCareer())
 
-                .message(MessageMapper.toDTO(student.getMessage()))
-                .report(ReportMapper.toDTO(student.getReport()))
-                .borrow(BorrowMapper.toDTO(student.getBorrow()))
-                .communication(CommunicationMapper.toDTO(student.getCommunication()))
+                .message(messageMapper.toDTO(student.getMessage()))
+                .report(reportMapper.toDTO(student.getReport()))
+                .borrow(borrowMapper.toDTO(student.getBorrow()))
+                .communication(communicationMapper.toDTO(student.getCommunication()))
                 .build();
     }
 
@@ -50,10 +55,10 @@ public class StudentMapper {
                 .address(studentDTO.getAddress())
                 .career(studentDTO.getCareer())
 
-                .message(MessageMapper.toEntity(studentDTO.getMessage()))
-                .report(ReportMapper.toEntity(studentDTO.getReport()))
-                .borrow(BorrowMapper.toEntity(studentDTO.getBorrow()))
-                .communication(CommunicationMapper.toEntity(studentDTO.getCommunication()))
+                .message(messageMapper.toEntity(studentDTO.getMessage()))
+                .report(reportMapper.toEntity(studentDTO.getReport()))
+                .borrow(borrowMapper.toEntity(studentDTO.getBorrow()))
+                .communication(communicationMapper.toEntity(studentDTO.getCommunication()))
                 .build();
     }
 

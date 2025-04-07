@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ActivityMapper {
     private final AnswerDocumentMapper answerDocumentMapper = new AnswerDocumentMapper();
-
+    private final GroupMapper groupMapper = new GroupMapper();
 
     public  ActivityDTO toDTO(Activity activity) {
 
@@ -20,12 +20,12 @@ public class ActivityMapper {
                 .id(activity.getId())
                 .evaluationRubric(activity.getEvaluationRubric())
                 .date(activity.getDate())
-                .groups(GroupMapper.toDTO(activity.getGroup())
+                .group(groupMapper.toDTO(activity.getGroup()))
 
                 //Datos Clase hija
                 .description(activity.getDescription())
                 .answerText(activity.getAnswerText())
-                .answerDocument(answerDocumentMapper.toDTO((AnswerDocument) activity.getAnswerDocuments())))
+                .answerDocument(answerDocumentMapper.toDTOList(activity.getAnswerDocuments()))
                 .build();
     }
 
@@ -35,12 +35,12 @@ public class ActivityMapper {
                 .id(activityDTO.getId())
                 .evaluationRubric(activityDTO.getEvaluationRubric())
                 .date(activityDTO.getDate())
-                .groups(GroupMapper.toEntity(activityDTO.getGroup()))
+                .group(groupMapper.toEntity(activityDTO.getGroup()))
 
                 //Datos Clase hija
                 .description(activityDTO.getDescription())
                 .answerText(activityDTO.getAnswerText())
-                .answerDocument(answerDocumentMapper.toEntity((AnswerDocumentDTO) activityDTO.getAnswerDocument()))
+                .answerDocuments(answerDocumentMapper.toEntityList(activityDTO.getAnswerDocument()))
                 .build();
     }
 

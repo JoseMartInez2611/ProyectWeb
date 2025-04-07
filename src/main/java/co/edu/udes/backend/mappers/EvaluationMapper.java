@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class EvaluationMapper {
+    private GroupMapper groupMapper = new GroupMapper();
 
     public EvaluationDTO toDTO(Evaluation evalution) {
 
@@ -14,7 +15,7 @@ public class EvaluationMapper {
                 .id(evalution.getId())
                 .evaluationRubric(evalution.getEvaluationRubric())
                 .date(evalution.getDate())
-                .group(GroupMapper.toDTO(evalution.getGroup()))
+                .group(groupMapper.toDTO(evalution.getGroup()))
                 .build();
     }
 
@@ -24,7 +25,7 @@ public class EvaluationMapper {
                 .id(evaluationDTO.getId())
                 .evaluationRubric(evaluationDTO.getEvaluationRubric())
                 .date(evaluationDTO.getDate())
-                .group(GroupMapper.toEntity(evaluationDTO.getGroup()))
+                .group(groupMapper.toEntity(evaluationDTO.getGroup()))
                 .build();
     }
 

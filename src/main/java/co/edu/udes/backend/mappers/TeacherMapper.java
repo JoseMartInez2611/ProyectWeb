@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class TeacherMapper {
+    private final GroupMapper groupMapper = new GroupMapper();
     public TeacherDTO toDTO(Teacher teacher){
         return TeacherDTO.builder()
                 //Datos Clase padre
@@ -20,11 +21,11 @@ public class TeacherMapper {
 
                 //Datos Clase hija
                 .speciality(teacher.getSpeciality())
-                .groups(GroupMapper.toDTO(teacher.getGroups()))
+                .groups(groupMapper.toDTOList(teacher.getGroups()))
                 .build();
     }
     public Teacher toEntity(TeacherDTO teacherDTO){
-        return TeacherDTO.builder()
+        return Teacher.builder()
                 //Datos Clase padre
                 .id(teacherDTO.getId())
                 .email(teacherDTO.getEmail())
@@ -36,7 +37,7 @@ public class TeacherMapper {
 
                 //Datos Clase hija
                 .speciality(teacherDTO.getSpeciality())
-                .groups(GroupMapper.toDTO(teacherDTO.getGroups()))
+                .groups(groupMapper.toEntityList(teacherDTO.getGroups()))
                 .build();
     }
     public List<Teacher> toEntityList(List<TeacherDTO> dtos) {

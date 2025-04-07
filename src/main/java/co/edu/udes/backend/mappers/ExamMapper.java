@@ -10,6 +10,7 @@ import java.util.List;
 
 public class ExamMapper {
     private final QuestionMapper questionMapper = new QuestionMapper();
+    private final GroupMapper groupMapper = new GroupMapper();
 
     public ExamDTO toDTO(Exam exam) {
         return ExamDTO.builder()
@@ -17,10 +18,10 @@ public class ExamMapper {
                 .id(exam.getId())
                 .evaluationRubric(exam.getEvaluationRubric())
                 .date(exam.getDate())
-                .group(GroupMapper.toEntity(exam.getGroup()))
+                .group(groupMapper.toDTO(exam.getGroup()))
 
                 //Datos Clase Hija
-                .questions(questionMapper.toDTO((Question) exam.getQuestions()))
+                .question(questionMapper.toDTOList(exam.getQuestions()))
                 .build();
     }
 
@@ -30,7 +31,7 @@ public class ExamMapper {
                 .id(examDTO.getId())
                 .evaluationRubric(examDTO.getEvaluationRubric())
                 .date(examDTO.getDate())
-                .group(GroupMapper.toEntity(examDTO.getGroup()))
+                .group(groupMapper.toEntity(examDTO.getGroup()))
 
                 //Datos Clase Hija
                 .questions(questionMapper.toEntityList(examDTO.getQuestion()))
