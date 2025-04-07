@@ -1,7 +1,9 @@
 package co.edu.udes.backend.dto.inheritanceDTO;
 
+import co.edu.udes.backend.dto.BorrowDTO;
+import co.edu.udes.backend.dto.MessageDTO;
+import co.edu.udes.backend.dto.ReportDTO;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -19,8 +21,8 @@ public class UserDTO {
     String userName;
     String password;
     MessageDTO message;
-    ReporteDTO report;
-    BorrowdDTO borrow;
+    ReportDTO report;
+    BorrowDTO borrow;
     CommunicationDTO communication;
 
 

@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class StudentDTO extends UserDTO {S
+public class StudentDTO extends UserDTO {
     int semester;
     String code;
     Date dateBirth;

@@ -4,6 +4,7 @@ import co.edu.udes.backend.dto.AttendanceDTO;
 import co.edu.udes.backend.models.Attendance;
 
 import java.util.Collections;
+import java.util.List;
 
 public class AttendanceMapper {
 

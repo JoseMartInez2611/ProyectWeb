@@ -2,12 +2,18 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.EmployeeDTO;
 import co.edu.udes.backend.models.Employee;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
 import java.util.List;
 
-
+@RequiredArgsConstructor
 public class EmployeeMapper {
+
+    @Autowired
+    private final BorrowMapper borrowMapper;
+
     public  EmployeeDTO toDTO(Employee employee) {
         return EmployeeDTO.builder()
                 .id(employee.getId())
@@ -20,7 +26,7 @@ public class EmployeeMapper {
 
                 //Datos Clase hija
                 .workSpace(employee.getWorkSpace())
-                .borrow(BorrowMapper.toDTO(employee.getBorrow()))
+                .borrow(borrowMapper.toDTO(employee.getBorrow()))
                 .build();
     }
 
@@ -37,7 +43,7 @@ public class EmployeeMapper {
 
                 //Datos Clase hija
                 .workSpace(EmployeeDTO.getWorkSpace())
-                .borrow(BorrowMapper.toEntity(EmployeeDTO.getBorrow()))
+                .borrow(borrowMapper.toEntity(EmployeeDTO.getBorrow()))
                 .build();
     }
 

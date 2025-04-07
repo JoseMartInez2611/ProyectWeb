@@ -1,5 +1,6 @@
 package co.edu.udes.backend.dto.inheritanceDTO;
 
+import co.edu.udes.backend.dto.GroupDTO;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;

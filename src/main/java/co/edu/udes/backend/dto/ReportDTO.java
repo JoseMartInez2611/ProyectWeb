@@ -1,5 +1,6 @@
 package co.edu.udes.backend.dto;
 
+import co.edu.udes.backend.dto.inheritanceDTO.UserDTO;
 import lombok.Data;
 import lombok.Builder;
 

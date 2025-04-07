@@ -1,14 +1,13 @@
-package co.edu.udes.backend.dto;
+package co.edu.udes.backend.dto.inheritanceDTO;
 
 import lombok.Data;
-import lombok.Builder;
-import co.edu.udes.backend.dto.UserDTO;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 public class CommunicationDTO {
     private Long id;
     private List<UserDTO> receiver;

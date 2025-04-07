@@ -2,6 +2,7 @@ package co.edu.udes.backend.models.inheritance;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,21 +16,21 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode
-@Builder
+@SuperBuilder
 @Inheritance(strategy = InheritanceType.JOINED)
 
 public class Communication {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private List<User> receiver;
-  
-    @Column(name = "sent_date",nullable=false, columnDefinition = "DATE")
+
+    @Column(name = "sent_date", nullable = false, columnDefinition = "DATE")
     private LocalDate sentDate;
 
-    @Column(name = "content",nullable=false, columnDefinition = "varchar(255)")
+    @Column(name = "content", nullable = false, columnDefinition = "varchar(255)")
     private String content;
 
     @Column(name = "read", nullable = false, columnDefinition = "boolean")
@@ -38,5 +39,5 @@ public class Communication {
     public void markAsRead() {
         this.read = true;
     }
-
+}
 

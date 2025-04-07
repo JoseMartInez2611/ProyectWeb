@@ -1,6 +1,6 @@
 package co.edu.udes.backend.controllers;
 
-import co.edu.udes.backend.dto.CommunicationDTO;
+import co.edu.udes.backend.dto.inheritanceDTO.CommunicationDTO;
 import co.edu.udes.backend.services.CommunicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

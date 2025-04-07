@@ -1,7 +1,6 @@
 package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.MessageDTO;
-import co.edu.udes.backend.dto.UserDTO;
 import co.edu.udes.backend.models.Message;
 import org.springframework.stereotype.Component;
 

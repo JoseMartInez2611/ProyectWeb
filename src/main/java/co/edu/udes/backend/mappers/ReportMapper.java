@@ -1,7 +1,6 @@
 package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.ReportDTO;
-import co.edu.udes.backend.dto.UserDTO;
 import co.edu.udes.backend.models.Report;
 import org.springframework.stereotype.Component;
 
