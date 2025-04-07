@@ -1,8 +1,7 @@
 package co.edu.udes.backend.controllers;
 
-import co.edu.udes.backend.models.Schedule;
-import co.edu.udes.backend.repositories.ScheduleRepository;
-import co.edu.udes.backend.utils.ResourceNotFoundException;
+import co.edu.udes.backend.dto.ScheduleDTO;
+import co.edu.udes.backend.services.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,53 +13,40 @@ import java.util.Map;
 
 //@CrossOrigin(origin = "http://localhost")
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/schedules")
 public class ScheduleController {
 
     @Autowired
-    private ScheduleRepository scheduleRepository;
+    private ScheduleService scheduleService;
 
     // get all schedules
-    @GetMapping("/schedules")
-    public List<Schedule> getAllSchedules() {
-        return scheduleRepository.findAll();
+    @GetMapping
+    public ResponseEntity<List<ScheduleDTO>> getAllSchedules() {
+        return ResponseEntity.ok(scheduleService.getAll());
     }
 
-    // create schedule rest api
-    @PostMapping("/schedules")
-    public Schedule createSchedule(@RequestBody Schedule schedule) {
-        return scheduleRepository.save(schedule);
+    // create schedule
+    @PostMapping
+    public ResponseEntity<ScheduleDTO> create(@RequestBody ScheduleDTO dto) {
+        return ResponseEntity.ok(scheduleService.create(dto));
     }
 
-    // get schedule by id rest api
-    @GetMapping("/schedules/{id}")
-    public ResponseEntity<Schedule> getScheduleById(@PathVariable Long id) {
-        Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Schedule not exist with id :" + id));
-        return ResponseEntity.ok(schedule);
+    // get schedule by id
+    @GetMapping("/{id}")
+    public ResponseEntity<ScheduleDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(scheduleService.getById(id));
     }
 
-    // update schedule rest api
-    @PutMapping("/schedules/{id}")
-    public ResponseEntity<Schedule> updateSchedule(@PathVariable Long id, @RequestBody Schedule scheduleDetails) {
-        Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Schedule not exist with id :" + id));
-
-        schedule.setStartHour(scheduleDetails.getStartHour());
-        schedule.setEndHour(scheduleDetails.getEndHour());
-        schedule.setDayOfWeek(scheduleDetails.getDayOfWeek());
-
-        Schedule updatedSchedule = scheduleRepository.save(schedule);
-        return ResponseEntity.ok(updatedSchedule);
+    // update schedule
+    @PutMapping("/{id}")
+    public ResponseEntity<ScheduleDTO> update(@PathVariable Long id, @RequestBody ScheduleDTO dto) {
+        return ResponseEntity.ok(scheduleService.update(id, dto));
     }
 
-    // delete schedule rest api
-    @DeleteMapping("/schedules/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteSchedule(@PathVariable Long id) {
-        Schedule schedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Schedule not exist with id :" + id));
-
-        scheduleRepository.delete(schedule);
+    // delete schedule
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable Long id) {
+        scheduleService.delete(id);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);

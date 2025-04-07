@@ -4,36 +4,36 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "groups")
+@Table(name = "final_notes")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode
-public class Group {
+public class FinalNote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_course",
+    @JoinColumn(name = "id_academic_record",
             nullable = false,
             columnDefinition = "BIGINT"
     )
-    private Course course;
+    private AcademicRecord academicRecord;
 
     @ManyToOne
-    @JoinColumn(name = "id_teacher",
+    @JoinColumn(name = "id_group",
             nullable = false,
             columnDefinition = "BIGINT"
     )
-    private Teacher teacher;
+    private Group group;
 
-    @Column(name = "academic_period",
+    @Column(name = "note",
             nullable = false,
-            columnDefinition = "VARCHAR(5)"
+            columnDefinition = "REAL"
     )
-    private String academicPeriod;
+    private float note;
 }

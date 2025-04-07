@@ -1,8 +1,7 @@
 package co.edu.udes.backend.controllers;
 
-import co.edu.udes.backend.models.DayOfWeek;
-import co.edu.udes.backend.repositories.DayOfWeekRepository;
-import co.edu.udes.backend.utils.ResourceNotFoundException;
+import co.edu.udes.backend.dto.DayOfWeekDTO;
+import co.edu.udes.backend.services.DayOfWeekService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,51 +12,40 @@ import java.util.Map;
 
 //@CrossOrigin(origin = "http://localhost")
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/days-of-week")
 public class DayOfWeekController {
 
     @Autowired
-    private DayOfWeekRepository dayOfWeekRepository;
+    private DayOfWeekService dayOfWeekService;
 
     // get all days of the week
-    @GetMapping("days-of-week")
-    public List<DayOfWeek> getAllDaysOfWeek() {
-        return dayOfWeekRepository.findAll();
+    @GetMapping
+    public ResponseEntity<List<DayOfWeekDTO>> getAllDaysOfWeek() {
+        return ResponseEntity.ok(dayOfWeekService.getAll());
     }
 
     // create day of the week rest api
-    @PostMapping("days-of-week")
-    public DayOfWeek createDayOfWeek(@RequestBody DayOfWeek dayOfWeek) {
-        return dayOfWeekRepository.save(dayOfWeek);
+    @PostMapping
+    public ResponseEntity<DayOfWeekDTO> create(@RequestBody DayOfWeekDTO dto) {
+        return ResponseEntity.ok(dayOfWeekService.create(dto));
     }
 
     // get day of the week by id rest api
-    @GetMapping("days-of-week/{id}")
-    public ResponseEntity<DayOfWeek> getDayOfWeekById(@PathVariable Long id) {
-        DayOfWeek dayOfWeek = dayOfWeekRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Day of the week not exist with id :" + id));
-        return ResponseEntity.ok(dayOfWeek);
+    @GetMapping("/{id}")
+    public ResponseEntity<DayOfWeekDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(dayOfWeekService.getById(id));
     }
 
     // update day of the week rest api
-    @PutMapping("days-of-week/{id}")
-    public ResponseEntity<DayOfWeek> updateDayOfWeek(@PathVariable Long id, @RequestBody DayOfWeek dayOfWeekDetails) {
-        DayOfWeek dayOfWeek = dayOfWeekRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Day of the week not exist with id :" + id));
-
-        dayOfWeek.setName(dayOfWeekDetails.getName());
-
-        DayOfWeek updatedDayOfWeek = dayOfWeekRepository.save(dayOfWeek);
-        return ResponseEntity.ok(updatedDayOfWeek);
+    @PutMapping("/{id}")
+    public ResponseEntity<DayOfWeekDTO> update(@PathVariable Long id, @RequestBody DayOfWeekDTO dto) {
+        return ResponseEntity.ok(dayOfWeekService.update(id, dto));
     }
 
     // delete day of the week rest api
-    @DeleteMapping("days-of-week/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteDayOfWeek(@PathVariable Long id){
-        DayOfWeek dayOfWeek = dayOfWeekRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Day of the week not exist with id :" + id));
-
-        dayOfWeekRepository.delete(dayOfWeek);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable Long id) {
+        dayOfWeekService.delete(id);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);

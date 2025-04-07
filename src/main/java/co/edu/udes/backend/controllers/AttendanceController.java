@@ -1,8 +1,7 @@
 package co.edu.udes.backend.controllers;
 
-import co.edu.udes.backend.models.Attendance;
-import co.edu.udes.backend.repositories.AttendanceRepository;
-import co.edu.udes.backend.utils.ResourceNotFoundException;
+import co.edu.udes.backend.dto.AttendanceDTO;
+import co.edu.udes.backend.services.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,57 +12,43 @@ import java.util.Map;
 
 //@CrossOrigin(origin = "http://localhost")
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/attendances")
 public class AttendanceController {
 
     @Autowired
-    private AttendanceRepository attendanceRepository;
+    private AttendanceService attendanceService;
 
     // get all attendances
-    @GetMapping("/attendances")
-    public List<Attendance> getAllAttendances() {
-        return attendanceRepository.findAll();
+    @GetMapping
+    public ResponseEntity<List<AttendanceDTO>> getAllAttendances() {
+        return ResponseEntity.ok(attendanceService.getAll());
     }
 
     // create attendance rest api
-    @PostMapping("/attendances")
-    public Attendance createAttendance(@RequestBody Attendance attendance) {
-        return attendanceRepository.save(attendance);
+    @PostMapping
+    public ResponseEntity<AttendanceDTO> create(@RequestBody AttendanceDTO dto) {
+        return ResponseEntity.ok(attendanceService.create(dto));
     }
 
     // get attendance by id rest api
-    @GetMapping("/attendances/{id}")
-    public ResponseEntity<Attendance> getAttendanceById(@PathVariable Long id) {
-        Attendance attendance = attendanceRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Attendance not exist with id :" + id));
-        return ResponseEntity.ok(attendance);
+    @GetMapping("/{id}")
+    public ResponseEntity<AttendanceDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(attendanceService.getById(id));
     }
 
     // update attendance rest api
-    @PutMapping("/attendances/{id}")
-    public ResponseEntity<Attendance> updateAttendance(@PathVariable Long id, @RequestBody Attendance attendanceDetails) {
-        Attendance attendance = attendanceRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Attendance not exist with id :" + id));
-
-        attendance.setLesson(attendanceDetails.getLesson());
-        attendance.setStudent(attendanceDetails.getStudent());
-        attendance.setDate(attendanceDetails.getDate());
-        attendance.setAssistance(attendanceDetails.isAssistance());
-        attendance.setJustification(attendanceDetails.getJustification());
-
-        Attendance updatedAttendance = attendanceRepository.save(attendance);
-        return ResponseEntity.ok(updatedAttendance);
+    @PutMapping("/{id}")
+    public ResponseEntity<AttendanceDTO> update(@PathVariable Long id, @RequestBody AttendanceDTO dto) {
+        return ResponseEntity.ok(attendanceService.update(id, dto));
     }
 
     // delete attendance rest api
-    @DeleteMapping("/attendances/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteAttendance(@PathVariable Long id) {
-        Attendance attendance = attendanceRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Attendance not exist with id :" + id));
-
-        attendanceRepository.delete(attendance);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable Long id) {
+        attendanceService.delete(id);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
+
 }

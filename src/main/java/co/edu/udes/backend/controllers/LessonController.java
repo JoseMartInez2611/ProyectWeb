@@ -1,8 +1,8 @@
 package co.edu.udes.backend.controllers;
 
-import co.edu.udes.backend.models.Lesson;
-import co.edu.udes.backend.repositories.LessonRepository;
-import co.edu.udes.backend.utils.ResourceNotFoundException;
+
+import co.edu.udes.backend.dto.LessonDTO;
+import co.edu.udes.backend.services.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,53 +13,40 @@ import java.util.Map;
 
 // @CrossOrigin(origins = "http://localhost")
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/lessons")
 public class LessonController {
 
     @Autowired
-    private LessonRepository lessonRepository;
+    private LessonService lessonService;
 
     // get all lessons
-    @GetMapping("/lessons")
-    public List<Lesson> getAllLessons() {
-        return lessonRepository.findAll();
+    @GetMapping
+    public ResponseEntity<List<LessonDTO>> getAll(){
+        return ResponseEntity.ok(lessonService.getAll());
     }
 
-    // create lesson rest api
-    @PostMapping("/lessons")
-    public Lesson createLesson(@RequestBody Lesson lesson) {
-        return lessonRepository.save(lesson);
+    // create lesson
+    @PostMapping
+    public ResponseEntity<LessonDTO> create(@RequestBody LessonDTO dto){
+        return ResponseEntity.ok(lessonService.create(dto));
     }
 
-    // get lesson by id rest api
-    @GetMapping("/lessons/{id}")
-    public ResponseEntity<Lesson> getLessonById(@PathVariable Long id) {
-        Lesson lesson = lessonRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Lesson not exist with id :" + id));
-        return ResponseEntity.ok(lesson);
+    // get lesson by id
+    @GetMapping("/{id}")
+    public ResponseEntity<LessonDTO> getById(@PathVariable Long id){
+        return ResponseEntity.ok(lessonService.getById(id));
     }
 
-    // update lesson rest api
-    @PutMapping("/lessons/{id}")
-    public ResponseEntity<Lesson> updateLesson(@PathVariable Long id, @RequestBody Lesson lessonDetails) {
-        Lesson lesson = lessonRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Lesson not exist with id :" + id));
-
-        lesson.setSchedule(lessonDetails.getSchedule());
-        lesson.setClassroom(lessonDetails.getClassroom());
-        lesson.setGroup(lessonDetails.getGroup());
-
-        Lesson updatedLesson = lessonRepository.save(lesson);
-        return ResponseEntity.ok(updatedLesson);
+    // update lesson
+    @PutMapping("/{id}")
+    public ResponseEntity<LessonDTO> update(@PathVariable Long id, @RequestBody LessonDTO dto){
+        return ResponseEntity.ok(lessonService.update(id, dto));
     }
 
-    // delete lesson rest api
-    @DeleteMapping("/lessons/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteLesson(@PathVariable Long id) {
-        Lesson lesson = lessonRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Lesson not exist with id :" + id));
-
-        lessonRepository.delete(lesson);
+    // delete lesson
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable Long id){
+        lessonService.delete(id);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);

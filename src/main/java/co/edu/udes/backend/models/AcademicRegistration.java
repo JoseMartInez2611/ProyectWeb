@@ -2,10 +2,7 @@ package co.edu.udes.backend.models;
 
 import java.time.LocalDate;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "academic_registrations")
@@ -13,6 +10,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@EqualsAndHashCode
 public class AcademicRegistration {
 
     @Id
@@ -20,13 +19,22 @@ public class AcademicRegistration {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "student_id", nullable = false)
+    @JoinColumn(name = "id_student",
+            nullable = false,
+            columnDefinition = "BIGINT"
+    )
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
+    @JoinColumn(name = "group_id",
+            nullable = false,
+            columnDefinition = "BIGINT"
+    )
     public Group group;
 
-    @Column (name = "registration_date")
+    @Column (name = "registration_date",
+            nullable = false,
+            columnDefinition = "DATE"
+    )
     private LocalDate registrationDate;
 }

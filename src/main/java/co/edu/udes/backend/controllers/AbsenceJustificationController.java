@@ -1,8 +1,7 @@
 package co.edu.udes.backend.controllers;
 
-import co.edu.udes.backend.models.AbsenceJustification;
-import co.edu.udes.backend.repositories.AbsenceJustificationRepository;
-import co.edu.udes.backend.utils.ResourceNotFoundException;
+import co.edu.udes.backend.dto.AbsenceJustificationDTO;
+import co.edu.udes.backend.services.AbsenceJustificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,56 +12,41 @@ import java.util.Map;
 
 //@CrossOrigin(origin = "http://localhost")
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/absence-justifications")
 public class AbsenceJustificationController {
 
     @Autowired
-    private AbsenceJustificationRepository absenceJustificationRepository;
+    private AbsenceJustificationService absenceJustificationService;
 
     // Get all absence justifications
-    @GetMapping("/absence-justifications")
-    public List<AbsenceJustification> getAllAbsenceJustifications() {
-        return absenceJustificationRepository.findAll();
+    @GetMapping
+    public ResponseEntity<List<AbsenceJustificationDTO>> getAllAbsenceJustifications() {
+        return ResponseEntity.ok(absenceJustificationService.getAll());
     }
 
     // Create absence justification
-    @PostMapping("/absence-justifications")
-    public AbsenceJustification createAbsenceJustification(@RequestBody AbsenceJustification absenceJustification) {
-        return absenceJustificationRepository.save(absenceJustification);
+    @PostMapping
+    public ResponseEntity<AbsenceJustificationDTO> create(@RequestBody AbsenceJustificationDTO dto){
+        return ResponseEntity.ok(absenceJustificationService.create(dto));
     }
 
     // Get absence justification by id
-    @GetMapping("/absence-justifications/{id}")
-    public ResponseEntity<AbsenceJustification> getAbsenceJustificationById(@PathVariable Long id) {
-        AbsenceJustification absenceJustification = absenceJustificationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Absence Justification not exist with id :" + id));
-        return ResponseEntity.ok(absenceJustification);
+    @GetMapping("/{id}")
+    public ResponseEntity<AbsenceJustificationDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(absenceJustificationService.getById(id));
     }
-
     // Update absence justification
-    @PutMapping("/absence-justifications/{id}")
-    public ResponseEntity<AbsenceJustification> updateAbsenceJustification(@PathVariable Long id, @RequestBody AbsenceJustification absenceJustificationDetails) {
-        AbsenceJustification absenceJustification = absenceJustificationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Absence Justification not exist with id :" + id));
-
-        absenceJustification.setMotive(absenceJustificationDetails.getMotive());
-        absenceJustification.setDescription(absenceJustificationDetails.getDescription());
-        absenceJustification.setJustified(absenceJustificationDetails.isJustified());
-
-        AbsenceJustification updatedAbsenceJustification = absenceJustificationRepository.save(absenceJustification);
-        return ResponseEntity.ok(updatedAbsenceJustification);
+    @PutMapping("/{id}")
+    public ResponseEntity<AbsenceJustificationDTO> update(@PathVariable Long id, @RequestBody AbsenceJustificationDTO dto) {
+        return ResponseEntity.ok(absenceJustificationService.update(id, dto));
     }
 
     // Delete absence justification
-    @DeleteMapping("/absence-justifications/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteAbsenceJustification (@PathVariable Long id) {
-        AbsenceJustification absenceJustification = absenceJustificationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Absence Justification not exist with id :" + id));
-
-        absenceJustificationRepository.delete(absenceJustification);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable Long id) {
+        absenceJustificationService.delete(id);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
-
 }

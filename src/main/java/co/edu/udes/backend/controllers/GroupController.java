@@ -1,8 +1,7 @@
 package co.edu.udes.backend.controllers;
 
-import co.edu.udes.backend.models.Group;
-import co.edu.udes.backend.repositories.GroupRepository;
-import co.edu.udes.backend.utils.ResourceNotFoundException;
+import co.edu.udes.backend.dto.GroupDTO;
+import co.edu.udes.backend.services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,53 +12,40 @@ import java.util.Map;
 
 // @CrossOrigin(origins = "http://localhost")
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/groups")
 public class GroupController {
 
     @Autowired
-    private GroupRepository groupRepository;
+    private GroupService groupService;
 
     // get all groups
-    @GetMapping("/groups")
-    public List<Group> getAllGroups() {
-        return groupRepository.findAll();
+    @GetMapping
+    public ResponseEntity<List<GroupDTO>> getAll(){
+        return ResponseEntity.ok(groupService.getAll());
     }
 
-    // create group rest api
-    @PostMapping("/groups")
-    public Group createGroup(@RequestBody Group group) {
-        return groupRepository.save(group);
+    // create group
+    @PostMapping
+    public ResponseEntity<GroupDTO> create(@RequestBody GroupDTO dto){
+        return ResponseEntity.ok(groupService.create(dto));
     }
 
-    // get group by id rest api
-    @GetMapping("/groups/{id}")
-    public ResponseEntity<Group> getGroupById(@PathVariable Long id) {
-        Group group = groupRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Group not exist with id :" + id));
-        return ResponseEntity.ok(group);
+    // get group by id
+    @GetMapping("/{id}")
+    public ResponseEntity<GroupDTO> getById(@PathVariable Long id){
+        return ResponseEntity.ok(groupService.getById(id));
     }
 
-    // update group rest api
-    @PutMapping("/groups/{id}")
-    public ResponseEntity<Group> updateGroup(@PathVariable Long id, @RequestBody Group groupDetails) {
-        Group group = groupRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Group not exist with id :" + id));
-
-        group.setCourse(groupDetails.getCourse());
-        group.setTeacher(groupDetails.getTeacher());
-        group.setAcademicPeriod(groupDetails.getAcademicPeriod());
-
-        Group updatedGroup = groupRepository.save(group);
-        return ResponseEntity.ok(updatedGroup);
+    // update group
+    @PutMapping("/{id}")
+    public ResponseEntity<GroupDTO> update(@PathVariable Long id, @RequestBody GroupDTO dto){
+        return ResponseEntity.ok(groupService.update(id, dto));
     }
 
-    // delete group rest api
-    @DeleteMapping("/groups/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteGroup(@PathVariable Long id) {
-        Group group = groupRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Group not exist with id :" + id));
-
-        groupRepository.delete(group);
+    // delete group
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable Long id){
+        groupService.delete(id);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
