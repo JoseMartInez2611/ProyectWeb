@@ -8,11 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Collections;
 import java.util.List;
 
-@RequiredArgsConstructor
 public class EmployeeMapper {
 
-    @Autowired
-    private final BorrowMapper borrowMapper;
+
+    private final BorrowMapper borrowMapper = new BorrowMapper();
 
     public  EmployeeDTO toDTO(Employee employee) {
         return EmployeeDTO.builder()

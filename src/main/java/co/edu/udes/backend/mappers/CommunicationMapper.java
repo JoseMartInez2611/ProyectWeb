@@ -2,18 +2,12 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.inheritanceDTO.CommunicationDTO;
 import co.edu.udes.backend.models.inheritance.Communication;
-import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
 public class CommunicationMapper {
 
-    private final UserMapper userMapper;
-
-    public CommunicationMapper(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
+    private final UserMapper userMapper = new UserMapper();
 
     public CommunicationDTO toDTO(Communication communication) {
         if (communication == null) {
@@ -32,14 +26,13 @@ public class CommunicationMapper {
         if (communicationDTO == null) {
             return null;
         }
-        Communication communication = Communication.builder()
+        return Communication.builder()
                 .id(communicationDTO.getId())
                 .receiver(userMapper.toEntityList(communicationDTO.getReceiver()))
                 .sentDate(communicationDTO.getSentDate())
                 .content(communicationDTO.getContent())
                 .read(communicationDTO.isRead())
                 .build();
-        return communication;
     }
 
     public List<CommunicationDTO> toDTOList(List<Communication> communications) {

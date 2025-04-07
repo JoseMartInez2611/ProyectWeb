@@ -8,16 +8,12 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+
 public class BorrowMapper {
 
-    private final AcademicResourceMapper academicResourceMapper;
-    private final EmployeeMapper employeeMapper;
+    private final AcademicResourceMapper academicResourceMapper = new AcademicResourceMapper();
+    private final EmployeeMapper employeeMapper = new EmployeeMapper();
 
-    public BorrowMapper(AcademicResourceMapper academicResourceMapper, EmployeeMapper employeeMapper) {
-        this.academicResourceMapper = academicResourceMapper;
-        this.employeeMapper = employeeMapper;
-    }
 
     public BorrowDTO toDTO(Borrow borrow) {
         if (borrow == null) {
@@ -37,14 +33,14 @@ public class BorrowMapper {
         if (borrowDTO == null) {
             return null;
         }
-        Borrow borrow = new Borrow();
-        borrow.setId(borrowDTO.getId());
-        borrow.setBorrowDate(borrowDTO.getBorrowDate());
-        borrow.setReturnDate(borrowDTO.getReturnDate());
-        borrow.setDuration(borrowDTO.getDuration());
-        borrow.setResource(academicResourceMapper.toEntity(borrowDTO.getResource()));
-        borrow.setLender(employeeMapper.toEntity(borrowDTO.getLender()));
-        return borrow;
+        return Borrow.builder()
+                .id(borrowDTO.getId())
+                .borrowDate(borrowDTO.getBorrowDate())
+                .returnDate(borrowDTO.getReturnDate())
+                .duration(borrowDTO.getDuration())
+                .resource(academicResourceMapper.toEntity(borrowDTO.getResource()))
+                .lender(employeeMapper.toEntity(borrowDTO.getLender()))
+                .build();
     }
 
     public List<BorrowDTO> toDTOList(List<Borrow> borrows) {

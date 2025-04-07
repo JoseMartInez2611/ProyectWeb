@@ -36,8 +36,5 @@ public class Communication {
     @Column(name = "read", nullable = false, columnDefinition = "boolean")
     private boolean read = false;
 
-    public void markAsRead() {
-        this.read = true;
-    }
 }
 

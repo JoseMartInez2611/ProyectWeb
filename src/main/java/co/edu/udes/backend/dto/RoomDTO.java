@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.Builder;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -14,5 +13,5 @@ public class RoomDTO {
     private String number;
     private String floor;
     private char building;
-    private List<Long> resourceIds; // List of IDs of the AcademicResources in the room
+    private List<AcademicResourceDTO> resources;
 }

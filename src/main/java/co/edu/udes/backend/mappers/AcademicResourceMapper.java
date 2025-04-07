@@ -2,11 +2,10 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.AcademicResourceDTO;
 import co.edu.udes.backend.models.AcademicResource;
-import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+
 public class AcademicResourceMapper {
 
     public AcademicResourceDTO toDTO(AcademicResource academicResource) {

@@ -7,8 +7,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+
 public class RoomMapper {
+
+    private final AcademicResourceMapper academicResourceMapper = new AcademicResourceMapper();
 
     public RoomDTO toDTO(Room room) {
         if (room == null) {
@@ -20,9 +22,7 @@ public class RoomMapper {
                 .number(room.getNumber())
                 .floor(room.getFloor())
                 .building(room.getBuilding())
-                .resourceIds(room.getResources().stream()
-                        .map(AcademicResource::getId)
-                        .collect(Collectors.toList()))
+                .resources(academicResourceMapper.toDTOList(room.getResources()))
                 .build();
     }
 
@@ -30,14 +30,14 @@ public class RoomMapper {
         if (roomDTO == null) {
             return null;
         }
-        Room room = new Room();
-        room.setId(roomDTO.getId());
-        room.setCapacity(roomDTO.getCapacity());
-        room.setNumber(roomDTO.getNumber());
-        room.setFloor(roomDTO.getFloor());
-        room.setBuilding(roomDTO.getBuilding());
-        room.setResources(new java.util.ArrayList<>());
-        return room;
+        return Room.builder()
+                .id(roomDTO.getId())
+                .capacity(roomDTO.getCapacity())
+                .number(roomDTO.getNumber())
+                .floor(roomDTO.getFloor())
+                .building(roomDTO.getBuilding())
+                .resources(academicResourceMapper.toEntityList(roomDTO.getResources()))
+                .build();
     }
 
     public List<RoomDTO> toDTOList(List<Room> rooms) {

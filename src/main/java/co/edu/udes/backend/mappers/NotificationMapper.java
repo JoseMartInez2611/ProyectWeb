@@ -2,19 +2,14 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.NotificationDTO;
 import co.edu.udes.backend.models.Notification;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+
 public class NotificationMapper {
 
-    private final CommunicationMapper communicationMapper;
-
-    public NotificationMapper(CommunicationMapper communicationMapper) {
-        this.communicationMapper = communicationMapper;
-    }
+    private final UserMapper userMapper = new UserMapper();
 
     public NotificationDTO toDTO(Notification notification) {
         if (notification == null) {
@@ -35,14 +30,14 @@ public class NotificationMapper {
         if (notificationDTO == null) {
             return null;
         }
-        Notification notification = new Notification();
-        notification.setId(notificationDTO.getId());
-        notification.setReceiver(userMapper.toEntityList(notificationDTO.getReceiver()));
-        notification.setSentDate(notificationDTO.getSentDate());
-        notification.setContent(notificationDTO.getContent());
-        notification.setRead(notificationDTO.isRead());
-        notification.setType(notificationDTO.getType());
-        return notification;
+        return Notification.builder()
+                .id(notificationDTO.getId())
+                .receiver(userMapper.toEntityList(notificationDTO.getReceiver()))
+                .sentDate(notificationDTO.getSentDate())
+                .content(notificationDTO.getContent())
+                .read(notificationDTO.isRead())
+                .type(notificationDTO.getType())
+                .build();
     }
 
     public List<NotificationDTO> toDTOList(List<Notification> notifications) {
