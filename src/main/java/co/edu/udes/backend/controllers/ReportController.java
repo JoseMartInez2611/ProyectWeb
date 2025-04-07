@@ -1,67 +1,43 @@
 package co.edu.udes.backend.controllers;
 
-import co.edu.udes.backend.models.Report;
-import co.edu.udes.backend.repositories.ReportRepository;
-import co.edu.udes.backend.utils.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import co.edu.udes.backend.dto.ReportDTO;
+import co.edu.udes.backend.services.ReportService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/reports") // Cambiado a /api/v1/reports para mejor semántica
+@RequestMapping("/api/v1/entity-name")
+@RequiredArgsConstructor
 public class ReportController {
 
-    @Autowired
-    private ReportRepository reportRepository;
+    private final ReportService entityNameService;
 
-    // get all reports
     @GetMapping
-    public List<Report> getAllReports() {
-        return reportRepository.findAll();
+    public ResponseEntity<List<ReportDTO>> getAll() {
+        return ResponseEntity.ok(entityNameService.getAll());
     }
 
-    // create report rest api
-    @PostMapping
-    public Report createReport(@RequestBody Report report) {
-        return reportRepository.save(report);
-    }
-
-    // get report by id rest api
     @GetMapping("/{id}")
-    public ResponseEntity<Report> getReportById(@PathVariable Long id) {
-        Report report = reportRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Report not exist with id :" + id));
-        return ResponseEntity.ok(report);
+    public ResponseEntity<ReportDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(entityNameService.getById(id));
     }
 
-    // update report rest api
+    @PostMapping
+    public ResponseEntity<ReportDTO> create(@RequestBody ReportDTO dto) {
+        return ResponseEntity.ok(entityNameService.create(dto));
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Report> updateReport(@PathVariable Long id, @RequestBody Report reportDetails) {
-        Report report = reportRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Report not exist with id :" + id));
-
-        report.setReportType(reportDetails.getReportType());
-        report.setContent(reportDetails.getContent());
-        report.setGenerationDate(reportDetails.getGenerationDate());
-        report.setRequestingUser(reportDetails.getRequestingUser());
-        report.setFiles(reportDetails.getFiles());
-
-        Report updatedReport = reportRepository.save(report);
-        return ResponseEntity.ok(updatedReport);
+    public ResponseEntity<ReportDTO> update(@PathVariable Long id, @RequestBody ReportDTO dto) {
+        return ResponseEntity.ok(entityNameService.update(id, dto));
     }
 
-    // delete report rest api
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteReport(@PathVariable Long id) {
-        Report report = reportRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Report not exist with id :" + id));
-
-        reportRepository.delete(report);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        entityNameService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,67 +1,43 @@
 package co.edu.udes.backend.controllers;
 
-import co.edu.udes.backend.models.Room;
-import co.edu.udes.backend.repositories.RoomRepository;
-import co.edu.udes.backend.utils.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import co.edu.udes.backend.dto.RoomDTO;
+import co.edu.udes.backend.services.RoomService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/rooms") // Cambiado a /api/v1/rooms para mejor semántica
+@RequestMapping("/api/v1/entity-name")
+@RequiredArgsConstructor
 public class RoomController {
 
-    @Autowired
-    private RoomRepository roomRepository;
+    private final RoomService entityNameService;
 
-    // get all rooms
     @GetMapping
-    public List<Room> getAllRooms() {
-        return roomRepository.findAll();
+    public ResponseEntity<List<RoomDTO>> getAll() {
+        return ResponseEntity.ok(entityNameService.getAll());
     }
 
-    // create room rest api
-    @PostMapping
-    public Room createRoom(@RequestBody Room room) {
-        return roomRepository.save(room);
-    }
-
-    // get room by id rest api
     @GetMapping("/{id}")
-    public ResponseEntity<Room> getRoomById(@PathVariable Long id) {
-        Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Room not exist with id :" + id));
-        return ResponseEntity.ok(room);
+    public ResponseEntity<RoomDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(entityNameService.getById(id));
     }
 
-    // update room rest api
+    @PostMapping
+    public ResponseEntity<RoomDTO> create(@RequestBody RoomDTO dto) {
+        return ResponseEntity.ok(entityNameService.create(dto));
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody Room roomDetails) {
-        Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Room not exist with id :" + id));
-
-        room.setCapacity(roomDetails.getCapacity());
-        room.setNumber(roomDetails.getNumber());
-        room.setFloor(roomDetails.getFloor());
-        room.setBuilding(roomDetails.getBuilding());
-        room.setResources(roomDetails.getResources());
-
-        Room updatedRoom = roomRepository.save(room);
-        return ResponseEntity.ok(updatedRoom);
+    public ResponseEntity<RoomDTO> update(@PathVariable Long id, @RequestBody RoomDTO dto) {
+        return ResponseEntity.ok(entityNameService.update(id, dto));
     }
 
-    // delete room rest api
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteRoom(@PathVariable Long id) {
-        Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Room not exist with id :" + id));
-
-        roomRepository.delete(room);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        entityNameService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
