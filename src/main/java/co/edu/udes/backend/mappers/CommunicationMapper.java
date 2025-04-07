@@ -1,4 +1,4 @@
-package co.edu.udes.backend.mapper;
+package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.CommunicationDTO;
 import co.edu.udes.backend.dto.UserDTO;

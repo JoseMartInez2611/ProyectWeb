@@ -1,9 +1,7 @@
-package co.edu.udes.backend.mapper;
+package co.edu.udes.backend.mappers;
 
-import co.edu.udes.backend.dto.CommunicationDTO;
 import co.edu.udes.backend.dto.NotificationDTO;
 import co.edu.udes.backend.models.Notification;
-import co.edu.udes.backend.models.inheritance.Communication;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

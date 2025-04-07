@@ -1,11 +1,10 @@
-package co.edu.udes.backend.mapper;
+package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.ReportDTO;
 import co.edu.udes.backend.dto.UserDTO;
 import co.edu.udes.backend.models.Report;
-import co.edu.udes.backend.models.inheritance.User;
 import org.springframework.stereotype.Component;
-import java.io.File;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -1,10 +1,11 @@
-package co.edu.udes.backend.service;
+package co.edu.udes.backend.services;
 
-import co.edu.udes.backend.dto.RoomDTO;
-import co.edu.udes.backend.mapper.RoomMapper;
-import co.edu.udes.backend.models.Room;
-import co.edu.udes.backend.repositories.RoomRepository;
+
+import co.edu.udes.backend.dto.AcademicResourceDTO;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
+import co.edu.udes.backend.mappers.AcademicResourceMapper;
+import co.edu.udes.backend.models.AcademicResource;
+import co.edu.udes.backend.repositories.AcademicResourceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,38 +14,38 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class RoomService {
+public class AcademicResourceService {
 
-    private final RoomRepository entityNameRepository;
-    private final RoomMapper entityNameMapper;
+    private final AcademicResourceRepository entityNameRepository;
+    private final AcademicResourceMapper entityNameMapper;
 
-    public List<RoomDTO> getAll() {
+    public List<AcademicResourceDTO> getAll() {
         return entityNameRepository.findAll().stream()
                 .map(entityNameMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public RoomDTO getById(Long id) {
-        Room entity = entityNameRepository.findById(id)
+    public AcademicResourceDTO getById(Long id) {
+        AcademicResource entity = entityNameRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
         return entityNameMapper.toDTO(entity);
     }
 
-    public RoomDTO create(RoomDTO dto) {
-        Room entity = entityNameMapper.toEntity(dto);
+    public AcademicResourceDTO create(AcademicResourceDTO dto) {
+        AcademicResource entity = entityNameMapper.toEntity(dto);
         return entityNameMapper.toDTO(entityNameRepository.save(entity));
     }
 
-    public RoomDTO update(Long id, RoomDTO dto) {
+    public AcademicResourceDTO update(Long id, AcademicResourceDTO dto) {
         entityNameRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
         dto.setId(id);
-        Room updated = entityNameRepository.save(entityNameMapper.toEntity(dto));
+        AcademicResource updated = entityNameRepository.save(entityNameMapper.toEntity(dto));
         return entityNameMapper.toDTO(updated);
     }
 
     public void delete(Long id) {
-        Room entity = entityNameRepository.findById(id)
+        AcademicResource entity = entityNameRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
         entityNameRepository.delete(entity);
     }

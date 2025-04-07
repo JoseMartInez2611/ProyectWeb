@@ -1,12 +1,11 @@
-package co.edu.udes.backend.service;
+package co.edu.udes.backend.services;
 
 
 import co.edu.udes.backend.dto.BorrowDTO;
-import co.edu.udes.backend.mapper.BorrowMapper;
+import co.edu.udes.backend.mappers.BorrowMapper;
 import co.edu.udes.backend.models.Borrow;
 import co.edu.udes.backend.repositories.BorrowRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
-import co.edu.udes.backend.models.AcademicResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
