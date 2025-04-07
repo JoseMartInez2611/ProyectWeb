@@ -1,8 +1,11 @@
 package co.edu.udes.backend.controllers;
 
+import co.edu.udes.backend.dto.ActivityDTO;
 import co.edu.udes.backend.models.Activity;
 import co.edu.udes.backend.repositories.ActivityRepository;
+import co.edu.udes.backend.services.ActivityService;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,59 +15,37 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/activity")
+@RequiredArgsConstructor
 public class ActivityController {
 
     @Autowired
-    private ActivityRepository activityRepository;
+    private final ActivityService activityService;
 
-    //get all activities
     @GetMapping
-    public List<Activity> getAllActivities(@RequestBody Activity activity){
-        return activityRepository.findAll();
+    public ResponseEntity<List<ActivityDTO>> getAll() {
+        return ResponseEntity.ok(activityService.getAll());
     }
 
-    //create activity
-    @PostMapping("/activities")
-    public Activity createActivity(@RequestBody Activity activity){
-        return activityRepository.save(activity);
+    @GetMapping("/{id}")
+    public ResponseEntity<ActivityDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(activityService.getById(id));
     }
 
-    //get activity by id
-    @GetMapping("/actvitys/{id}")
-    public ResponseEntity<Activity> getActivityById(@PathVariable Long id){
-        Activity activity = activityRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("activity not exist with id: "+id));
-        return ResponseEntity.ok(activity);
+    @PostMapping
+    public ResponseEntity<ActivityDTO> create(@RequestBody ActivityDTO dto) {
+        return ResponseEntity.ok(activityService.create(dto));
     }
 
-    //update activity
-    @PutMapping("/activities/{id}")
-    public ResponseEntity<Activity> updateActivity(@PathVariable Long id, @RequestBody Activity activity){
-        Activity existingActivity = activityRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("activity not exist with id: "+id));
-
-        existingActivity.setEvaluationRubric(activity.getEvaluationRubric());
-        existingActivity.setDate(activity.getDate());
-        existingActivity.setGroup(activity.getGroup());
-
-        existingActivity.setDescription(activity.getDescription());
-        existingActivity.setAnswerText(activity.getAnswerText());
-        existingActivity.setAnswerDocuments(activity.getAnswerDocuments());
-
-        Activity updatedActivity = activityRepository.save(existingActivity);
-        return ResponseEntity.ok(updatedActivity);
+    @PutMapping("/{id}")
+    public ResponseEntity<ActivityDTO> update(@PathVariable Long id, @RequestBody ActivityDTO dto) {
+        return ResponseEntity.ok(activityService.update(id, dto));
     }
 
-    //delete activity
-    @DeleteMapping("/activities/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteUser(@PathVariable Long id){
-        Activity activity = activityRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("activity not exist with id: "+id));
-        activityRepository.delete(activity);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        activityService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

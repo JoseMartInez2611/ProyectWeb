@@ -1,8 +1,11 @@
 package co.edu.udes.backend.controllers;
 
+import co.edu.udes.backend.dto.TeacherDTO;
 import co.edu.udes.backend.models.Teacher;
 import co.edu.udes.backend.repositories.TeacherRepository;
+import co.edu.udes.backend.services.TeacherService;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,51 +15,36 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/teachers")
+@RequiredArgsConstructor
 public class TeacherController {
 
     @Autowired
-    private TeacherRepository teacherRepository;
+    private final TeacherService teacherService;
 
-    // get all users
     @GetMapping
-    public List<Teacher> getAllTeacher(@RequestBody Teacher teacher){
-        return teacherRepository.findAll();
-
+    public ResponseEntity<List<TeacherDTO>> getAll() {
+        return ResponseEntity.ok(teacherService.getAll());
     }
 
-    //Create teacher
-    @PostMapping("/teachers")
-    public Teacher createTeacher(@RequestBody Teacher teacher){
-        return teacherRepository.save(teacher);
+    @GetMapping("/{id}")
+    public ResponseEntity<TeacherDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(teacherService.getById(id));
     }
 
-    //Update teacher
-    @PutMapping("/teachers/{id}")
-    public ResponseEntity<Teacher> updateTeacher(@PathVariable Long id, @RequestBody Teacher teacher){
-        Teacher existingTeacher = teacherRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Teacher not exist with id :" + id));
-
-        existingTeacher.setFirstName(teacher.getFirstName());
-        existingTeacher.setLastName(teacher.getLastName());
-        existingTeacher.setEmail(teacher.getEmail());
-        existingTeacher.setPhone(teacher.getPhone());
-        existingTeacher.setPassword(teacher.getPassword());
-        existingTeacher.setUserName(teacher.getUserName());
-
-        existingTeacher.setSpeciality(teacher.getSpeciality());
-        Teacher updatedTeacher = teacherRepository.save(existingTeacher);
-        return ResponseEntity.ok(updatedTeacher);
+    @PostMapping
+    public ResponseEntity<TeacherDTO> create(@RequestBody TeacherDTO dto) {
+        return ResponseEntity.ok(teacherService.create(dto));
     }
 
-    //Delete teacher
-    @DeleteMapping("/teachers/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteTeacher(@PathVariable Long id){
-        Teacher teacher = teacherRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Teacher not exist with id: "+id));
-        teacherRepository.delete(teacher);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    @PutMapping("/{id}")
+    public ResponseEntity<TeacherDTO> update(@PathVariable Long id, @RequestBody TeacherDTO dto) {
+        return ResponseEntity.ok(teacherService.update(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        teacherService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,8 +1,11 @@
 package co.edu.udes.backend.controllers;
 
+import co.edu.udes.backend.dto.QualificationDTO;
 import co.edu.udes.backend.models.Qualification;
 import co.edu.udes.backend.repositories.QualificationRepository;
+import co.edu.udes.backend.services.QualificationService;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,54 +16,36 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/qualification")
+@RequiredArgsConstructor
 public class QualificationController {
 
     @Autowired
-    private QualificationRepository qualificationRepository;
+    private final QualificationService qualificationService;
 
-    // get all qualifications
-    @GetMapping("/qualifications")
-    public List<Qualification> getAllQualifications(@RequestBody Qualification qualification){
-        return qualificationRepository.findAll();
+    @GetMapping
+    public ResponseEntity<List<QualificationDTO>> getAll() {
+        return ResponseEntity.ok(qualificationService.getAll());
     }
 
-    //create qualification
-    @PostMapping("/qualifications")
-    public Qualification createQualification(@RequestBody Qualification qualification){
-        return qualificationRepository.save(qualification);
+    @GetMapping("/{id}")
+    public ResponseEntity<QualificationDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(qualificationService.getById(id));
     }
 
-    //get qualification by id
-    @GetMapping("/qualifications/{id}")
-    public ResponseEntity<Qualification> getQualificationById(@PathVariable Long id){
-        Qualification qualification = qualificationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Qualification not exist with id :" + id));
-        return ResponseEntity.ok(qualification);
+    @PostMapping
+    public ResponseEntity<QualificationDTO> create(@RequestBody QualificationDTO dto) {
+        return ResponseEntity.ok(qualificationService.create(dto));
     }
 
-    //update qualification
-    @PutMapping("/qualifications/{id}")
-    public ResponseEntity<Qualification> updateQualification(@PathVariable Long id, @RequestBody Qualification qualification){
-        Qualification existingQualification = qualificationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Qualification not exist with id :" + id));
-
-        existingQualification.setQualification(qualification.getQualification());
-        existingQualification.setEvaluation(qualification.getEvaluation());
-        existingQualification.setStudent(qualification.getStudent());
-
-        Qualification updatedQualification = qualificationRepository.save(existingQualification);
-        return ResponseEntity.ok(updatedQualification);
+    @PutMapping("/{id}")
+    public ResponseEntity<QualificationDTO> update(@PathVariable Long id, @RequestBody QualificationDTO dto) {
+        return ResponseEntity.ok(qualificationService.update(id, dto));
     }
 
-    // delete qualification
-    @DeleteMapping("/qualifications/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteQualification(@PathVariable Long id){
-        Qualification qualification = qualificationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Qualification not exist with id :" + id));
-        qualificationRepository.delete(qualification);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        qualificationService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

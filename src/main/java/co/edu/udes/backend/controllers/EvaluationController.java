@@ -1,8 +1,11 @@
 package co.edu.udes.backend.controllers;
 
+import co.edu.udes.backend.dto.inheritanceDTO.EvaluationDTO;
 import co.edu.udes.backend.models.inheritance.Evaluation;
 import co.edu.udes.backend.repositories.EvaluationRepository;
+import co.edu.udes.backend.services.EvaluationService;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,53 +16,35 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/evaluation")
+@RequiredArgsConstructor
 public class EvaluationController {
     @Autowired
-    private EvaluationRepository evaluationRepository;
+    private final EvaluationService evaluationService;
 
-    //get all evaluations
     @GetMapping
-    public List<Evaluation> getAllEvaluations(@RequestBody Evaluation evaluation){
-        return evaluationRepository.findAll();
+    public ResponseEntity<List<EvaluationDTO>> getAll() {
+        return ResponseEntity.ok(evaluationService.getAll());
     }
 
-    //Create evaluation
-    @PostMapping("/evaluations")
-    public Evaluation createEvaluation(@RequestBody Evaluation evaluation){
-        return evaluationRepository.save(evaluation);
+    @GetMapping("/{id}")
+    public ResponseEntity<EvaluationDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(evaluationService.getById(id));
     }
 
-    //get evaluation by id
-    @GetMapping("/evaluations/{id}")
-    public ResponseEntity<Evaluation> getEvaluationById(@PathVariable Long id){
-        Evaluation evaluation = evaluationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Evaluation not exist with id :" + id));
-        return ResponseEntity.ok(evaluation);
+    @PostMapping
+    public ResponseEntity<EvaluationDTO> create(@RequestBody EvaluationDTO dto) {
+        return ResponseEntity.ok(evaluationService.create(dto));
     }
 
-    //update evaluation
-    @PutMapping("/evaluations/{id}")
-    public ResponseEntity<Evaluation> updateEvaluation(@PathVariable Long id, @RequestBody Evaluation evaluation){
-        Evaluation existingEvaluation = evaluationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Evaluation not exist with id :" + id));
-
-        existingEvaluation.setEvaluationRubric(evaluation.getEvaluationRubric());
-        existingEvaluation.setId(evaluation.getId());
-        existingEvaluation.setGroup(evaluation.getGroup());
-
-        Evaluation updatedEvaluation = evaluationRepository.save(evaluation);
-        return ResponseEntity.ok(updatedEvaluation);
+    @PutMapping("/{id}")
+    public ResponseEntity<EvaluationDTO> update(@PathVariable Long id, @RequestBody EvaluationDTO dto) {
+        return ResponseEntity.ok(evaluationService.update(id, dto));
     }
 
-    //delete evaluation
-    @DeleteMapping("/evaluations/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteEvaluation(@PathVariable Long id){
-        Evaluation evaluation = evaluationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Evaluation not exist with id :" + id));
-        evaluationRepository.delete(evaluation);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        evaluationService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

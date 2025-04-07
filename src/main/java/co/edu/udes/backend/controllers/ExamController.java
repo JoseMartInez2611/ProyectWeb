@@ -1,8 +1,11 @@
 package co.edu.udes.backend.controllers;
 
+import co.edu.udes.backend.dto.ExamDTO;
 import co.edu.udes.backend.models.Exam;
 import co.edu.udes.backend.repositories.ExamRepository;
+import co.edu.udes.backend.services.ExamService;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,58 +15,37 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/exam")
+@RequiredArgsConstructor
 public class ExamController {
 
     @Autowired
-    private ExamRepository examRepository;
+    private final ExamService examService;
 
-    //get all exams
     @GetMapping
-    public List<Exam> getAllExams(@RequestBody Exam exam){
-        return examRepository.findAll();
+    public ResponseEntity<List<ExamDTO>> getAll() {
+        return ResponseEntity.ok(examService.getAll());
     }
 
-    //Create Exam
-    @PostMapping("/exams")
-    public Exam createExam(@RequestBody Exam exam){
-        return examRepository.save(exam);
+    @GetMapping("/{id}")
+    public ResponseEntity<ExamDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(examService.getById(id));
     }
 
-    //get exam by id
-    @GetMapping("/exams/{id}")
-    public ResponseEntity<Exam> getExamById(@PathVariable Long id){
-        Exam exam = examRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("exam not exist with id: "+id));
-        return ResponseEntity.ok(exam);
-
+    @PostMapping
+    public ResponseEntity<ExamDTO> create(@RequestBody ExamDTO dto) {
+        return ResponseEntity.ok(examService.create(dto));
     }
 
-    //update exam
-    @PutMapping("/exams/{id}")
-    public ResponseEntity<Exam> updateExam(@PathVariable Long id, @RequestBody Exam exam){
-        Exam existingExam = examRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("exam not exist with id: "+id));
-
-        existingExam.setEvaluationRubric(exam.getEvaluationRubric());
-        existingExam.setDate(exam.getDate());
-        existingExam.setGroup(exam.getGroup());
-
-        existingExam.setQuestions(exam.getQuestions());
-
-        Exam updatedExam = examRepository.save(existingExam);
-        return ResponseEntity.ok(updatedExam);
+    @PutMapping("/{id}")
+    public ResponseEntity<ExamDTO> update(@PathVariable Long id, @RequestBody ExamDTO dto) {
+        return ResponseEntity.ok(examService.update(id, dto));
     }
 
-    //delete exam
-    @DeleteMapping("/exams/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteExam(@PathVariable Long id){
-        Exam exam = examRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("exam not exist with id: "+id));
-        examRepository.delete(exam);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        examService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
 
