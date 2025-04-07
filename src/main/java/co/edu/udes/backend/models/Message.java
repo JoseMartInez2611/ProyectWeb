@@ -24,8 +24,4 @@ public class Message extends Communication {
     @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false, referencedColumnName = "id")
     private User sender;
-
-    public void send() {
-        // send Message
-    }
 }

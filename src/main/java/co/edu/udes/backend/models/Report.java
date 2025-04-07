@@ -41,15 +41,4 @@ public class Report {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "report_id", nullable = false, columnDefinition = "varchar(255)")
     private List<File> files;
-
-    public void generateReport() {
-    }
-    public void viewReport() {
-    }
-    public void saveReport() {
-    }
-    public void editReport() {
-    }
-    public void deleteReport() {
-    }
 }
