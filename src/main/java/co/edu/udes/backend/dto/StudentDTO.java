@@ -1,6 +1,6 @@
 package co.edu.udes.backend.dto;
 
-import co.edu.udes.backend.dto.inheritanceDTO.UserDTO;
+import co.edu.udes.backend.dto.inheritanceDTO.ProfileUDTO;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class StudentDTO extends UserDTO {
+public class StudentDTO extends ProfileUDTO {
     int semester;
     String code;
     Date dateBirth;

@@ -2,54 +2,18 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.QuestionDTO;
 import co.edu.udes.backend.models.Question;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-import java.util.Collections;
 import java.util.List;
 
-@Component
-@RequiredArgsConstructor
-public class QuestionMapper {
-    private ExamMapper examMapper;
+@Mapper
+public interface QuestionMapper {
+    QuestionMapper INSTANCE = Mappers.getMapper(QuestionMapper.class);
 
-    public QuestionDTO toDTO(Question question){
-        return QuestionDTO.builder()
-                .id(question.getId())
-                .question(question.getQuestion())
-                .questionType(question.getQuestionType())
-                .answer(question.getAnswer())
-                .exam(examMapper.toDTO(question.getExam()))
-                .build();
-    }
+    Question toEntity(QuestionDTO question);
+    List<Question> toEntityList(List<QuestionDTO> questions);
 
-    public Question toEntity(QuestionDTO questionDTO){
-        return Question.builder()
-                .id(questionDTO.getId())
-                .question(questionDTO.getQuestion())
-                .questionType(questionDTO.getQuestionType())
-                .answer(questionDTO.getAnswer())
-                .exam(examMapper.toEntity(questionDTO.getExam()))
-                .build();
-    }
-
-    public List<Question> toEntityList(List<QuestionDTO> dtos) {
-        if (dtos == null || dtos.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return dtos.stream()
-                .map(this::toEntity)
-                .toList();
-    }
-
-    public List<QuestionDTO> toDTOList(List<Question> entities) {
-        if (entities == null || entities.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return entities.stream()
-                .map(this::toDTO)
-                .toList();
-    }
+    QuestionDTO toDto(Question question);
+    List<QuestionDTO> toDtoList(List<Question> questions);
 }

@@ -2,7 +2,7 @@ package co.edu.udes.backend.controllers;
 
 
 
-import co.edu.udes.backend.dto.inheritanceDTO.UserDTO;
+import co.edu.udes.backend.dto.inheritanceDTO.ProfileUDTO;
 import co.edu.udes.backend.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,22 +20,22 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAll() {
+    public ResponseEntity<List<ProfileUDTO>> getAll() {
         return ResponseEntity.ok(userService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<ProfileUDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getById(id));
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody UserDTO dto) {
+    public ResponseEntity<ProfileUDTO> create(@RequestBody ProfileUDTO dto) {
         return ResponseEntity.ok(userService.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO dto) {
+    public ResponseEntity<ProfileUDTO> update(@PathVariable Long id, @RequestBody ProfileUDTO dto) {
         return ResponseEntity.ok(userService.update(id, dto));
     }
 

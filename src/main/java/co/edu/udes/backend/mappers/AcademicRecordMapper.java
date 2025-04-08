@@ -2,63 +2,17 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.AcademicRecordDTO;
 import co.edu.udes.backend.models.AcademicRecord;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-import java.util.Collections;
 import java.util.List;
 
-@Component
-@NoArgsConstructor
-public class AcademicRecordMapper {
+@Mapper
+public interface AcademicRecordMapper {
+    AcademicRecordMapper INSTANCE = Mappers.getMapper(AcademicRecordMapper.class);
+    AcademicRecord toEntity(AcademicRecordDTO academicRecord);
+    List<AcademicRecord> toEntityList(List<AcademicRecordDTO> academicRecords);
 
-    private StudentMapper studentMapper;
-    private FinalNoteMapper finalNoteMapper;
-
-    public AcademicRecord toEntity(AcademicRecordDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-
-        return AcademicRecord.builder()
-                .id(dto.getId())
-                .academicAverage(dto.getAcademicAverage())
-                .student(studentMapper.toEntity(dto.getStudent()))
-                .finalNotes(finalNoteMapper.toEntityList(dto.getFinalNotes()))
-                .build();
-    }
-
-    public AcademicRecordDTO toDTO(AcademicRecord entity) {
-        if (entity == null) {
-            return null;
-        }
-
-        return AcademicRecordDTO.builder()
-                .id(entity.getId())
-                .academicAverage(entity.getAcademicAverage())
-                .student(studentMapper.toDTO(entity.getStudent()))
-                .finalNotes(finalNoteMapper.toDTOList(entity.getFinalNotes()))
-                .build();
-    }
-
-    public List<AcademicRecord> toEntityList(List<AcademicRecordDTO> dtos) {
-        if (dtos == null || dtos.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return dtos.stream()
-                .map(this::toEntity)
-                .toList();
-    }
-
-    public List<AcademicRecordDTO> toDTOList(List<AcademicRecord> entities) {
-        if (entities == null || entities.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return entities.stream()
-                .map(this::toDTO)
-                .toList();
-    }
-
+    AcademicRecordDTO toDto(AcademicRecord academicRecord);
+    List<AcademicRecordDTO> toDtoList(List<AcademicRecord> academicRecords);
 }

@@ -1,7 +1,10 @@
 package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.AbsenceJustificationDTO;
+import co.edu.udes.backend.mappers.AbsenceJustificationMapper;
+import co.edu.udes.backend.models.AbsenceJustification;
 import co.edu.udes.backend.services.AbsenceJustificationService;
+import org.aspectj.apache.bcel.classfile.annotation.RuntimeTypeAnnos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +27,15 @@ public class AbsenceJustificationController {
         return ResponseEntity.ok(absenceJustificationService.getAll());
     }
 
-    // Create absence justification
+    // Create absence justification  (HACER ESTO EN TODOS LOS POST Y PUT DE LOS CONTROLLERS)
     @PostMapping
-    public ResponseEntity<AbsenceJustificationDTO> create(@RequestBody AbsenceJustificationDTO dto){
-        return ResponseEntity.ok(absenceJustificationService.create(dto));
+    public ResponseEntity create(@RequestBody AbsenceJustificationDTO dto){
+        try{
+            AbsenceJustification absenceJustification = AbsenceJustificationMapper.INSTANCE.toEntity(dto);
+            return ResponseEntity.ok(absenceJustificationService.create(absenceJustification));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     // Get absence justification by id

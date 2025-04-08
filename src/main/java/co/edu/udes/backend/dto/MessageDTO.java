@@ -2,7 +2,7 @@ package co.edu.udes.backend.dto;
 
 
 import co.edu.udes.backend.dto.inheritanceDTO.CommunicationDTO;
-import co.edu.udes.backend.dto.inheritanceDTO.UserDTO;
+import co.edu.udes.backend.dto.inheritanceDTO.ProfileUDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -12,5 +12,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class MessageDTO extends CommunicationDTO {
     private String subject;
-    private UserDTO sender;
+    private ProfileUDTO sender;
 }

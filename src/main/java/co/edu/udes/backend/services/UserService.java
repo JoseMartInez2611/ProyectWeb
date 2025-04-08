@@ -1,7 +1,7 @@
 package co.edu.udes.backend.services;
 
-import co.edu.udes.backend.dto.inheritanceDTO.UserDTO;
-import co.edu.udes.backend.mappers.UserMapper;
+import co.edu.udes.backend.dto.inheritanceDTO.ProfileUDTO;
+import co.edu.udes.backend.mappers.ProfileUMapper;
 import co.edu.udes.backend.models.inheritance.ProfileU;
 import co.edu.udes.backend.repositories.UserRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
@@ -16,26 +16,26 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final ProfileUMapper userMapper;
 
-    public List<UserDTO> getAll() {
+    public List<ProfileUDTO> getAll() {
         return userRepository.findAll().stream()
                 .map(userMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public UserDTO getById(Long id) {
+    public ProfileUDTO getById(Long id) {
         ProfileU entity = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
         return userMapper.toDTO(entity);
     }
 
-    public UserDTO create(UserDTO dto) {
+    public ProfileUDTO create(ProfileUDTO dto) {
         ProfileU entity = userMapper.toEntity(dto);
         return userMapper.toDTO(userRepository.save(entity));
     }
 
-    public UserDTO update(Long id, UserDTO dto) {
+    public ProfileUDTO update(Long id, ProfileUDTO dto) {
         userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
         dto.setId(id);

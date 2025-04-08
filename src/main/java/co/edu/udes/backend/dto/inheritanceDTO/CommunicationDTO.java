@@ -10,7 +10,7 @@ import java.util.List;
 @SuperBuilder
 public class CommunicationDTO {
     private Long id;
-    private List<UserDTO> receiver;
+    private List<ProfileUDTO> receiver;
     private LocalDate sentDate;
     private String content;
     private boolean read;

@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @SuperBuilder
 @FieldDefaults(level= AccessLevel.PRIVATE)
-public class UserDTO {
+public class ProfileUDTO {
 
     long id;
     String firstName;

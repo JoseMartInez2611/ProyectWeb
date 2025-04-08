@@ -1,6 +1,6 @@
 package co.edu.udes.backend.dto;
 
-import co.edu.udes.backend.dto.inheritanceDTO.UserDTO;
+import co.edu.udes.backend.dto.inheritanceDTO.ProfileUDTO;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +14,7 @@ import java.util.List;
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
-public class TeacherDTO extends UserDTO {
+public class TeacherDTO extends ProfileUDTO {
 
     String speciality;
     List<GroupDTO> groups;

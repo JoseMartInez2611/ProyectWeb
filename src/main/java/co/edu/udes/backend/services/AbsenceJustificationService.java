@@ -2,6 +2,7 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.AbsenceJustificationDTO;
 import co.edu.udes.backend.mappers.AbsenceJustificationMapper;
+import co.edu.udes.backend.models.AbsenceJustification;
 import co.edu.udes.backend.repositories.AbsenceJustificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,8 @@ public class AbsenceJustificationService {
                 .orElseThrow(() -> new RuntimeException("Absence justification not found with id: " + id)));
     }
 
-    public AbsenceJustificationDTO create(AbsenceJustificationDTO dto) {
-        return absenceJustificationMapper.toDTO(absenceJustificationRepository.save(absenceJustificationMapper.toEntity(dto)));
+    public AbsenceJustificationDTO create(AbsenceJustification absenceJustification) {
+        return AbsenceJustificationMapper.INSTANCE.toDto(absenceJustification);
     }
 
     public AbsenceJustificationDTO update(Long id, AbsenceJustificationDTO dto) {
