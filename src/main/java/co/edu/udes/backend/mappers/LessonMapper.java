@@ -7,7 +7,12 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring",
+        uses = {ScheduleMapper.class,
+                GroupMapper.class,
+                RoomMapper.class
+        }
+)
 public interface LessonMapper {
     LessonMapper INSTANCE = Mappers.getMapper(LessonMapper.class);
 

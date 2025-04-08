@@ -2,10 +2,12 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.FinalNoteDTO;
 import co.edu.udes.backend.models.FinalNote;
+import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
+@Mapper(componentModel = "spring")
 public interface FinalNoteMapper {
     FinalNoteMapper INSTANCE = Mappers.getMapper(FinalNoteMapper.class);
 

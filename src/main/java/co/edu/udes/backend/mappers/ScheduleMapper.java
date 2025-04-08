@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring", uses = {DayOfWeekMapper.class})
 public interface ScheduleMapper {
     ScheduleMapper INSTANCE = Mappers.getMapper(ScheduleMapper.class);
 

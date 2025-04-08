@@ -7,8 +7,13 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
-public interface ProfileUMapper {
+@Mapper(componentModel = "spring",
+        uses = {MessageMapper.class,
+                ReportMapper.class,
+                BorrowMapper.class,
+                CommunicationMapper.class
+        }
+)public interface ProfileUMapper {
     ProfileUMapper INSTANCE = Mappers.getMapper(ProfileUMapper.class);
 
     ProfileU toEntity(ProfileUDTO profileU);
