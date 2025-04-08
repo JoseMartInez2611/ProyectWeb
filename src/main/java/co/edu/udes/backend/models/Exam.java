@@ -24,7 +24,8 @@ public class Exam extends Evaluation {
     @OneToMany(
             targetEntity = Question.class,
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL
+            cascade = CascadeType.ALL,
+            mappedBy = "exam"
     )
     List<Question> questions;
 
