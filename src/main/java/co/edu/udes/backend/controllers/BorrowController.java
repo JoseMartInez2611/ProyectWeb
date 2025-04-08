@@ -1,8 +1,12 @@
 package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.BorrowDTO;
+import co.edu.udes.backend.mappers.BorrowMapper;
+import co.edu.udes.backend.models.Borrow;
 import co.edu.udes.backend.services.BorrowService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,31 +17,55 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BorrowController {
 
-    private final BorrowService entityNameService;
+    @Autowired
+    private final BorrowService borrowService;
+
+    @Autowired
+    private final BorrowMapper borrowMapper;
 
     @GetMapping
     public ResponseEntity<List<BorrowDTO>> getAll() {
-        return ResponseEntity.ok(entityNameService.getAll());
+        return ResponseEntity.ok(borrowService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BorrowDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(entityNameService.getById(id));
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        try{
+            return ResponseEntity.ok().body(borrowService.getById(id));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @PostMapping
-    public ResponseEntity<BorrowDTO> create(@RequestBody BorrowDTO dto) {
-        return ResponseEntity.ok(entityNameService.create(dto));
+    public ResponseEntity<?> create(@RequestBody BorrowDTO dto) {
+        try{
+            Borrow borrow = borrowMapper.toEntity(dto);
+            return ResponseEntity.ok(borrowService.create(borrow));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BorrowDTO> update(@PathVariable Long id, @RequestBody BorrowDTO dto) {
-        return ResponseEntity.ok(entityNameService.update(id, dto));
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody BorrowDTO dto) {
+        try{
+            Borrow borrow = borrowMapper.toEntity(dto);
+            return ResponseEntity.ok(borrowService.update(id, borrow));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        entityNameService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            borrowService.delete(id);
+            return ResponseEntity.noContent().build();
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }

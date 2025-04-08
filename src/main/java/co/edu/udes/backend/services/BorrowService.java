@@ -7,45 +7,42 @@ import co.edu.udes.backend.models.Borrow;
 import co.edu.udes.backend.repositories.BorrowRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class BorrowService {
 
-    private final BorrowRepository entityNameRepository;
-    private final BorrowMapper entityNameMapper;
+    private final BorrowRepository borrowRepository;
+    @Autowired
+    private BorrowMapper borrowMapper;
 
     public List<BorrowDTO> getAll() {
-        return entityNameRepository.findAll().stream()
-                .map(entityNameMapper::toDTO)
-                .collect(Collectors.toList());
+        List<Borrow> borrows = borrowRepository.findAll();
+        return borrowMapper.toDtoList(borrows);
     }
 
     public BorrowDTO getById(Long id) {
-        Borrow entity = entityNameRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        return entityNameMapper.toDTO(entity);
+        return borrowMapper.toDto(borrowRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Borrow not found with id: " + id)));
     }
 
-    public BorrowDTO create(BorrowDTO dto) {
-        Borrow entity = entityNameMapper.toEntity(dto);
-        return entityNameMapper.toDTO(entityNameRepository.save(entity));
+    public BorrowDTO create(Borrow borrow) {
+        return borrowMapper.toDto(borrowRepository.save(borrow));
     }
 
-    public BorrowDTO update(Long id, BorrowDTO dto) {
-        entityNameRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        dto.setId(id);
-        Borrow updated = entityNameRepository.save(entityNameMapper.toEntity(dto));
-        return entityNameMapper.toDTO(updated);
+    public BorrowDTO update(Long id, Borrow borrow) {
+        borrowRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Borrow not found with id: " + id));
+        borrow.setId(id);
+        return borrowMapper.toDto(borrowRepository.save(borrow));
     }
 
     public void delete(Long id) {
-        Borrow entity = entityNameRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        entityNameRepository.delete(entity);
+        borrowRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Borrow not found with id: " + id));
+        borrowRepository.deleteById(id);
     }
 }

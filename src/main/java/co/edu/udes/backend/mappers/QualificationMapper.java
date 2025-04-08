@@ -1,57 +1,19 @@
 package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.QualificationDTO;
-import co.edu.udes.backend.dto.inheritanceDTO.EvaluationDTO;
 import co.edu.udes.backend.models.Qualification;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-import java.util.Collections;
 import java.util.List;
 
-@Component
-@RequiredArgsConstructor
-public class QualificationMapper {
-    private StudentMapper studentMapper;
-    private EvaluationMapper evaluationMapper;
+@Mapper(componentModel = "spring", uses = {StudentMapper.class, EvaluationMapper.class})
+public interface QualificationMapper {
+    QualificationMapper INSTANCE = Mappers.getMapper(QualificationMapper.class);
 
-    public QualificationDTO toDTO(Qualification qualification) {
-        return QualificationDTO.builder()
-                .id(qualification.getId())
-                .student(studentMapper.toDTO(qualification.getStudent()))
-                .qualification(qualification.getQualification())
-                .evaluation(evaluationMapper.toDTO(qualification.getEvaluation()))
-                .build();
-    }
+    Qualification toEntity(QualificationDTO qualification);
+    List<Qualification> toEntityList(List<QualificationDTO>  qualifications);
 
-    public Qualification toEntity(QualificationDTO qualificationDTO) {
-        return Qualification.builder()
-                .id(qualificationDTO.getId())
-                .student(studentMapper.toEntity(qualificationDTO.getStudent()))
-                .qualification(qualificationDTO.getQualification())
-                .evaluation(evaluationMapper.toEntity(qualificationDTO.getEvaluation()))
-                .build();
-    }
-
-    public List<Qualification> toEntityList(List<QualificationDTO> dtos) {
-        if (dtos == null || dtos.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return dtos.stream()
-                .map(this::toEntity)
-                .toList();
-    }
-
-    public List<QualificationDTO> toDTOList(List<Qualification> entities) {
-        if (entities == null || entities.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return entities.stream()
-                .map(this::toDTO)
-                .toList();
-    }
-
-
+    QualificationDTO toDto(Qualification qualification);
+    List<QualificationDTO> toDtoList(List<Qualification> qualifications);
 }

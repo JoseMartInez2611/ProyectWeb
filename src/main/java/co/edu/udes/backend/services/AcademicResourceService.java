@@ -7,46 +7,43 @@ import co.edu.udes.backend.mappers.AcademicResourceMapper;
 import co.edu.udes.backend.models.AcademicResource;
 import co.edu.udes.backend.repositories.AcademicResourceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AcademicResourceService {
 
-    private final AcademicResourceRepository entityNameRepository;
-    private final AcademicResourceMapper entityNameMapper=new AcademicResourceMapper();
+    private final AcademicResourceRepository academicResourceRepository;
+    @Autowired
+    private AcademicResourceMapper academicResourceMapper;
 
     public List<AcademicResourceDTO> getAll() {
-        return entityNameRepository.findAll().stream()
-                .map(entityNameMapper::toDTO)
-                .collect(Collectors.toList());
+        List<AcademicResource> academicResources = academicResourceRepository.findAll();
+        return academicResourceMapper.toDtoList(academicResources);
     }
 
     public AcademicResourceDTO getById(Long id) {
-        AcademicResource entity = entityNameRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        return entityNameMapper.toDTO(entity);
+        return academicResourceMapper.toDto(academicResourceRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Academic resource not found with id: " + id)));
     }
 
-    public AcademicResourceDTO create(AcademicResourceDTO dto) {
-        AcademicResource entity = entityNameMapper.toEntity(dto);
-        return entityNameMapper.toDTO(entityNameRepository.save(entity));
+    public AcademicResourceDTO create(AcademicResource academicResource) {
+        return academicResourceMapper.toDto(academicResourceRepository.save(academicResource));
     }
 
-    public AcademicResourceDTO update(Long id, AcademicResourceDTO dto) {
-        entityNameRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        dto.setId(id);
-        AcademicResource updated = entityNameRepository.save(entityNameMapper.toEntity(dto));
-        return entityNameMapper.toDTO(updated);
+    public AcademicResourceDTO update(Long id, AcademicResource academicResource) {
+        academicResourceRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Academic resource not found with id: " + id));
+        academicResource.setId(id);
+        return academicResourceMapper.toDto(academicResourceRepository.save(academicResource));
     }
 
     public void delete(Long id) {
-        AcademicResource entity = entityNameRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        entityNameRepository.delete(entity);
+        academicResourceRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Academic resource not found with id: " + id));
+        academicResourceRepository.deleteById(id);
     }
 }

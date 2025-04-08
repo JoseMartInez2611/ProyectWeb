@@ -2,55 +2,18 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.FinalNoteDTO;
 import co.edu.udes.backend.models.FinalNote;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-import java.util.Collections;
 import java.util.List;
 
-@Component
-@RequiredArgsConstructor
-public class FinalNoteMapper {
+@Mapper(componentModel = "spring")
+public interface FinalNoteMapper {
+    FinalNoteMapper INSTANCE = Mappers.getMapper(FinalNoteMapper.class);
 
-    public FinalNote toEntity(FinalNoteDTO dto) {
-        if (dto == null) {
-            return null;
-        }
+    FinalNote toEntity(FinalNoteDTO finalNote);
+    List<FinalNote> toEntityList(List<FinalNoteDTO> finalNotes);
 
-        return FinalNote.builder()
-                .id(dto.getId())
-                .note(dto.getNote())
-                .build();
-    }
-
-    public FinalNoteDTO toDTO(FinalNote entity) {
-        if (entity == null) {
-            return null;
-        }
-
-        return FinalNoteDTO.builder()
-                .id(entity.getId())
-                .note(entity.getNote())
-                .build();
-    }
-
-    public List<FinalNote> toEntityList(List<FinalNoteDTO> dtos) {
-        if (dtos == null || dtos.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return dtos.stream()
-                .map(this::toEntity)
-                .toList();
-    }
-
-    public List<FinalNoteDTO> toDTOList(List<FinalNote> entities) {
-        if (entities == null || entities.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return entities.stream()
-                .map(this::toDTO)
-                .toList();
-    }
+    FinalNoteDTO toDto(FinalNote finalNote);
+    List<FinalNoteDTO> toDtoList(List<FinalNote> finalNotes);
 }

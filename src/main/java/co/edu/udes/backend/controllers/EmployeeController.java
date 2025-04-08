@@ -1,18 +1,16 @@
 package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.EmployeeDTO;
+import co.edu.udes.backend.mappers.EmployeeMapper;
 import co.edu.udes.backend.models.Employee;
-import co.edu.udes.backend.repositories.EmployeeRepository;
 import co.edu.udes.backend.services.EmployeeService;
-import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 //@CrossOrigin(origins = "http://localhost")
 @RestController
@@ -22,6 +20,8 @@ public class EmployeeController {
 
     @Autowired
     private final EmployeeService employeeService;
+    @Autowired
+    private final EmployeeMapper employeeMapper;
 
     @GetMapping
     public ResponseEntity<List<EmployeeDTO>> getAll() {
@@ -29,23 +29,44 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(employeeService.getById(id));
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        try{
+            return ResponseEntity.ok().body(employeeService.getById(id));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeDTO> create(@RequestBody EmployeeDTO dto) {
-        return ResponseEntity.ok(employeeService.create(dto));
+    public ResponseEntity<?> create(@RequestBody EmployeeDTO dto) {
+        try{
+            Employee employee = employeeMapper.toEntity(dto);
+            return ResponseEntity.ok(employeeService.create(employee));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeDTO> update(@PathVariable Long id, @RequestBody EmployeeDTO dto) {
-        return ResponseEntity.ok(employeeService.update(id, dto));
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody EmployeeDTO dto) {
+        try{
+            Employee employee = employeeMapper.toEntity(dto);
+            return ResponseEntity.ok(employeeService.update(id, employee));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        employeeService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try{
+            employeeService.delete(id);
+            return ResponseEntity.noContent().build();
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
     }
 }

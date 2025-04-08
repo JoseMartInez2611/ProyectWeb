@@ -4,48 +4,46 @@ import co.edu.udes.backend.dto.QualificationDTO;
 import co.edu.udes.backend.mappers.QualificationMapper;
 import co.edu.udes.backend.models.Qualification;
 import co.edu.udes.backend.repositories.QualificationRepository;
-import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class QualificationService {
 
     private final QualificationRepository qualificationRepository;
-    private final QualificationMapper qualificationMapper;
+    @Autowired
+    private QualificationMapper qualificationMapper;
 
     public List<QualificationDTO> getAll() {
-        return qualificationRepository.findAll().stream()
-                .map(qualificationMapper::toDTO)
-                .collect(Collectors.toList());
+        List<Qualification> qualifications =   qualificationRepository.findAll();
+        return qualificationMapper.toDtoList(qualifications);
     }
 
     public QualificationDTO getById(Long id) {
-        Qualification entity = qualificationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        return qualificationMapper.toDTO(entity);
+        return qualificationMapper.toDto(qualificationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Qualification not found with id: " + id)));
     }
 
-    public QualificationDTO create(QualificationDTO dto) {
-        Qualification entity = qualificationMapper.toEntity(dto);
-        return qualificationMapper.toDTO(qualificationRepository.save(entity));
+    public QualificationDTO create(Qualification qualification) {
+        return qualificationMapper.toDto(qualificationRepository.save(qualification));
+
     }
 
-    public QualificationDTO update(Long id, QualificationDTO dto) {
+    public QualificationDTO update(Long id, Qualification qualification) {
         qualificationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        dto.setId(id);
-        Qualification updated = qualificationRepository.save(qualificationMapper.toEntity(dto));
-        return qualificationMapper.toDTO(updated);
+                .orElseThrow(() -> new RuntimeException("Qualification not found with id: " + id));
+        qualification.setId(id);
+        return qualificationMapper.toDto(qualificationRepository.save(qualification));
+
     }
 
     public void delete(Long id) {
-        Qualification entity = qualificationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        qualificationRepository.delete(entity);
+        qualificationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Qualification not found with id: " + id));
+        qualificationRepository.deleteById(id);
     }
 }

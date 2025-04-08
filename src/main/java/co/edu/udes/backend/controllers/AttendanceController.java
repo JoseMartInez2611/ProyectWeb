@@ -1,14 +1,15 @@
 package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.AttendanceDTO;
+import co.edu.udes.backend.mappers.AttendanceMapper;
+import co.edu.udes.backend.models.Attendance;
 import co.edu.udes.backend.services.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 //@CrossOrigin(origin = "http://localhost")
 @RestController
@@ -18,6 +19,9 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
+    @Autowired
+    private AttendanceMapper attendanceMapper;
+
     // get all attendances
     @GetMapping
     public ResponseEntity<List<AttendanceDTO>> getAllAttendances() {
@@ -26,29 +30,47 @@ public class AttendanceController {
 
     // create attendance rest api
     @PostMapping
-    public ResponseEntity<AttendanceDTO> create(@RequestBody AttendanceDTO dto) {
-        return ResponseEntity.ok(attendanceService.create(dto));
+    public ResponseEntity<?> create(@RequestBody AttendanceDTO dto) {
+        try{
+            Attendance attendance = attendanceMapper.toEntity(dto);
+            return ResponseEntity.ok(attendanceService.create(attendance));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     // get attendance by id rest api
     @GetMapping("/{id}")
-    public ResponseEntity<AttendanceDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(attendanceService.getById(id));
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        try{
+            return ResponseEntity.ok().body(attendanceService.getById(id));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // update attendance rest api
     @PutMapping("/{id}")
-    public ResponseEntity<AttendanceDTO> update(@PathVariable Long id, @RequestBody AttendanceDTO dto) {
-        return ResponseEntity.ok(attendanceService.update(id, dto));
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AttendanceDTO dto) {
+        try{
+            Attendance attendance = attendanceMapper.toEntity(dto);
+            return ResponseEntity.ok(attendanceService.update(id, attendance));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     // delete attendance rest api
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable Long id) {
-        attendanceService.delete(id);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            attendanceService.delete(id);
+            return ResponseEntity.noContent().build();
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 }

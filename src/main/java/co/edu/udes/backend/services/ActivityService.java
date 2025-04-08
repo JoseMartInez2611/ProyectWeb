@@ -6,47 +6,44 @@ import co.edu.udes.backend.models.Activity;
 import co.edu.udes.backend.repositories.ActivityRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ActivityService {
 
     private final ActivityRepository activityRepository;
-    private final ActivityMapper activityMapper;
+    @Autowired
+    private ActivityMapper activityMapper;
 
     public List<ActivityDTO> getAll() {
-        return activityRepository.findAll().stream()
-                .map(activityMapper::toDTO)
-                .collect(Collectors.toList());
+        List<Activity> activities = activityRepository.findAll();
+        return activityMapper.toDtoList(activities);
     }
 
     public ActivityDTO getById(Long id) {
-        Activity entity = activityRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        return activityMapper.toDTO(entity);
+        return activityMapper.toDto(activityRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Activity not found with id: " + id)));
     }
 
-    public ActivityDTO create(ActivityDTO dto) {
-        Activity entity = activityMapper.toEntity(dto);
-        return activityMapper.toDTO(activityRepository.save(entity));
+    public ActivityDTO create(Activity activity) {
+        return activityMapper.toDto(activityRepository.save(activity));
     }
 
-    public ActivityDTO update(Long id, ActivityDTO dto) {
+    public ActivityDTO update(Long id, Activity activity) {
         activityRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        dto.setId(id);
-        Activity updated = activityRepository.save(activityMapper.toEntity(dto));
-        return activityMapper.toDTO(updated);
+                .orElseThrow(() -> new ResourceNotFoundException("Activity not found with id: " + id));
+        activity.setId(id);
+        return activityMapper.toDto(activityRepository.save(activity));
     }
 
     public void delete(Long id) {
-        Activity entity = activityRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        activityRepository.delete(entity);
+        activityRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Activity not found with id: " + id));
+        activityRepository.deleteById(id);
     }
 
 

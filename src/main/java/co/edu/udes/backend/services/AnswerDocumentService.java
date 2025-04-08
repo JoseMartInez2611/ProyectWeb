@@ -6,45 +6,42 @@ import co.edu.udes.backend.models.AnswerDocument;
 import co.edu.udes.backend.repositories.AnswerDocumentRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AnswerDocumentService {
     private final AnswerDocumentRepository answerDocumentRepository;
-    private final AnswerDocumentMapper answerDocumentMapper;
+    @Autowired
+    private AnswerDocumentMapper answerDocumentMapper;
 
     public List<AnswerDocumentDTO> getAll() {
-        return answerDocumentRepository.findAll().stream()
-                .map(answerDocumentMapper::toDTO)
-                .collect(Collectors.toList());
+        List<AnswerDocument> answerDocuments = answerDocumentRepository.findAll();
+        return answerDocumentMapper.toDtoList(answerDocuments);
     }
 
     public AnswerDocumentDTO getById(Long id) {
-        AnswerDocument entity = answerDocumentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        return answerDocumentMapper.toDTO(entity);
+        return answerDocumentMapper.toDto(answerDocumentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Answer document not found with id: " + id)));
     }
 
-    public AnswerDocumentDTO create(AnswerDocumentDTO dto) {
-        AnswerDocument entity = answerDocumentMapper.toEntity(dto);
-        return answerDocumentMapper.toDTO(answerDocumentRepository.save(entity));
+    public AnswerDocumentDTO create(AnswerDocument answerDocument) {
+        return answerDocumentMapper.toDto(answerDocumentRepository.save(answerDocument));
     }
 
-    public AnswerDocumentDTO update(Long id, AnswerDocumentDTO dto) {
+    public AnswerDocumentDTO update(Long id, AnswerDocument answerDocument) {
         answerDocumentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        dto.setId(id);
-        AnswerDocument updated = answerDocumentRepository.save(answerDocumentMapper.toEntity(dto));
-        return answerDocumentMapper.toDTO(updated);
+                .orElseThrow(() -> new ResourceNotFoundException("Answer document not found with id: " + id));
+        answerDocument.setId(id);
+        return answerDocumentMapper.toDto(answerDocumentRepository.save(answerDocument));
     }
 
     public void delete(Long id) {
-        AnswerDocument entity = answerDocumentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        answerDocumentRepository.delete(entity);
+        answerDocumentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Answer document not found with id: " + id));
+        answerDocumentRepository.deleteById(id);
     }
 }

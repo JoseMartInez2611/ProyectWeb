@@ -4,47 +4,44 @@ import co.edu.udes.backend.dto.NotificationDTO;
 import co.edu.udes.backend.mappers.NotificationMapper;
 import co.edu.udes.backend.models.Notification;
 import co.edu.udes.backend.repositories.NotificationRepository;
-import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
 
-    private final NotificationRepository entityNameRepository;
-    private final NotificationMapper entityNameMapper;
+    private final NotificationRepository notificationRepository;
+    @Autowired
+    private NotificationMapper notificationMapper;
 
     public List<NotificationDTO> getAll() {
-        return entityNameRepository.findAll().stream()
-                .map(entityNameMapper::toDTO)
-                .collect(Collectors.toList());
+        List<Notification> notifications = notificationRepository.findAll();
+        return notificationMapper.toDtoList(notifications);
     }
 
     public NotificationDTO getById(Long id) {
-        Notification entity = entityNameRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        return entityNameMapper.toDTO(entity);
+        return notificationMapper.toDto(notificationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Notification not found with id: " + id)));
     }
 
-    public NotificationDTO create(NotificationDTO dto) {
-        Notification entity = entityNameMapper.toEntity(dto);
-        return entityNameMapper.toDTO(entityNameRepository.save(entity));
+    public NotificationDTO create(Notification notification) {
+        return notificationMapper.toDto(notificationRepository.save(notification));
+
     }
 
-    public NotificationDTO update(Long id, NotificationDTO dto) {
-        entityNameRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        dto.setId(id);
-        Notification updated = entityNameRepository.save(entityNameMapper.toEntity(dto));
-        return entityNameMapper.toDTO(updated);
+    public NotificationDTO update(Long id, Notification notification) {
+        notificationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Notification not found with id: " + id));
+        notification.setId(id);
+        return notificationMapper.toDto(notificationRepository.save(notification));
     }
 
     public void delete(Long id) {
-        Notification entity = entityNameRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        entityNameRepository.delete(entity);
+        notificationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Notification not found with id: " + id));
+        notificationRepository.deleteById(id);
     }
 }

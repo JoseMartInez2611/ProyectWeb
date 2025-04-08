@@ -19,7 +19,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
 
     @Column(name = "question", nullable = false, columnDefinition = "VARCHAR(1024)")
     String question;

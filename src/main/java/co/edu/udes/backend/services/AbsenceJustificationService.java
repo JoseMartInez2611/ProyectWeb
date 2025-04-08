@@ -2,8 +2,10 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.AbsenceJustificationDTO;
 import co.edu.udes.backend.mappers.AbsenceJustificationMapper;
+import co.edu.udes.backend.models.AbsenceJustification;
 import co.edu.udes.backend.repositories.AbsenceJustificationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,28 +15,30 @@ import java.util.List;
 public class AbsenceJustificationService {
 
     private final AbsenceJustificationRepository absenceJustificationRepository;
-    private final AbsenceJustificationMapper absenceJustificationMapper;
+    @Autowired
+    private AbsenceJustificationMapper absenceJustificationMapper;
 
     public List<AbsenceJustificationDTO> getAll() {
-        return absenceJustificationRepository.findAll().stream()
-                .map(absenceJustificationMapper::toDTO)
-                .toList();
+        List<AbsenceJustification> absenceJustifications = absenceJustificationRepository.findAll();
+        return absenceJustificationMapper.toDtoList(absenceJustifications);
     }
 
     public AbsenceJustificationDTO getById(Long id) {
-        return absenceJustificationMapper.toDTO(absenceJustificationRepository.findById(id)
+        return absenceJustificationMapper.toDto(absenceJustificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Absence justification not found with id: " + id)));
     }
 
-    public AbsenceJustificationDTO create(AbsenceJustificationDTO dto) {
-        return absenceJustificationMapper.toDTO(absenceJustificationRepository.save(absenceJustificationMapper.toEntity(dto)));
+    public AbsenceJustificationDTO create(AbsenceJustification absenceJustification) {
+        return absenceJustificationMapper.toDto(absenceJustification);
     }
 
-    public AbsenceJustificationDTO update(Long id, AbsenceJustificationDTO dto) {
+    public AbsenceJustificationDTO update(Long id, AbsenceJustification absenceJustification) {
         absenceJustificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Absence justification not found with id: " + id));
-        dto.setId(id);
-        return absenceJustificationMapper.toDTO(absenceJustificationRepository.save(absenceJustificationMapper.toEntity(dto)));
+        absenceJustification.setId(id);
+        return absenceJustificationMapper.toDto(
+                absenceJustificationRepository.save(absenceJustification)
+        );
     }
 
     public void delete(Long id) {

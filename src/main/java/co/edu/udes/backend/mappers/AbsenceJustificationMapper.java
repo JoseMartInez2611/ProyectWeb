@@ -2,58 +2,18 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.AbsenceJustificationDTO;
 import co.edu.udes.backend.models.AbsenceJustification;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-import java.util.Collections;
 import java.util.List;
-@Component
-@RequiredArgsConstructor
-public class AbsenceJustificationMapper {
 
-    public AbsenceJustification toEntity(AbsenceJustificationDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-        return AbsenceJustification.builder()
-                .id(dto.getId())
-                .motive(dto.getMotive())
-                .description(dto.getDescription())
-                .justified(dto.isJustified())
-                .build();
-    }
+@Mapper(componentModel = "spring")
+public interface AbsenceJustificationMapper {
+    AbsenceJustificationMapper INSTANCE = Mappers.getMapper(AbsenceJustificationMapper.class);
 
-    public AbsenceJustificationDTO toDTO(AbsenceJustification entity) {
-        if (entity == null) {
-            return null;
-        }
+    AbsenceJustification toEntity(AbsenceJustificationDTO absenceJustification);
+    List<AbsenceJustification> toEntityList(List<AbsenceJustificationDTO> absenceJustifications);
 
-        return AbsenceJustificationDTO.builder()
-                .id(entity.getId())
-                .motive(entity.getMotive())
-                .description(entity.getDescription())
-                .justified(entity.isJustified())
-                .build();
-    }
-
-
-    public List<AbsenceJustification> toEntityList(List<AbsenceJustificationDTO> dtos) {
-        if (dtos == null || dtos.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return dtos.stream()
-                .map(this::toEntity)
-                .toList();
-    }
-
-    public List<AbsenceJustificationDTO> toDTOList(List<AbsenceJustification> entities) {
-        if (entities == null || entities.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return entities.stream()
-                .map(this::toDTO)
-                .toList();
-    }
+    AbsenceJustificationDTO toDto(AbsenceJustification absenceJustification);
+    List<AbsenceJustificationDTO> toDtoList(List<AbsenceJustification> absenceJustifications);
 }

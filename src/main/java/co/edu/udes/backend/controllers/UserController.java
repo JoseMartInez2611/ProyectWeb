@@ -2,10 +2,13 @@ package co.edu.udes.backend.controllers;
 
 
 
-import co.edu.udes.backend.dto.inheritanceDTO.UserDTO;
+import co.edu.udes.backend.dto.inheritanceDTO.ProfileUDTO;
+import co.edu.udes.backend.mappers.ProfileUMapper;
+import co.edu.udes.backend.models.inheritance.ProfileU;
 import co.edu.udes.backend.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,32 +20,55 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private final UserService userService;
+    private final UserService profileUService;
+
+    @Autowired
+    private final ProfileUMapper profileUMapper;
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAll() {
-        return ResponseEntity.ok(userService.getAll());
+    public ResponseEntity<List<ProfileUDTO>> getAll() {
+        return ResponseEntity.ok(profileUService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getById(id));
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        try{
+            return ResponseEntity.ok().body(profileUService.getById(id));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody UserDTO dto) {
-        return ResponseEntity.ok(userService.create(dto));
+    public ResponseEntity<?> create(@RequestBody ProfileUDTO dto) {
+        try{
+            ProfileU profileU = profileUMapper.toEntity(dto);
+            return ResponseEntity.ok(profileUService.create(profileU));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO dto) {
-        return ResponseEntity.ok(userService.update(id, dto));
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProfileUDTO dto) {
+        try{
+            ProfileU profileU = profileUMapper.toEntity(dto);
+            return ResponseEntity.ok(profileUService.update(id, profileU));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        userService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try{
+            profileUService.delete(id);
+            return ResponseEntity.noContent().build();
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
 
+    }
 }

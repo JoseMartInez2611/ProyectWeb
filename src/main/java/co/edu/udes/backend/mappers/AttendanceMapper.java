@@ -2,67 +2,23 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.AttendanceDTO;
 import co.edu.udes.backend.models.Attendance;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-import java.util.Collections;
 import java.util.List;
 
-@Component
-@NoArgsConstructor
-public class AttendanceMapper {
-
-    private LessonMapper lessonMapper;
-    private StudentMapper studentMapper;
-    private AbsenceJustificationMapper absenceJustificationMapper;
-
-    public Attendance toEntity(AttendanceDTO dto) {
-        if (dto == null) {
-            return null;
+@Mapper(componentModel = "spring",
+        uses = {StudentMapper.class,
+                LessonMapper.class,
+                AbsenceJustificationMapper.class
         }
+)
+public interface AttendanceMapper {
+    AttendanceMapper INSTANCE = Mappers.getMapper(AttendanceMapper.class);
 
-        return Attendance.builder()
-                .id(dto.getId())
-                .lesson(lessonMapper.toEntity(dto.getLesson()))
-                .student(studentMapper.toEntity(dto.getStudent()))
-                .assistance(dto.isAssistance())
-                .date(dto.getDate())
-                .justification(absenceJustificationMapper.toEntity(dto.getJustification()))
-                .build();
-    }
+    Attendance toEntity(AttendanceDTO attendance);
+    List<Attendance> toEntityList(List<AttendanceDTO> attendances);
 
-    public AttendanceDTO toDTO(Attendance entity) {
-        if (entity == null) {
-            return null;
-        }
-
-        return AttendanceDTO.builder()
-                .id(entity.getId())
-                .lesson(lessonMapper.toDTO(entity.getLesson()))
-                .student(studentMapper.toDTO(entity.getStudent()))
-                .assistance(entity.isAssistance())
-                .date(entity.getDate())
-                .justification(absenceJustificationMapper.toDTO(entity.getJustification()))
-                .build();
-    }
-
-    public List<Attendance> toEntityList(List<AttendanceDTO> dtos) {
-        if (dtos == null || dtos.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return dtos.stream()
-                .map(this::toEntity)
-                .toList();
-    }
-
-    public List<AttendanceDTO> toDTOList(List<Attendance> entities) {
-        if (entities == null || entities.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return entities.stream()
-                .map(this::toDTO)
-                .toList();
-    }
+    AttendanceDTO toDto(Attendance attendance);
+    List<AttendanceDTO> toDtoList(List<Attendance> attendances);
 }

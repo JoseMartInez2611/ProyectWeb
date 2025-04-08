@@ -6,10 +6,10 @@ import co.edu.udes.backend.models.Student;
 import co.edu.udes.backend.repositories.StudentRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,36 +17,35 @@ import java.util.stream.Collectors;
 public class StudentService {
 
     private final StudentRepository studentRepository;
-    private final StudentMapper studentMapper;
+    @Autowired
+    private StudentMapper studentMapper;
 
     public List<StudentDTO> getAll() {
-        return studentRepository.findAll().stream()
-                .map(studentMapper::toDTO)
-                .collect(Collectors.toList());
+        List<Student> students = studentRepository.findAll();
+        return studentMapper.toDtoList(students);
     }
 
     public StudentDTO getById(Long id) {
-        Student entity = studentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        return studentMapper.toDTO(entity);
+        return studentMapper.toDto(studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + id)));
     }
 
-    public StudentDTO create(StudentDTO dto) {
-        Student entity = studentMapper.toEntity(dto);
-        return studentMapper.toDTO(studentRepository.save(entity));
+    public StudentDTO create(Student student) {
+        return studentMapper.toDto(studentRepository.save(student));
+
     }
 
-    public StudentDTO update(Long id, StudentDTO dto) {
+    public StudentDTO update(Long id, Student student) {
         studentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        dto.setId(id);
-        Student updated = studentRepository.save(studentMapper.toEntity(dto));
-        return studentMapper.toDTO(updated);
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
+        student.setId(id);
+        return studentMapper.toDto(studentRepository.save(student));
+
     }
 
     public void delete(Long id) {
-        Student entity = studentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        studentRepository.delete(entity);
+        studentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
+        studentRepository.deleteById(id);
     }
 }

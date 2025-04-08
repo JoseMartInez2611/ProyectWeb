@@ -1,7 +1,11 @@
 package co.edu.udes.backend.controllers;
 import co.edu.udes.backend.dto.AcademicResourceDTO;
+import co.edu.udes.backend.mappers.AcademicResourceMapper;
+import co.edu.udes.backend.models.AcademicResource;
 import co.edu.udes.backend.services.AcademicResourceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,31 +16,57 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AcademicResourceController {
 
-    private final AcademicResourceService entityNameService;
+    @Autowired
+    private final AcademicResourceService academicResourceService;
+
+    @Autowired
+    private final AcademicResourceMapper academicResourceMapper;
 
     @GetMapping
     public ResponseEntity<List<AcademicResourceDTO>> getAll() {
-        return ResponseEntity.ok(entityNameService.getAll());
+        return ResponseEntity.ok(academicResourceService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AcademicResourceDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(entityNameService.getById(id));
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        try{
+            return ResponseEntity.ok().body(academicResourceService.getById(id));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @PostMapping
-    public ResponseEntity<AcademicResourceDTO> create(@RequestBody AcademicResourceDTO dto) {
-        return ResponseEntity.ok(entityNameService.create(dto));
+    public ResponseEntity<?> create(@RequestBody AcademicResourceDTO dto) {
+        try{
+            AcademicResource academicResource = academicResourceMapper.toEntity(dto);
+            return ResponseEntity.ok(academicResourceService.create(academicResource));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
+
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AcademicResourceDTO> update(@PathVariable Long id, @RequestBody AcademicResourceDTO dto) {
-        return ResponseEntity.ok(entityNameService.update(id, dto));
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AcademicResourceDTO dto) {
+        try{
+            AcademicResource academicResource = academicResourceMapper.toEntity(dto);
+            return ResponseEntity.ok(academicResourceService.update(id, academicResource));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        entityNameService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            academicResourceService.delete(id);
+            return ResponseEntity.noContent().build();
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }

@@ -5,48 +5,44 @@ import co.edu.udes.backend.dto.EmployeeDTO;
 import co.edu.udes.backend.mappers.EmployeeMapper;
 import co.edu.udes.backend.models.Employee;
 import co.edu.udes.backend.repositories.EmployeeRepository;
-import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final EmployeeMapper employeeMapper;
+    @Autowired
+    private EmployeeMapper employeeMapper;
 
     public List<EmployeeDTO> getAll() {
-        return employeeRepository.findAll().stream()
-                .map(employeeMapper::toDTO)
-                .collect(Collectors.toList());
+        List<Employee> employees = employeeRepository.findAll();
+        return employeeMapper.toDtoList(employees);
     }
 
     public EmployeeDTO getById(Long id) {
-        Employee entity = employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        return employeeMapper.toDTO(entity);
+        return employeeMapper.toDto(employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id)));
     }
 
-    public EmployeeDTO create(EmployeeDTO dto) {
-        Employee entity = employeeMapper.toEntity(dto);
-        return employeeMapper.toDTO(employeeRepository.save(entity));
+    public EmployeeDTO create(Employee employee) {
+        return employeeMapper.toDto(employeeRepository.save(employee));
     }
 
-    public EmployeeDTO update(Long id, EmployeeDTO dto) {
+    public EmployeeDTO update(Long id, Employee employee) {
         employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        dto.setId(id);
-        Employee updated = employeeRepository.save(employeeMapper.toEntity(dto));
-        return employeeMapper.toDTO(updated);
+                .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
+        employee.setId(id);
+        return employeeMapper.toDto(employeeRepository.save(employee));
     }
 
     public void delete(Long id) {
-        Employee entity = employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        employeeRepository.delete(entity);
+        employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
+        employeeRepository.deleteById(id);
     }
 }
