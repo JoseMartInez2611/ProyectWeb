@@ -6,6 +6,7 @@ import co.edu.udes.backend.models.inheritance.Communication;
 import co.edu.udes.backend.repositories.CommunicationRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class CommunicationService {
 
     private final CommunicationRepository communicationRepository;
+    @Autowired
     private CommunicationMapper communicationMapper;
 
     public List<CommunicationDTO> getAll() {

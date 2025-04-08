@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.ExamMapper;
 import co.edu.udes.backend.models.Exam;
 import co.edu.udes.backend.repositories.ExamRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExamService {
     private final ExamRepository examRepository;
+    @Autowired
     private ExamMapper examMapper;
 
     public List<ExamDTO> getAll() {

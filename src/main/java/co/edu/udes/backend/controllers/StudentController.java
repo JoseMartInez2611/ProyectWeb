@@ -44,6 +44,7 @@ public class StudentController {
             Student student = studentMapper.toEntity(dto);
             return ResponseEntity.ok(studentService.create(student));
         }catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
     }

@@ -6,6 +6,7 @@ import co.edu.udes.backend.models.Student;
 import co.edu.udes.backend.repositories.StudentRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    @Autowired
     private StudentMapper studentMapper;
 
     public List<StudentDTO> getAll() {

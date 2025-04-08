@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.EvaluationMapper;
 import co.edu.udes.backend.models.inheritance.Evaluation;
 import co.edu.udes.backend.repositories.EvaluationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EvaluationService {
     private final EvaluationRepository evaluationRepository;
+    @Autowired
     private EvaluationMapper evaluationMapper;
 
     public List<EvaluationDTO> getAll() {

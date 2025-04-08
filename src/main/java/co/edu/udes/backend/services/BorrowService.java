@@ -7,6 +7,7 @@ import co.edu.udes.backend.models.Borrow;
 import co.edu.udes.backend.repositories.BorrowRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class BorrowService {
 
     private final BorrowRepository borrowRepository;
+    @Autowired
     private BorrowMapper borrowMapper;
 
     public List<BorrowDTO> getAll() {

@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.AcademicRecordMapper;
 import co.edu.udes.backend.models.AcademicRecord;
 import co.edu.udes.backend.repositories.AcademicRecordRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class AcademicRecordService {
 
     private final AcademicRecordRepository academicRecordRepository;
+    @Autowired
     private AcademicRecordMapper academicRecordMapper;
 
     public List<AcademicRecordDTO> getAll() {

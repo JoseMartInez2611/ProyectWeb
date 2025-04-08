@@ -7,6 +7,7 @@ import co.edu.udes.backend.mappers.AcademicResourceMapper;
 import co.edu.udes.backend.models.AcademicResource;
 import co.edu.udes.backend.repositories.AcademicResourceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 public class AcademicResourceService {
 
     private final AcademicResourceRepository academicResourceRepository;
+    @Autowired
     private AcademicResourceMapper academicResourceMapper;
 
     public List<AcademicResourceDTO> getAll() {

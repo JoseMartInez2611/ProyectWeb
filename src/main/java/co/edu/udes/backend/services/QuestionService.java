@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.QuestionMapper;
 import co.edu.udes.backend.models.Question;
 import co.edu.udes.backend.repositories.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    @Autowired
     private QuestionMapper questionMapper;
 
     public List<QuestionDTO> getAll() {

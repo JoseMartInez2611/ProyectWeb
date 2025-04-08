@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.DayOfWeekMapper;
 import co.edu.udes.backend.models.DayOfWeek;
 import co.edu.udes.backend.repositories.DayOfWeekRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,8 @@ import java.util.List;
 public class DayOfWeekService {
 
     private final DayOfWeekRepository dayOfWeekRepository;
-    private final DayOfWeekMapper dayOfWeekMapper;
+    @Autowired
+    private DayOfWeekMapper dayOfWeekMapper;
 
     public List<DayOfWeekDTO> getAll() {
         List<DayOfWeek> dayOfWeeks = dayOfWeekRepository.findAll();

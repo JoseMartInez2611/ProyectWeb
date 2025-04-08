@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.GroupMapper;
 import co.edu.udes.backend.models.Group;
 import co.edu.udes.backend.repositories.GroupRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class GroupService {
 
     private final GroupRepository groupRepository;
+    @Autowired
     private GroupMapper groupMapper;
 
     public List<GroupDTO> getAll() {

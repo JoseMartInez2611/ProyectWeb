@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.QualificationMapper;
 import co.edu.udes.backend.models.Qualification;
 import co.edu.udes.backend.repositories.QualificationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class QualificationService {
 
     private final QualificationRepository qualificationRepository;
+    @Autowired
     private QualificationMapper qualificationMapper;
 
     public List<QualificationDTO> getAll() {

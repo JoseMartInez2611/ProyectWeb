@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.MessageMapper;
 import co.edu.udes.backend.models.Message;
 import co.edu.udes.backend.repositories.MessageRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class MessageService {
 
     private final MessageRepository messageRepository;
+    @Autowired
     private MessageMapper messageMapper;
 
     public List<MessageDTO> getAll() {

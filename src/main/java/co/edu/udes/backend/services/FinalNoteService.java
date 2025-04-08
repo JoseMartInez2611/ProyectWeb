@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.FinalNoteMapper;
 import co.edu.udes.backend.models.FinalNote;
 import co.edu.udes.backend.repositories.FinalNoteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class FinalNoteService {
 
     private final FinalNoteRepository finalNoteRepository;
+    @Autowired
     private FinalNoteMapper finalNoteMapper;
 
     public List<FinalNoteDTO> getAll() {

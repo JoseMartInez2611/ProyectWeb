@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.NotificationMapper;
 import co.edu.udes.backend.models.Notification;
 import co.edu.udes.backend.repositories.NotificationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
+    @Autowired
     private NotificationMapper notificationMapper;
 
     public List<NotificationDTO> getAll() {

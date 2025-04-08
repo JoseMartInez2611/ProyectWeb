@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.ProfileUMapper;
 import co.edu.udes.backend.models.inheritance.ProfileU;
 import co.edu.udes.backend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    @Autowired
     private ProfileUMapper profileUMapper;
 
     public List<ProfileUDTO> getAll() {

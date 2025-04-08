@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.ReportMapper;
 import co.edu.udes.backend.models.Report;
 import co.edu.udes.backend.repositories.ReportRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class ReportService {
 
     private final ReportRepository reportRepository;
+    @Autowired
     private ReportMapper reportMapper;
 
     public List<ReportDTO> getAll() {

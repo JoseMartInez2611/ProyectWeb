@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.RoomMapper;
 import co.edu.udes.backend.models.Room;
 import co.edu.udes.backend.repositories.RoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class RoomService {
 
     private final RoomRepository roomRepository;
+    @Autowired
     private RoomMapper roomMapper;
 
     public List<RoomDTO> getAll() {

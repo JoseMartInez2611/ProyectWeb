@@ -6,6 +6,7 @@ import co.edu.udes.backend.models.Attendance;
 import co.edu.udes.backend.repositories.AttendanceRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 public class AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
+    @Autowired
     private AttendanceMapper attendanceMapper;
 
     public List<AttendanceDTO> getAll() {

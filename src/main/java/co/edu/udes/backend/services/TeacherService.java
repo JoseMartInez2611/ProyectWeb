@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.TeacherMapper;
 import co.edu.udes.backend.models.Teacher;
 import co.edu.udes.backend.repositories.TeacherRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class TeacherService {
 
     private final TeacherRepository teacherRepository;
+    @Autowired
     private TeacherMapper teacherMapper;
 
     public List<TeacherDTO> getAll() {

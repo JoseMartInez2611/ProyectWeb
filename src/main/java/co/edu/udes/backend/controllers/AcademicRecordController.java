@@ -2,7 +2,6 @@ package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.AcademicRecordDTO;
 import co.edu.udes.backend.mappers.AcademicRecordMapper;
-import co.edu.udes.backend.models.AbsenceJustification;
 import co.edu.udes.backend.models.AcademicRecord;
 import co.edu.udes.backend.services.AcademicRecordService;
 import org.springframework.beans.factory.annotation.Autowired;

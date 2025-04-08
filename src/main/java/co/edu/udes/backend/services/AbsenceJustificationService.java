@@ -15,6 +15,7 @@ import java.util.List;
 public class AbsenceJustificationService {
 
     private final AbsenceJustificationRepository absenceJustificationRepository;
+    @Autowired
     private AbsenceJustificationMapper absenceJustificationMapper;
 
     public List<AbsenceJustificationDTO> getAll() {
