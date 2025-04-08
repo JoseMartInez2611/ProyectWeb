@@ -14,19 +14,20 @@ import java.util.List;
 public class ReportService {
 
     private final ReportRepository reportRepository;
+    private ReportMapper reportMapper;
 
     public List<ReportDTO> getAll() {
         List<Report> reports =   reportRepository.findAll();
-        return ReportMapper.INSTANCE.toDtoList(reports);
+        return reportMapper.toDtoList(reports);
     }
 
     public ReportDTO getById(Long id) {
-        return ReportMapper.INSTANCE.toDto(reportRepository.findById(id)
+        return reportMapper.toDto(reportRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Report not found with id: " + id)));
     }
 
     public ReportDTO create(Report report) {
-        return ReportMapper.INSTANCE.toDto(reportRepository.save(report));
+        return reportMapper.toDto(reportRepository.save(report));
 
     }
 
@@ -34,7 +35,7 @@ public class ReportService {
         reportRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Report not found with id: " + id));
         report.setId(id);
-        return ReportMapper.INSTANCE.toDto(reportRepository.save(report));
+        return reportMapper.toDto(reportRepository.save(report));
     }
 
     public void delete(Long id) {

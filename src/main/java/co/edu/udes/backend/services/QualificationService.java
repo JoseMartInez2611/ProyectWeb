@@ -14,19 +14,20 @@ import java.util.List;
 public class QualificationService {
 
     private final QualificationRepository qualificationRepository;
+    private QualificationMapper qualificationMapper;
 
     public List<QualificationDTO> getAll() {
         List<Qualification> qualifications =   qualificationRepository.findAll();
-        return QualificationMapper.INSTANCE.toDtoList(qualifications);
+        return qualificationMapper.toDtoList(qualifications);
     }
 
     public QualificationDTO getById(Long id) {
-        return QualificationMapper.INSTANCE.toDto(qualificationRepository.findById(id)
+        return qualificationMapper.toDto(qualificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Qualification not found with id: " + id)));
     }
 
     public QualificationDTO create(Qualification qualification) {
-        return QualificationMapper.INSTANCE.toDto(qualificationRepository.save(qualification));
+        return qualificationMapper.toDto(qualificationRepository.save(qualification));
 
     }
 
@@ -34,7 +35,7 @@ public class QualificationService {
         qualificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Qualification not found with id: " + id));
         qualification.setId(id);
-        return QualificationMapper.INSTANCE.toDto(qualificationRepository.save(qualification));
+        return qualificationMapper.toDto(qualificationRepository.save(qualification));
 
     }
 

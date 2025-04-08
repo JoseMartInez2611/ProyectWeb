@@ -14,26 +14,27 @@ import java.util.List;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private ScheduleMapper ScheduleMapper;
 
     public List<ScheduleDTO> getAll() {
         List<Schedule> schedules = scheduleRepository.findAll();
-        return ScheduleMapper.INSTANCE.toDtoList(schedules);
+        return ScheduleMapper.toDtoList(schedules);
     }
 
     public ScheduleDTO getById(Long id) {
-        return ScheduleMapper.INSTANCE.toDto(scheduleRepository.findById(id)
+        return ScheduleMapper.toDto(scheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Schedule not found with id: " + id)));
     }
 
     public ScheduleDTO create(Schedule schedule) {
-        return ScheduleMapper.INSTANCE.toDto(scheduleRepository.save(schedule));
+        return ScheduleMapper.toDto(scheduleRepository.save(schedule));
     }
 
     public ScheduleDTO update(Long id, Schedule schedule) {
         scheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Schedule not found with id: " + id));
         schedule.setId(id);
-        return ScheduleMapper.INSTANCE.toDto(scheduleRepository.save(schedule));
+        return ScheduleMapper.toDto(scheduleRepository.save(schedule));
     }
 
     public void delete(Long id) {

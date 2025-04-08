@@ -14,19 +14,20 @@ import java.util.List;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private QuestionMapper questionMapper;
 
     public List<QuestionDTO> getAll() {
         List<Question> questions =   questionRepository.findAll();
-        return QuestionMapper.INSTANCE.toDtoList(questions);
+        return questionMapper.toDtoList(questions);
     }
 
     public QuestionDTO getById(Long id) {
-        return QuestionMapper.INSTANCE.toDto(questionRepository.findById(id)
+        return questionMapper.toDto(questionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Question not found with id: " + id)));
     }
 
     public QuestionDTO create(Question question) {
-        return QuestionMapper.INSTANCE.toDto(questionRepository.save(question));
+        return questionMapper.toDto(questionRepository.save(question));
 
     }
 
@@ -34,7 +35,7 @@ public class QuestionService {
         questionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Question not found with id: " + id));
         question.setId(id);
-        return QuestionMapper.INSTANCE.toDto(questionRepository.save(question));
+        return questionMapper.toDto(questionRepository.save(question));
     }
 
     public void delete(Long id) {

@@ -16,19 +16,20 @@ import java.util.List;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private StudentMapper studentMapper;
 
     public List<StudentDTO> getAll() {
         List<Student> students = studentRepository.findAll();
-        return StudentMapper.INSTANCE.toDtoList(students);
+        return studentMapper.toDtoList(students);
     }
 
     public StudentDTO getById(Long id) {
-        return StudentMapper.INSTANCE.toDto(studentRepository.findById(id)
+        return studentMapper.toDto(studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found with id: " + id)));
     }
 
     public StudentDTO create(Student student) {
-        return StudentMapper.INSTANCE.toDto(studentRepository.save(student));
+        return studentMapper.toDto(studentRepository.save(student));
 
     }
 
@@ -36,7 +37,7 @@ public class StudentService {
         studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
         student.setId(id);
-        return StudentMapper.INSTANCE.toDto(studentRepository.save(student));
+        return studentMapper.toDto(studentRepository.save(student));
 
     }
 

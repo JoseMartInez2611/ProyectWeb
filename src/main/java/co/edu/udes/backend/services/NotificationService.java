@@ -13,19 +13,20 @@ import java.util.List;
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
+    private NotificationMapper notificationMapper;
 
     public List<NotificationDTO> getAll() {
         List<Notification> notifications = notificationRepository.findAll();
-        return NotificationMapper.INSTANCE.toDtoList(notifications);
+        return notificationMapper.toDtoList(notifications);
     }
 
     public NotificationDTO getById(Long id) {
-        return NotificationMapper.INSTANCE.toDto(notificationRepository.findById(id)
+        return notificationMapper.toDto(notificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Notification not found with id: " + id)));
     }
 
     public NotificationDTO create(Notification notification) {
-        return NotificationMapper.INSTANCE.toDto(notificationRepository.save(notification));
+        return notificationMapper.toDto(notificationRepository.save(notification));
 
     }
 
@@ -33,7 +34,7 @@ public class NotificationService {
         notificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Notification not found with id: " + id));
         notification.setId(id);
-        return NotificationMapper.INSTANCE.toDto(notificationRepository.save(notification));
+        return notificationMapper.toDto(notificationRepository.save(notification));
     }
 
     public void delete(Long id) {

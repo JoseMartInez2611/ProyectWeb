@@ -14,19 +14,20 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private ProfileUMapper profileUMapper;
 
     public List<ProfileUDTO> getAll() {
         List<ProfileU> profilesU = userRepository.findAll();
-        return ProfileUMapper.INSTANCE.toDtoList(profilesU);
+        return profileUMapper.toDtoList(profilesU);
     }
 
     public ProfileUDTO getById(Long id) {
-        return ProfileUMapper.INSTANCE.toDto(userRepository.findById(id)
+        return profileUMapper.toDto(userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id)));
     }
 
     public ProfileUDTO create(ProfileU user) {
-        return ProfileUMapper.INSTANCE.toDto(userRepository.save(user));
+        return profileUMapper.toDto(userRepository.save(user));
 
     }
 
@@ -34,7 +35,7 @@ public class UserService {
         userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         user.setId(id);
-        return ProfileUMapper.INSTANCE.toDto(userRepository.save(user));
+        return profileUMapper.toDto(userRepository.save(user));
     }
 
     public void delete(Long id) {

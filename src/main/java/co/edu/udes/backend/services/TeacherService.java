@@ -14,19 +14,20 @@ import java.util.List;
 public class TeacherService {
 
     private final TeacherRepository teacherRepository;
+    private TeacherMapper teacherMapper;
 
     public List<TeacherDTO> getAll() {
         List<Teacher> teachers = teacherRepository.findAll();
-        return TeacherMapper.INSTANCE.toDtoList(teachers);
+        return teacherMapper.toDtoList(teachers);
     }
 
     public TeacherDTO getById(Long id) {
-        return TeacherMapper.INSTANCE.toDto(teacherRepository.findById(id)
+        return teacherMapper.toDto(teacherRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Teacher not found with id: " + id)));
     }
 
     public TeacherDTO create(Teacher teacher) {
-        return TeacherMapper.INSTANCE.toDto(teacherRepository.save(teacher));
+        return teacherMapper.toDto(teacherRepository.save(teacher));
 
     }
 
@@ -34,7 +35,7 @@ public class TeacherService {
         teacherRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Teacher not found with id: " + id));
         teacher.setId(id);
-        return TeacherMapper.INSTANCE.toDto(teacherRepository.save(teacher));
+        return teacherMapper.toDto(teacherRepository.save(teacher));
     }
 
     public void delete(Long id) {

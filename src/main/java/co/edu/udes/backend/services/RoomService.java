@@ -14,19 +14,20 @@ import java.util.List;
 public class RoomService {
 
     private final RoomRepository roomRepository;
+    private RoomMapper roomMapper;
 
     public List<RoomDTO> getAll() {
         List<Room> rooms = roomRepository.findAll();
-        return RoomMapper.INSTANCE.toDtoList(rooms);
+        return roomMapper.toDtoList(rooms);
     }
 
     public RoomDTO getById(Long id) {
-        return RoomMapper.INSTANCE.toDto(roomRepository.findById(id)
+        return roomMapper.toDto(roomRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Room not found with id: " + id)));
     }
 
     public RoomDTO create(Room room) {
-        return RoomMapper.INSTANCE.toDto(roomRepository.save(room));
+        return roomMapper.toDto(roomRepository.save(room));
 
     }
 
@@ -34,7 +35,7 @@ public class RoomService {
         roomRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Room not found with id: " + id));
         room.setId(id);
-        return RoomMapper.INSTANCE.toDto(roomRepository.save(room));
+        return roomMapper.toDto(roomRepository.save(room));
     }
 
     public void delete(Long id) {
