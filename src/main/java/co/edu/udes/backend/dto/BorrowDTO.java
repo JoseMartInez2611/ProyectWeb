@@ -1,6 +1,5 @@
 package co.edu.udes.backend.dto;
 
-import co.edu.udes.backend.models.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Builder;
