@@ -14,26 +14,27 @@ import java.util.List;
 public class LessonService {
 
     private final LessonRepository lessonRepository;
+    private LessonMapper lessonMapper;
 
     public List<LessonDTO> getAll() {
         List<Lesson> lessons = lessonRepository.findAll();
-        return LessonMapper.INSTANCE.toDtoList(lessons);
+        return lessonMapper.toDtoList(lessons);
     }
 
     public LessonDTO getById(Long id) {
-        return LessonMapper.INSTANCE.toDto(lessonRepository.findById(id)
+        return lessonMapper.toDto(lessonRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Lesson not found with id: " + id)));
     }
 
     public LessonDTO create(Lesson lesson) {
-        return LessonMapper.INSTANCE.toDto(lessonRepository.save(lesson));
+        return lessonMapper.toDto(lessonRepository.save(lesson));
     }
 
     public LessonDTO update(Long id, Lesson lesson) {
         lessonRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Lesson not found with id: " + id));
         lesson.setId(id);
-        return LessonMapper.INSTANCE.toDto(lessonRepository.save(lesson));
+        return lessonMapper.toDto(lessonRepository.save(lesson));
     }
 
     public void delete(Long id) {

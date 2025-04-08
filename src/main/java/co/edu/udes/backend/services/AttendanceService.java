@@ -15,26 +15,27 @@ import java.util.List;
 public class AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
+    private AttendanceMapper attendanceMapper;
 
     public List<AttendanceDTO> getAll() {
         List<Attendance> attendances = attendanceRepository.findAll();
-        return AttendanceMapper.INSTANCE.toDtoList(attendances);
+        return attendanceMapper.toDtoList(attendances);
     }
 
     public AttendanceDTO getById(Long id) {
-        return AttendanceMapper.INSTANCE.toDto(attendanceRepository.findById(id)
+        return attendanceMapper.toDto(attendanceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Attendance not found with id: " + id)));
     }
 
     public AttendanceDTO create(Attendance attendance) {
-        return AttendanceMapper.INSTANCE.toDto(attendanceRepository.save(attendance));
+        return attendanceMapper.toDto(attendanceRepository.save(attendance));
     }
 
     public AttendanceDTO update(Long id, Attendance attendance) {
         attendanceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Attendance not found with id: " + id));
         attendance.setId(id);
-        return AttendanceMapper.INSTANCE.toDto(attendanceRepository.save(attendance));
+        return attendanceMapper.toDto(attendanceRepository.save(attendance));
     }
 
     public void delete(Long id) {

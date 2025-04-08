@@ -13,19 +13,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EvaluationService {
     private final EvaluationRepository evaluationRepository;
+    private EvaluationMapper evaluationMapper;
 
     public List<EvaluationDTO> getAll() {
         List<Evaluation> evaluations = evaluationRepository.findAll();
-        return EvaluationMapper.INSTANCE.toDtoList(evaluations);
+        return evaluationMapper.toDtoList(evaluations);
     }
 
     public EvaluationDTO getById(Long id) {
-        return EvaluationMapper.INSTANCE.toDto(evaluationRepository.findById(id)
+        return evaluationMapper.toDto(evaluationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Evaluation not found with id: " + id)));
     }
 
     public EvaluationDTO create(Evaluation evaluation) {
-        return EvaluationMapper.INSTANCE.toDto(evaluationRepository.save(evaluation));
+        return evaluationMapper.toDto(evaluationRepository.save(evaluation));
 
     }
 
@@ -33,7 +34,7 @@ public class EvaluationService {
         evaluationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Evaluation not found with id: " + id));
         evaluation.setId(id);
-        return EvaluationMapper.INSTANCE.toDto(evaluationRepository.save(evaluation));
+        return evaluationMapper.toDto(evaluationRepository.save(evaluation));
     }
 
     public void delete(Long id) {

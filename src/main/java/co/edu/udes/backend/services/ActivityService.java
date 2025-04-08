@@ -15,26 +15,27 @@ import java.util.List;
 public class ActivityService {
 
     private final ActivityRepository activityRepository;
+    private ActivityMapper activityMapper;
 
     public List<ActivityDTO> getAll() {
         List<Activity> activities = activityRepository.findAll();
-        return ActivityMapper.INSTANCE.toDtoList(activities);
+        return activityMapper.toDtoList(activities);
     }
 
     public ActivityDTO getById(Long id) {
-        return ActivityMapper.INSTANCE.toDto(activityRepository.findById(id)
+        return activityMapper.toDto(activityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Activity not found with id: " + id)));
     }
 
     public ActivityDTO create(Activity activity) {
-        return ActivityMapper.INSTANCE.toDto(activityRepository.save(activity));
+        return activityMapper.toDto(activityRepository.save(activity));
     }
 
     public ActivityDTO update(Long id, Activity activity) {
         activityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Activity not found with id: " + id));
         activity.setId(id);
-        return ActivityMapper.INSTANCE.toDto(activityRepository.save(activity));
+        return activityMapper.toDto(activityRepository.save(activity));
     }
 
     public void delete(Long id) {

@@ -15,26 +15,27 @@ import java.util.List;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private EmployeeMapper employeeMapper;
 
     public List<EmployeeDTO> getAll() {
         List<Employee> employees = employeeRepository.findAll();
-        return EmployeeMapper.INSTANCE.toDtoList(employees);
+        return employeeMapper.toDtoList(employees);
     }
 
     public EmployeeDTO getById(Long id) {
-        return EmployeeMapper.INSTANCE.toDto(employeeRepository.findById(id)
+        return employeeMapper.toDto(employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id)));
     }
 
     public EmployeeDTO create(Employee employee) {
-        return EmployeeMapper.INSTANCE.toDto(employeeRepository.save(employee));
+        return employeeMapper.toDto(employeeRepository.save(employee));
     }
 
     public EmployeeDTO update(Long id, Employee employee) {
         employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
         employee.setId(id);
-        return EmployeeMapper.INSTANCE.toDto(employeeRepository.save(employee));
+        return employeeMapper.toDto(employeeRepository.save(employee));
     }
 
     public void delete(Long id) {

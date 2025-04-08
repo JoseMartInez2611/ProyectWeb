@@ -14,19 +14,20 @@ import java.util.List;
 public class MessageService {
 
     private final MessageRepository messageRepository;
+    private MessageMapper messageMapper;
 
     public List<MessageDTO> getAll() {
         List<Message> messages = messageRepository.findAll();
-        return MessageMapper.INSTANCE.toDtoList(messages);
+        return messageMapper.toDtoList(messages);
     }
 
     public MessageDTO getById(Long id) {
-        return MessageMapper.INSTANCE.toDto(messageRepository.findById(id)
+        return messageMapper.toDto(messageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Message not found with id: " + id)));
     }
 
     public MessageDTO create(Message message) {
-        return MessageMapper.INSTANCE.toDto(messageRepository.save(message));
+        return messageMapper.toDto(messageRepository.save(message));
 
     }
 
@@ -34,7 +35,7 @@ public class MessageService {
         messageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Message not found with id: " + id));
         message.setId(id);
-        return MessageMapper.INSTANCE.toDto(messageRepository.save(message));
+        return messageMapper.toDto(messageRepository.save(message));
     }
 
     public void delete(Long id) {

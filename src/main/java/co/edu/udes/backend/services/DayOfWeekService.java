@@ -14,26 +14,27 @@ import java.util.List;
 public class DayOfWeekService {
 
     private final DayOfWeekRepository dayOfWeekRepository;
+    private final DayOfWeekMapper dayOfWeekMapper;
 
     public List<DayOfWeekDTO> getAll() {
         List<DayOfWeek> dayOfWeeks = dayOfWeekRepository.findAll();
-        return DayOfWeekMapper.INSTANCE.toDtoList(dayOfWeeks);
+        return dayOfWeekMapper.toDtoList(dayOfWeeks);
     }
 
     public DayOfWeekDTO getById(Long id) {
-        return DayOfWeekMapper.INSTANCE.toDto(dayOfWeekRepository.findById(id)
+        return dayOfWeekMapper.toDto(dayOfWeekRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Day of week not found with id: " + id)));
     }
 
     public DayOfWeekDTO create(DayOfWeek dayOfWeek) {
-        return DayOfWeekMapper.INSTANCE.toDto(dayOfWeekRepository.save(dayOfWeek));
+        return dayOfWeekMapper.toDto(dayOfWeekRepository.save(dayOfWeek));
     }
 
     public DayOfWeekDTO update(Long id, DayOfWeek dayOfWeek) {
         dayOfWeekRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found with id: " + id));
         dayOfWeek.setId(id);
-        return DayOfWeekMapper.INSTANCE.toDto(dayOfWeekRepository.save(dayOfWeek));
+        return dayOfWeekMapper.toDto(dayOfWeekRepository.save(dayOfWeek));
     }
 
     public void delete(Long id) {

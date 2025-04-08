@@ -13,19 +13,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExamService {
     private final ExamRepository examRepository;
+    private ExamMapper examMapper;
 
     public List<ExamDTO> getAll() {
         List<Exam> exams = examRepository.findAll();
-        return ExamMapper.INSTANCE.toDtoList(exams);
+        return examMapper.toDtoList(exams);
     }
 
     public ExamDTO getById(Long id) {
-        return ExamMapper.INSTANCE.toDto(examRepository.findById(id)
+        return examMapper.toDto(examRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Exam not found with id: " + id)));
     }
 
     public ExamDTO create(Exam exam) {
-        return ExamMapper.INSTANCE.toDto(examRepository.save(exam));
+        return examMapper.toDto(examRepository.save(exam));
 
     }
 
@@ -33,7 +34,7 @@ public class ExamService {
         examRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Exam not found with id: " + id));
         exam.setId(id);
-        return ExamMapper.INSTANCE.toDto(examRepository.save(exam));
+        return examMapper.toDto(examRepository.save(exam));
     }
 
     public void delete(Long id) {

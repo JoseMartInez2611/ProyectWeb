@@ -14,26 +14,27 @@ import java.util.List;
 public class AcademicRegistrationService {
 
     private final AcademicRegistrationRepository academicRegistrationRepository;
+    private AcademicRegistrationMapper academicRegistrationMapper;
 
     public List<AcademicRegistrationDTO> getAll() {
         List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findAll();
-        return AcademicRegistrationMapper.INSTANCE.toDtoList(academicRegistrations);
+        return academicRegistrationMapper.toDtoList(academicRegistrations);
     }
 
     public AcademicRegistrationDTO getById(Long id) {
-        return AcademicRegistrationMapper.INSTANCE.toDto(academicRegistrationRepository.findById(id)
+        return academicRegistrationMapper.toDto(academicRegistrationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Academic registration not found with id: " + id)));
     }
 
     public AcademicRegistrationDTO create(AcademicRegistration academicRegistration) {
-        return AcademicRegistrationMapper.INSTANCE.toDto(academicRegistrationRepository.save(academicRegistration));
+        return academicRegistrationMapper.toDto(academicRegistrationRepository.save(academicRegistration));
     }
 
     public AcademicRegistrationDTO update(Long id, AcademicRegistration academicRegistration) {
         academicRegistrationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Academic registration not found with id: " + id));
         academicRegistration.setId(id);
-        return AcademicRegistrationMapper.INSTANCE.toDto(academicRegistrationRepository.save(academicRegistration));
+        return academicRegistrationMapper.toDto(academicRegistrationRepository.save(academicRegistration));
     }
 
     public void delete(Long id) {
