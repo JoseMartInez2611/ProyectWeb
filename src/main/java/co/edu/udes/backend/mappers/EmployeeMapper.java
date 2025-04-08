@@ -11,7 +11,8 @@ import java.util.List;
         uses = {BorrowMapper.class,
                 MessageMapper.class,
                 ReportMapper.class,
-                CommunicationMapper.class
+                CommunicationMapper.class,
+                ProfileUMapper.class
         }
 )
 public interface EmployeeMapper {

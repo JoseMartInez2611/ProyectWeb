@@ -12,7 +12,8 @@ import java.util.List;
                 MessageMapper.class,
                 ReportMapper.class,
                 BorrowMapper.class,
-                CommunicationMapper.class
+                CommunicationMapper.class,
+                ProfileUMapper.class
         }
 )public interface TeacherMapper {
     TeacherMapper INSTANCE = Mappers.getMapper(TeacherMapper.class);

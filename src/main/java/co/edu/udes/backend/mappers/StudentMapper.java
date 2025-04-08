@@ -13,7 +13,8 @@ import java.util.List;
                 BorrowMapper.class,
                 CommunicationMapper.class,
                 AttendanceMapper.class,
-                AcademicRegistrationMapper.class
+                AcademicRegistrationMapper.class,
+                ProfileUMapper.class
         }
 )
 public interface StudentMapper {
