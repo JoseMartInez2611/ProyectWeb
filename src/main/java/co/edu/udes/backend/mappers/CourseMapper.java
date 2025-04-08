@@ -2,10 +2,15 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.CourseDTO;
 import co.edu.udes.backend.models.Course;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 
+@Component
+@NoArgsConstructor
 public class CourseMapper {
 
     public Course toEntity(CourseDTO dto) {

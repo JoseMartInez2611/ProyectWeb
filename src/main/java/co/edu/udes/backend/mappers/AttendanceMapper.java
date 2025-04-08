@@ -2,15 +2,19 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.AttendanceDTO;
 import co.edu.udes.backend.models.Attendance;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 
+@Component
+@NoArgsConstructor
 public class AttendanceMapper {
 
-    private final LessonMapper lessonMapper = new LessonMapper();
-    private final StudentMapper studentMapper = new StudentMapper();
-    private final AbsenceJustificationMapper absenceJustificationMapper = new AbsenceJustificationMapper();
+    private LessonMapper lessonMapper;
+    private StudentMapper studentMapper;
+    private AbsenceJustificationMapper absenceJustificationMapper;
 
     public Attendance toEntity(AttendanceDTO dto) {
         if (dto == null) {

@@ -13,7 +13,7 @@ import java.util.List;
 public class DayOfWeekService {
 
     private final DayOfWeekRepository dayOfWeekRepository;
-    private final DayOfWeekMapper dayOfWeekMapper;
+    private final DayOfWeekMapper dayOfWeekMapper = new DayOfWeekMapper();
 
     public List<DayOfWeekDTO> getAll() {
         return dayOfWeekRepository.findAll().stream()

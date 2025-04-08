@@ -8,8 +8,6 @@ import lombok.*;
 @Table(name = "academic_records")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @EqualsAndHashCode
 public class AcademicRecord {

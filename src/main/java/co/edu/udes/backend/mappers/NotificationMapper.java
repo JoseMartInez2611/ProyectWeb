@@ -2,14 +2,17 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.NotificationDTO;
 import co.edu.udes.backend.models.Notification;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Component
+@RequiredArgsConstructor
 public class NotificationMapper {
 
-    private final UserMapper userMapper = new UserMapper();
+    private UserMapper userMapper;
 
     public NotificationDTO toDTO(Notification notification) {
         if (notification == null) {

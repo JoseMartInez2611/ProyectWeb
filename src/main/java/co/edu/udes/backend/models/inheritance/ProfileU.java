@@ -8,9 +8,11 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
-@Table(name="user")
+@Table(name="profileU")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,7 +22,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode
 @SuperBuilder
 
-public class User {
+public class ProfileU {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,36 +49,29 @@ public class User {
     @OneToMany(
             targetEntity = Message.class,
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            mappedBy = "user"
+            mappedBy = "sender"
     )
-    Message message;
+    List<Message> message;
 
     @OneToMany(
             targetEntity = Report.class,
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            mappedBy = "requestingUser"
+            mappedBy = "requestingProfileU"
     )
-    Report report;
+    List<Report> report;
 
     @OneToMany(
             targetEntity = Borrow.class,
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
             mappedBy = "petitioner"
     )
-    Borrow borrow;
+    List<Borrow> borrow;
 
     @ManyToMany(
             targetEntity = Communication.class,
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL
+            fetch = FetchType.LAZY
     )
     @JoinTable(joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "communication_id"))
-    Communication communication;
+    List<Communication> communication;
 
 }

@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Data
 @SuperBuilder
 @FieldDefaults(level= AccessLevel.PRIVATE)
@@ -20,10 +22,10 @@ public class UserDTO {
     String email;
     String userName;
     String password;
-    MessageDTO message;
-    ReportDTO report;
-    BorrowDTO borrow;
-    CommunicationDTO communication;
+    List<MessageDTO> message;
+    List<ReportDTO> report;
+    List<BorrowDTO> borrow;
+    List<CommunicationDTO> communication;
 
 
 }

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class AcademicResourceService {
 
     private final AcademicResourceRepository entityNameRepository;
-    private final AcademicResourceMapper entityNameMapper;
+    private final AcademicResourceMapper entityNameMapper=new AcademicResourceMapper();
 
     public List<AcademicResourceDTO> getAll() {
         return entityNameRepository.findAll().stream()

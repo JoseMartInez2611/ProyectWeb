@@ -2,7 +2,7 @@ package co.edu.udes.backend.models;
 
 
 import co.edu.udes.backend.models.inheritance.Communication;
-import co.edu.udes.backend.models.inheritance.User;
+import co.edu.udes.backend.models.inheritance.ProfileU;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -22,6 +22,6 @@ public class Message extends Communication {
     private String subject;
 
     @ManyToOne
-    @JoinColumn(name = "sender_id", nullable = false, referencedColumnName = "id")
-    private User sender;
+    @JoinColumn(name = "sender_id", nullable = false, columnDefinition = "BIGINT")
+    private ProfileU sender;
 }

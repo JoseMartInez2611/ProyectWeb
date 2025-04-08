@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -19,7 +20,7 @@ public class StudentDTO extends UserDTO {
     Date dateBirth;
     String address;
     String career;
-    AttendanceDTO attendance;
-    AcademicRegistrationDTO academicRegistration;
+    List<AttendanceDTO> attendance;
+    List<AcademicRegistrationDTO> academicRegistration;
 
 }

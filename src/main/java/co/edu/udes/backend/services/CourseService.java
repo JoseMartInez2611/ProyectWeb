@@ -13,7 +13,7 @@ import java.util.List;
 public class CourseService {
 
     private final CourseRepository courseRepository;
-    private final CourseMapper courseMapper;
+    private final CourseMapper courseMapper = new CourseMapper();
 
     public List<CourseDTO> getAll() {
         return courseRepository.findAll().stream()

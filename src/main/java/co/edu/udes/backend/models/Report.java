@@ -1,13 +1,11 @@
 package co.edu.udes.backend.models;
 
 
-import co.edu.udes.backend.models.inheritance.User;
+import co.edu.udes.backend.models.inheritance.ProfileU;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.File;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table (name = "report")
@@ -35,10 +33,7 @@ public class Report {
     private LocalDate generationDate;
 
     @ManyToOne
-    @JoinColumn(name = "requesting_user_id", nullable = false, columnDefinition = "varchar(255)")
-    private User requestingUser;
+    @JoinColumn(name = "requesting_user_id", nullable = false, columnDefinition = "BIGINT")
+    private ProfileU requestingProfileU;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "report_id", nullable = false, columnDefinition = "varchar(255)")
-    private List<File> files;
 }

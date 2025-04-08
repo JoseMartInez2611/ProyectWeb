@@ -1,28 +1,41 @@
 package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.inheritanceDTO.UserDTO;
-import co.edu.udes.backend.models.inheritance.User;
+import co.edu.udes.backend.models.inheritance.ProfileU;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class UserMapper {
+    private BorrowMapper borrowMapper;
+    private MessageMapper messageMapper;
+    private ReportMapper reportMapper;
+    private CommunicationMapper communicationMapper;
 
-    public UserDTO toDTO(User user) {
+    public UserDTO toDTO(ProfileU profileU) {
         return UserDTO.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .phone(user.getPhone())
-                .email(user.getEmail())
-                .userName(user.getUserName())
-                .password(user.getPassword())
+                .id(profileU.getId())
+                .firstName(profileU.getFirstName())
+                .lastName(profileU.getLastName())
+                .phone(profileU.getPhone())
+                .email(profileU.getEmail())
+                .userName(profileU.getUserName())
+                .password(profileU.getPassword())
+
+                .message(messageMapper.toDTOList(profileU.getMessage()))
+                .report(reportMapper.toDTOList(profileU.getReport()))
+                .borrow(borrowMapper.toDTOList(profileU.getBorrow()))
+                .communication(communicationMapper.toDTOList(profileU.getCommunication()))
                 .build();
 
     }
 
-    public User toEntity(UserDTO userDTO) {
-        return User.builder()
+    public ProfileU toEntity(UserDTO userDTO) {
+        return ProfileU.builder()
                 .id(userDTO.getId())
                 .firstName(userDTO.getFirstName())
                 .lastName(userDTO.getLastName())
@@ -30,11 +43,16 @@ public class UserMapper {
                 .email(userDTO.getEmail())
                 .userName(userDTO.getUserName())
                 .password(userDTO.getPassword())
+
+                .message(messageMapper.toEntityList(userDTO.getMessage()))
+                .report(reportMapper.toEntityList(userDTO.getReport()))
+                .borrow(borrowMapper.toEntityList(userDTO.getBorrow()))
+                .communication(communicationMapper.toEntityList(userDTO.getCommunication()))
                 .build();
 
     }
 
-    public List<User> toEntityList(List<UserDTO> dtos) {
+    public List<ProfileU> toEntityList(List<UserDTO> dtos) {
         if (dtos == null || dtos.isEmpty()) {
             return Collections.emptyList();
         }
@@ -44,7 +62,7 @@ public class UserMapper {
                 .toList();
     }
 
-    public List<UserDTO> toDTOList(List<User> entities) {
+    public List<UserDTO> toDTOList(List<ProfileU> entities) {
         if (entities == null || entities.isEmpty()) {
             return Collections.emptyList();
         }

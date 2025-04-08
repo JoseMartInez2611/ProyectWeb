@@ -3,13 +3,17 @@ package co.edu.udes.backend.mappers;
 import co.edu.udes.backend.dto.QualificationDTO;
 import co.edu.udes.backend.dto.inheritanceDTO.EvaluationDTO;
 import co.edu.udes.backend.models.Qualification;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class QualificationMapper {
-    private final StudentMapper studentMapper = new StudentMapper();
-    private final EvaluationMapper evaluationMapper = new EvaluationMapper();
+    private StudentMapper studentMapper;
+    private EvaluationMapper evaluationMapper;
 
     public QualificationDTO toDTO(Qualification qualification) {
         return QualificationDTO.builder()

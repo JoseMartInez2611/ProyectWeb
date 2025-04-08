@@ -2,10 +2,13 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.AbsenceJustificationDTO;
 import co.edu.udes.backend.models.AbsenceJustification;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
-
+@Component
+@RequiredArgsConstructor
 public class AbsenceJustificationMapper {
 
     public AbsenceJustification toEntity(AbsenceJustificationDTO dto) {

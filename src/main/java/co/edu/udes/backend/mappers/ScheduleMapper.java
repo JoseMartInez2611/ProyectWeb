@@ -2,13 +2,17 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.ScheduleDTO;
 import co.edu.udes.backend.models.Schedule;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class ScheduleMapper {
 
-    private final DayOfWeekMapper dayOfWeekMapper = new DayOfWeekMapper();
+    private DayOfWeekMapper dayOfWeekMapper;
 
     public ScheduleDTO toDTO(Schedule entity) {
         if (entity == null) {

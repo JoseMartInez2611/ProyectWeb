@@ -1,10 +1,10 @@
 package co.edu.udes.backend.repositories;
 
 
-import co.edu.udes.backend.models.inheritance.User;
+import co.edu.udes.backend.models.inheritance.ProfileU;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<ProfileU, Long> {
 }

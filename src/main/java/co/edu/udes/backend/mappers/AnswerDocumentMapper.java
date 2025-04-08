@@ -2,12 +2,16 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.AnswerDocumentDTO;
 import co.edu.udes.backend.models.AnswerDocument;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 
+@Component
+@NoArgsConstructor
 public class AnswerDocumentMapper {
-    private final ActivityMapper activityMapper = new ActivityMapper();
+    private  ActivityMapper activityMapper;
 
     public AnswerDocumentDTO toDTO(AnswerDocument answerDocument) {
         return AnswerDocumentDTO.builder()

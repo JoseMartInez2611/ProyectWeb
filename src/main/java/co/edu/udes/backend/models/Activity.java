@@ -30,8 +30,6 @@ public class Activity extends Evaluation {
     @OneToMany(
             targetEntity = AnswerDocument.class,
             fetch = FetchType.LAZY,
-            mappedBy = "activity",
-            cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     List<AnswerDocument> answerDocuments;

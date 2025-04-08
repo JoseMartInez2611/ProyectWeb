@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder
@@ -15,6 +17,5 @@ import lombok.experimental.SuperBuilder;
 public class EmployeeDTO extends UserDTO {
 
     String workSpace;
-    BorrowDTO borrow;
 
 }

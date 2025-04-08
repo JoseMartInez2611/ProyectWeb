@@ -16,5 +16,4 @@ public class ReportDTO {
     private String content;
     private LocalDate generationDate;
     private UserDTO requestingUserId;
-    private List<File> file;
 }

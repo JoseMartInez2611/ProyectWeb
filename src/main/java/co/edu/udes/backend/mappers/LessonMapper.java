@@ -2,15 +2,19 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.LessonDTO;
 import co.edu.udes.backend.models.Lesson;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class LessonMapper {
 
-    private final ScheduleMapper scheduleMapper = new ScheduleMapper();
-    private final RoomMapper roomMapper = new RoomMapper();
-    private final GroupMapper groupMapper = new GroupMapper();
+    private ScheduleMapper scheduleMapper;
+    private RoomMapper roomMapper;
+    private GroupMapper groupMapper;
 
     public Lesson toEntity(LessonDTO dto) {
         if (dto == null) {

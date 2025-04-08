@@ -1,6 +1,6 @@
 package co.edu.udes.backend.models;
 
-import co.edu.udes.backend.models.inheritance.User;
+import co.edu.udes.backend.models.inheritance.ProfileU;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,7 +19,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 
-public class Teacher extends User {
+public class Teacher extends ProfileU {
 
     @Column(name = "speciality", columnDefinition = "VARCHAR(255)", nullable = false)
     String speciality;
@@ -27,8 +27,6 @@ public class Teacher extends User {
     @OneToMany(
             targetEntity = Group.class,
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
             mappedBy = "teacher"
     )
     List<Group> groups;

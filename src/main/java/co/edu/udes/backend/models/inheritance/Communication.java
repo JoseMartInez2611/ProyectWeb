@@ -24,7 +24,8 @@ public class Communication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private List<User> receiver;
+    @ManyToMany(mappedBy = "communication", fetch = FetchType.LAZY)
+    private List<ProfileU> receiver;
 
     @Column(name = "sent_date", nullable = false, columnDefinition = "DATE")
     private LocalDate sentDate;

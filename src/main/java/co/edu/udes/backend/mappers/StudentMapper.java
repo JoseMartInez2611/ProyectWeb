@@ -1,16 +1,23 @@
 package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.StudentDTO;
+import co.edu.udes.backend.models.AcademicRegistration;
 import co.edu.udes.backend.models.Student;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class StudentMapper {
-    private final MessageMapper messageMapper = new MessageMapper();
-    private final ReportMapper reportMapper = new ReportMapper();
-    private final BorrowMapper borrowMapper = new BorrowMapper();
-    private final CommunicationMapper communicationMapper = new CommunicationMapper();
+    private MessageMapper messageMapper;
+    private ReportMapper reportMapper;
+    private BorrowMapper borrowMapper;
+    private CommunicationMapper communicationMapper;
+    private AttendanceMapper attendanceMapper;
+    private AcademicRegistrationMapper academicRegistrationMapper;
 
     public StudentDTO toDTO(Student student){
         return StudentDTO.builder()
@@ -29,11 +36,13 @@ public class StudentMapper {
                 .dateBirth(student.getDateBirth())
                 .address(student.getAddress())
                 .career(student.getCareer())
+                .attendance(attendanceMapper.toDTOList(student.getAttendance()))
+                .academicRegistration(academicRegistrationMapper.toDTOList(student.getAcademicRegistration()))
 
-                .message(messageMapper.toDTO(student.getMessage()))
-                .report(reportMapper.toDTO(student.getReport()))
-                .borrow(borrowMapper.toDTO(student.getBorrow()))
-                .communication(communicationMapper.toDTO(student.getCommunication()))
+                .message(messageMapper.toDTOList(student.getMessage()))
+                .report(reportMapper.toDTOList(student.getReport()))
+                .borrow(borrowMapper.toDTOList(student.getBorrow()))
+                .communication(communicationMapper.toDTOList(student.getCommunication()))
                 .build();
     }
 
@@ -55,10 +64,13 @@ public class StudentMapper {
                 .address(studentDTO.getAddress())
                 .career(studentDTO.getCareer())
 
-                .message(messageMapper.toEntity(studentDTO.getMessage()))
-                .report(reportMapper.toEntity(studentDTO.getReport()))
-                .borrow(borrowMapper.toEntity(studentDTO.getBorrow()))
-                .communication(communicationMapper.toEntity(studentDTO.getCommunication()))
+                .attendance(attendanceMapper.toEntityList(studentDTO.getAttendance()))
+                .academicRegistration(academicRegistrationMapper.toEntityList(studentDTO.getAcademicRegistration()))
+
+                .message(messageMapper.toEntityList(studentDTO.getMessage()))
+                .report(reportMapper.toEntityList(studentDTO.getReport()))
+                .borrow(borrowMapper.toEntityList(studentDTO.getBorrow()))
+                .communication(communicationMapper.toEntityList(studentDTO.getCommunication()))
                 .build();
     }
 

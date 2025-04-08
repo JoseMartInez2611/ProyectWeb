@@ -2,12 +2,16 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.QuestionDTO;
 import co.edu.udes.backend.models.Question;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class QuestionMapper {
-    private final ExamMapper examMapper = new ExamMapper();
+    private ExamMapper examMapper;
 
     public QuestionDTO toDTO(Question question){
         return QuestionDTO.builder()

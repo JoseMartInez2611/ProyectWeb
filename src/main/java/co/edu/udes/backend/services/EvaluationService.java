@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EvaluationService {
     private final EvaluationRepository evaluationRepository;
-    private final EvaluationMapper evaluationMapper;
+    private final EvaluationMapper evaluationMapper = new EvaluationMapper();
 
     public List<EvaluationDTO> getAll() {
         return evaluationRepository.findAll().stream()

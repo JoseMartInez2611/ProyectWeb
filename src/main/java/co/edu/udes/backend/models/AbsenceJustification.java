@@ -7,8 +7,6 @@ import lombok.*;
 @Table(name = "absence_justifications")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @EqualsAndHashCode
 public class AbsenceJustification {

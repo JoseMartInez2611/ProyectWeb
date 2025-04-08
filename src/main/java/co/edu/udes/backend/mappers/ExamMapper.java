@@ -4,13 +4,17 @@ package co.edu.udes.backend.mappers;
 import co.edu.udes.backend.dto.ExamDTO;
 import co.edu.udes.backend.models.Exam;
 import co.edu.udes.backend.models.Question;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class ExamMapper {
-    private final QuestionMapper questionMapper = new QuestionMapper();
-    private final GroupMapper groupMapper = new GroupMapper();
+    private QuestionMapper questionMapper;
+    private GroupMapper groupMapper;
 
     public ExamDTO toDTO(Exam exam) {
         return ExamDTO.builder()

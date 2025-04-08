@@ -1,6 +1,6 @@
 package co.edu.udes.backend.models;
 
-import co.edu.udes.backend.models.inheritance.User;
+import co.edu.udes.backend.models.inheritance.ProfileU;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,14 +31,13 @@ public class Borrow {
     private String duration;
 
     @ManyToOne (targetEntity = AcademicResource.class)
-    @JoinColumn(name = "resource", nullable = false, columnDefinition = "varchar(255)")
+    @JoinColumn(name = "resource", nullable = false, columnDefinition = "BIGINT")
     private AcademicResource resource;
 
     @ManyToOne(targetEntity = Employee.class)
-    @JoinColumn(name = "lender", nullable = false, columnDefinition = "varchar(255)")
+    @JoinColumn(name = "lender", columnDefinition = "BIGINT")
     private Employee lender;
 
-    @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "petitioner", nullable = false, columnDefinition = "varchar(255)")
-    private User petitioner;
+    @ManyToOne(targetEntity = ProfileU.class)
+    private ProfileU petitioner;
 }

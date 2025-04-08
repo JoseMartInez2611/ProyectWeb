@@ -17,6 +17,5 @@ import lombok.experimental.SuperBuilder;
 public class Notification extends Communication {
 
     @Column(name = "type", nullable = false, columnDefinition = "varchar(255)")
-
     private String type;
 }

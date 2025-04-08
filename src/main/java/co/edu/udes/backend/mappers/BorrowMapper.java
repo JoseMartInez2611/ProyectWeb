@@ -2,15 +2,18 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.BorrowDTO;
 import co.edu.udes.backend.models.Borrow;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Component
+@NoArgsConstructor
 public class BorrowMapper {
 
-    private final AcademicResourceMapper academicResourceMapper = new AcademicResourceMapper();
-    private final EmployeeMapper employeeMapper = new EmployeeMapper();
+    private AcademicResourceMapper academicResourceMapper;
+    private  EmployeeMapper employeeMapper;
 
 
     public BorrowDTO toDTO(Borrow borrow) {

@@ -2,14 +2,17 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.ReportDTO;
 import co.edu.udes.backend.models.Report;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Component
+@RequiredArgsConstructor
 public class ReportMapper {
 
-    private final UserMapper userMapper = new UserMapper();
+    private UserMapper userMapper;
 
     public ReportDTO toDTO(Report report) {
         if (report == null) {
@@ -20,8 +23,7 @@ public class ReportMapper {
                 .reportType(report.getReportType())
                 .content(report.getContent())
                 .generationDate(report.getGenerationDate())
-                .requestingUserId(userMapper.toDTO(report.getRequestingUser()))
-                .file(report.getFiles()) // Be cautious about transferring File objects directly
+                .requestingUserId(userMapper.toDTO(report.getRequestingProfileU()))
                 .build();
     }
 
@@ -34,9 +36,8 @@ public class ReportMapper {
                 .reportType(reportDTO.getReportType())
                 .content(reportDTO.getContent())
                 .generationDate(reportDTO.getGenerationDate())
-                .requestingUser(userMapper.toEntity(reportDTO.getRequestingUserId()))
-                .files(reportDTO.getFile())
-                .build();// Be cautious about transferring File objects directly
+                .requestingProfileU(userMapper.toEntity(reportDTO.getRequestingUserId()))
+                .build();
     }
 
     public List<ReportDTO> toDTOList(List<Report> reports) {

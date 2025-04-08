@@ -2,13 +2,17 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.RoomDTO;
 import co.edu.udes.backend.models.Room;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Component
+@RequiredArgsConstructor
 public class RoomMapper {
 
-    private final AcademicResourceMapper academicResourceMapper = new AcademicResourceMapper();
+    private AcademicResourceMapper academicResourceMapper;
 
     public RoomDTO toDTO(Room room) {
         if (room == null) {

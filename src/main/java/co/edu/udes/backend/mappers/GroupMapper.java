@@ -2,14 +2,18 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.GroupDTO;
 import co.edu.udes.backend.models.Group;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class GroupMapper {
 
-    private final CourseMapper courseMapper = new CourseMapper();
-    private final TeacherMapper teacherMapper = new TeacherMapper();
+    private CourseMapper courseMapper;
+    private TeacherMapper teacherMapper;
 
     public Group toEntity(GroupDTO dto) {
         if (dto == null) {

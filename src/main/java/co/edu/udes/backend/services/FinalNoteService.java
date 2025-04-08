@@ -13,7 +13,7 @@ import java.util.List;
 public class FinalNoteService {
 
     private final FinalNoteRepository finalNoteRepository;
-    private final FinalNoteMapper finalNoteMapper;
+    private final FinalNoteMapper finalNoteMapper= new FinalNoteMapper();
 
     public List<FinalNoteDTO> getAll() {
         return finalNoteRepository.findAll().stream()

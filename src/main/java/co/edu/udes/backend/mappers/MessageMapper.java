@@ -2,15 +2,18 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.MessageDTO;
 import co.edu.udes.backend.models.Message;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Component
+@RequiredArgsConstructor
 public class MessageMapper {
 
-    private final UserMapper userMapper = new UserMapper();
+    private UserMapper userMapper;
 
 
     public MessageDTO toDTO(Message message) {

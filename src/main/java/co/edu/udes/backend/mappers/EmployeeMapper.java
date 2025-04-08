@@ -2,14 +2,21 @@ package co.edu.udes.backend.mappers;
 
 import co.edu.udes.backend.dto.EmployeeDTO;
 import co.edu.udes.backend.models.Employee;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class EmployeeMapper {
 
-
-    private final BorrowMapper borrowMapper = new BorrowMapper();
+    private BorrowMapper borrowMapper;
+    private MessageMapper messageMapper;
+    private ReportMapper reportMapper;
+    private CommunicationMapper communicationMapper;
 
     public  EmployeeDTO toDTO(Employee employee) {
         return EmployeeDTO.builder()
@@ -20,10 +27,13 @@ public class EmployeeMapper {
                 .phone(employee.getPhone())
                 .userName(employee.getUserName())
                 .password(employee.getPassword())
+                .message(messageMapper.toDTOList(employee.getMessage()))
+                .report(reportMapper.toDTOList(employee.getReport()))
+                .borrow(borrowMapper.toDTOList(employee.getBorrow()))
+                .communication(communicationMapper.toDTOList(employee.getCommunication()))
 
                 //Datos Clase hija
                 .workSpace(employee.getWorkSpace())
-                .borrow(borrowMapper.toDTO(employee.getBorrow()))
                 .build();
     }
 
@@ -37,10 +47,14 @@ public class EmployeeMapper {
                 .email(EmployeeDTO.getEmail())
                 .userName(EmployeeDTO.getUserName())
                 .password(EmployeeDTO.getPassword())
+                .message(messageMapper.toEntityList(EmployeeDTO.getMessage()))
+                .report(reportMapper.toEntityList(EmployeeDTO.getReport()))
+                .borrow(borrowMapper.toEntityList(EmployeeDTO.getBorrow()))
+                .communication(communicationMapper.toEntityList(EmployeeDTO.getCommunication()))
+
 
                 //Datos Clase hija
                 .workSpace(EmployeeDTO.getWorkSpace())
-                .borrow(borrowMapper.toEntity(EmployeeDTO.getBorrow()))
                 .build();
     }
 
