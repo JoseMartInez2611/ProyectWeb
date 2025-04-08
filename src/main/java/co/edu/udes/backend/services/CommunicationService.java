@@ -8,43 +8,38 @@ import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CommunicationService {
 
-    private final CommunicationRepository entityNameRepository;
-    private final CommunicationMapper entityNameMapper;
+    private final CommunicationRepository communicationRepository;
 
     public List<CommunicationDTO> getAll() {
-        return entityNameRepository.findAll().stream()
-                .map(entityNameMapper::toDTO)
-                .collect(Collectors.toList());
+        List<Communication> communications = communicationRepository.findAll();
+        return CommunicationMapper.INSTANCE.toDtoList(communications);
     }
 
     public CommunicationDTO getById(Long id) {
-        Communication entity = entityNameRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        return entityNameMapper.toDTO(entity);
+        return CommunicationMapper.INSTANCE.toDto(communicationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Communication not found with id: " + id)));
     }
 
-    public CommunicationDTO create(CommunicationDTO dto) {
-        Communication entity = entityNameMapper.toEntity(dto);
-        return entityNameMapper.toDTO(entityNameRepository.save(entity));
+    public CommunicationDTO create(Communication communication) {
+        return CommunicationMapper.INSTANCE.toDto(communicationRepository.save(communication));
+
     }
 
-    public CommunicationDTO update(Long id, CommunicationDTO dto) {
-        entityNameRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        dto.setId(id);
-        Communication updated = entityNameRepository.save(entityNameMapper.toEntity(dto));
-        return entityNameMapper.toDTO(updated);
+    public CommunicationDTO update(Long id, Communication communication) {
+        communicationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Communication not found with id: " + id));
+        communication.setId(id);
+        return CommunicationMapper.INSTANCE.toDto(communicationRepository.save(communication));
     }
 
     public void delete(Long id) {
-        Communication entity = entityNameRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id: " + id));
-        entityNameRepository.delete(entity);
+        communicationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Communication not found with id: " + id));
+        communicationRepository.deleteById(id);
     }
 }

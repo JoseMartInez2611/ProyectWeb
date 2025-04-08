@@ -2,6 +2,7 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.FinalNoteDTO;
 import co.edu.udes.backend.mappers.FinalNoteMapper;
+import co.edu.udes.backend.models.FinalNote;
 import co.edu.udes.backend.repositories.FinalNoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,28 +14,26 @@ import java.util.List;
 public class FinalNoteService {
 
     private final FinalNoteRepository finalNoteRepository;
-    private final FinalNoteMapper finalNoteMapper= new FinalNoteMapper();
 
     public List<FinalNoteDTO> getAll() {
-        return finalNoteRepository.findAll().stream()
-                .map(finalNoteMapper::toDTO)
-                .toList();
+        List<FinalNote> finalNotes = finalNoteRepository.findAll();
+        return FinalNoteMapper.INSTANCE.toDtoList(finalNotes);
     }
 
     public FinalNoteDTO getById(Long id) {
-        return finalNoteMapper.toDTO(finalNoteRepository.findById(id)
+        return FinalNoteMapper.INSTANCE.toDto(finalNoteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Final note not found with id: " + id)));
     }
 
-    public FinalNoteDTO create(FinalNoteDTO dto) {
-        return finalNoteMapper.toDTO(finalNoteRepository.save(finalNoteMapper.toEntity(dto)));
+    public FinalNoteDTO create(FinalNote finalNote) {
+        return FinalNoteMapper.INSTANCE.toDto(finalNoteRepository.save(finalNote));
     }
 
-    public FinalNoteDTO update(Long id, FinalNoteDTO dto) {
+    public FinalNoteDTO update(Long id, FinalNote finalNote) {
         finalNoteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Final note not found with id: " + id));
-        dto.setId(id);
-        return finalNoteMapper.toDTO(finalNoteRepository.save(finalNoteMapper.toEntity(dto)));
+        finalNote.setId(id);
+        return FinalNoteMapper.INSTANCE.toDto(finalNoteRepository.save(finalNote));
     }
 
     public void delete(Long id) {

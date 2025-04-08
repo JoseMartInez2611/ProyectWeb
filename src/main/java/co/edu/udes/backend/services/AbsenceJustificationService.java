@@ -14,16 +14,14 @@ import java.util.List;
 public class AbsenceJustificationService {
 
     private final AbsenceJustificationRepository absenceJustificationRepository;
-    private final AbsenceJustificationMapper absenceJustificationMapper;
 
     public List<AbsenceJustificationDTO> getAll() {
-        return absenceJustificationRepository.findAll().stream()
-                .map(absenceJustificationMapper::toDTO)
-                .toList();
+        List<AbsenceJustification> absenceJustifications = absenceJustificationRepository.findAll();
+        return AbsenceJustificationMapper.INSTANCE.toDtoList(absenceJustifications);
     }
 
     public AbsenceJustificationDTO getById(Long id) {
-        return absenceJustificationMapper.toDTO(absenceJustificationRepository.findById(id)
+        return AbsenceJustificationMapper.INSTANCE.toDto(absenceJustificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Absence justification not found with id: " + id)));
     }
 
@@ -31,11 +29,13 @@ public class AbsenceJustificationService {
         return AbsenceJustificationMapper.INSTANCE.toDto(absenceJustification);
     }
 
-    public AbsenceJustificationDTO update(Long id, AbsenceJustificationDTO dto) {
+    public AbsenceJustificationDTO update(Long id, AbsenceJustification absenceJustification) {
         absenceJustificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Absence justification not found with id: " + id));
-        dto.setId(id);
-        return absenceJustificationMapper.toDTO(absenceJustificationRepository.save(absenceJustificationMapper.toEntity(dto)));
+        absenceJustification.setId(id);
+        return AbsenceJustificationMapper.INSTANCE.toDto(
+                absenceJustificationRepository.save(absenceJustification)
+        );
     }
 
     public void delete(Long id) {

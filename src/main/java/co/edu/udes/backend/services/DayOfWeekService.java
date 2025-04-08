@@ -2,6 +2,7 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.DayOfWeekDTO;
 import co.edu.udes.backend.mappers.DayOfWeekMapper;
+import co.edu.udes.backend.models.DayOfWeek;
 import co.edu.udes.backend.repositories.DayOfWeekRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,28 +14,26 @@ import java.util.List;
 public class DayOfWeekService {
 
     private final DayOfWeekRepository dayOfWeekRepository;
-    private final DayOfWeekMapper dayOfWeekMapper = new DayOfWeekMapper();
 
     public List<DayOfWeekDTO> getAll() {
-        return dayOfWeekRepository.findAll().stream()
-                .map(dayOfWeekMapper::toDTO)
-                .toList();
+        List<DayOfWeek> dayOfWeeks = dayOfWeekRepository.findAll();
+        return DayOfWeekMapper.INSTANCE.toDtoList(dayOfWeeks);
     }
 
     public DayOfWeekDTO getById(Long id) {
-        return dayOfWeekMapper.toDTO(dayOfWeekRepository.findById(id)
+        return DayOfWeekMapper.INSTANCE.toDto(dayOfWeekRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Day of week not found with id: " + id)));
     }
 
-    public DayOfWeekDTO create(DayOfWeekDTO dto) {
-        return dayOfWeekMapper.toDTO(dayOfWeekRepository.save(dayOfWeekMapper.toEntity(dto)));
+    public DayOfWeekDTO create(DayOfWeek dayOfWeek) {
+        return DayOfWeekMapper.INSTANCE.toDto(dayOfWeekRepository.save(dayOfWeek));
     }
 
-    public DayOfWeekDTO update(Long id, DayOfWeekDTO dto) {
+    public DayOfWeekDTO update(Long id, DayOfWeek dayOfWeek) {
         dayOfWeekRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Day of week not found with id: " + id));
-        dto.setId(id);
-        return dayOfWeekMapper.toDTO(dayOfWeekRepository.save(dayOfWeekMapper.toEntity(dto)));
+                .orElseThrow(() -> new RuntimeException("Course not found with id: " + id));
+        dayOfWeek.setId(id);
+        return DayOfWeekMapper.INSTANCE.toDto(dayOfWeekRepository.save(dayOfWeek));
     }
 
     public void delete(Long id) {

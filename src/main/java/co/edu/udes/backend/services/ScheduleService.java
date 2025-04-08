@@ -2,9 +2,9 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.ScheduleDTO;
 import co.edu.udes.backend.mappers.ScheduleMapper;
+import co.edu.udes.backend.models.Schedule;
 import co.edu.udes.backend.repositories.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,28 +14,26 @@ import java.util.List;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-    private final ScheduleMapper scheduleMapper;
 
     public List<ScheduleDTO> getAll() {
-        return scheduleRepository.findAll().stream()
-                .map(scheduleMapper::toDTO)
-                .toList();
+        List<Schedule> schedules = scheduleRepository.findAll();
+        return ScheduleMapper.INSTANCE.toDtoList(schedules);
     }
 
     public ScheduleDTO getById(Long id) {
-        return scheduleMapper.toDTO(scheduleRepository.findById(id)
+        return ScheduleMapper.INSTANCE.toDto(scheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Schedule not found with id: " + id)));
     }
 
-    public ScheduleDTO create(ScheduleDTO dto) {
-        return scheduleMapper.toDTO(scheduleRepository.save(scheduleMapper.toEntity(dto)));
+    public ScheduleDTO create(Schedule schedule) {
+        return ScheduleMapper.INSTANCE.toDto(scheduleRepository.save(schedule));
     }
 
-    public ScheduleDTO update(Long id, ScheduleDTO dto) {
+    public ScheduleDTO update(Long id, Schedule schedule) {
         scheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Schedule not found with id: " + id));
-        dto.setId(id);
-        return scheduleMapper.toDTO(scheduleRepository.save(scheduleMapper.toEntity(dto)));
+        schedule.setId(id);
+        return ScheduleMapper.INSTANCE.toDto(scheduleRepository.save(schedule));
     }
 
     public void delete(Long id) {

@@ -2,6 +2,7 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.LessonDTO;
 import co.edu.udes.backend.mappers.LessonMapper;
+import co.edu.udes.backend.models.Lesson;
 import co.edu.udes.backend.repositories.LessonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,28 +14,26 @@ import java.util.List;
 public class LessonService {
 
     private final LessonRepository lessonRepository;
-    private final LessonMapper lessonMapper;
 
     public List<LessonDTO> getAll() {
-        return lessonRepository.findAll().stream()
-                .map(lessonMapper::toDTO)
-                .toList();
+        List<Lesson> lessons = lessonRepository.findAll();
+        return LessonMapper.INSTANCE.toDtoList(lessons);
     }
 
     public LessonDTO getById(Long id) {
-        return lessonMapper.toDTO(lessonRepository.findById(id)
+        return LessonMapper.INSTANCE.toDto(lessonRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Lesson not found with id: " + id)));
     }
 
-    public LessonDTO create(LessonDTO dto) {
-        return lessonMapper.toDTO(lessonRepository.save(lessonMapper.toEntity(dto)));
+    public LessonDTO create(Lesson lesson) {
+        return LessonMapper.INSTANCE.toDto(lessonRepository.save(lesson));
     }
 
-    public LessonDTO update(Long id, LessonDTO dto) {
+    public LessonDTO update(Long id, Lesson lesson) {
         lessonRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Lesson not found with id: " + id));
-        dto.setId(id);
-        return lessonMapper.toDTO(lessonRepository.save(lessonMapper.toEntity(dto)));
+        lesson.setId(id);
+        return LessonMapper.INSTANCE.toDto(lessonRepository.save(lesson));
     }
 
     public void delete(Long id) {

@@ -25,7 +25,7 @@ public class AcademicRecordController {
     }
 
     // create academic record rest api
-    @PutMapping
+    @PostMapping
     public ResponseEntity<?> create(@RequestBody AcademicRecordDTO dto) {
         try{
             AcademicRecord academicRecord = AcademicRecordMapper.INSTANCE.toEntity(dto);

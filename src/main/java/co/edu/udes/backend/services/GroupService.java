@@ -2,9 +2,9 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.GroupDTO;
 import co.edu.udes.backend.mappers.GroupMapper;
+import co.edu.udes.backend.models.Group;
 import co.edu.udes.backend.repositories.GroupRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,28 +14,26 @@ import java.util.List;
 public class GroupService {
 
     private final GroupRepository groupRepository;
-    private final GroupMapper groupMapper;
 
     public List<GroupDTO> getAll() {
-        return groupRepository.findAll().stream()
-                .map(groupMapper::toDTO)
-                .toList();
+        List<Group> groups = groupRepository.findAll();
+        return GroupMapper.INSTANCE.toDtoList(groups);
     }
 
     public GroupDTO getById(Long id) {
-        return groupMapper.toDTO(groupRepository.findById(id)
+        return GroupMapper.INSTANCE.toDto(groupRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Group not found with id: " + id)));
     }
 
-    public GroupDTO create(GroupDTO dto) {
-        return groupMapper.toDTO(groupRepository.save(groupMapper.toEntity(dto)));
+    public GroupDTO create(Group group) {
+        return GroupMapper.INSTANCE.toDto(groupRepository.save(group));
     }
 
-    public GroupDTO update(Long id, GroupDTO dto) {
+    public GroupDTO update(Long id, Group group) {
         groupRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Group not found with id: " + id));
-        dto.setId(id);
-        return groupMapper.toDTO(groupRepository.save(groupMapper.toEntity(dto)));
+        group.setId(id);
+        return GroupMapper.INSTANCE.toDto(groupRepository.save(group));
     }
 
     public void delete(Long id) {
