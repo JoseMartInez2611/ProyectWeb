@@ -17,7 +17,7 @@ public class AcademicResource {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "name", nullable = false, columnDefinition = "varchar(255)")
     private String name;

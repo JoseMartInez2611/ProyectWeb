@@ -34,7 +34,6 @@ public class AcademicRegistrationController {
             return ResponseEntity.ok(academicRegistrationService.create(academicRegistration));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
-        return ResponseEntity.ok(academicRegistrationService.create(dto));
         }
     }
 

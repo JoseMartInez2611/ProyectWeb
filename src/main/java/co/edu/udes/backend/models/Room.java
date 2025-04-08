@@ -19,7 +19,7 @@ public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "capacity", nullable = false, columnDefinition = "int")
     private int capacity;

@@ -65,7 +65,8 @@ public class GroupController {
         try {
             groupService.delete(id);
             return ResponseEntity.noContent().build();
-        }catch (RuntimeException e){
+        }catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }

@@ -30,7 +30,7 @@ public class TeacherController {
         try{
             return ResponseEntity.ok().body(teacherService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 

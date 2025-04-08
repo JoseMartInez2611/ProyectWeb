@@ -19,7 +19,7 @@ public class Qualification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
 
     @OneToOne(targetEntity = Student.class)
     @JoinColumn(name="student_id", nullable = false)

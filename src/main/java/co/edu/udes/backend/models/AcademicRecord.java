@@ -10,11 +10,13 @@ import lombok.*;
 @Setter
 @Builder
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class AcademicRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "academic_average",
             nullable = false,

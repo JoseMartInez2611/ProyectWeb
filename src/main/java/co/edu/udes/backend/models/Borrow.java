@@ -19,7 +19,7 @@ import java.time.LocalDate;
 public class Borrow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "borrow_date", nullable = false, columnDefinition = "DATE")
     private LocalDate borrowDate;
