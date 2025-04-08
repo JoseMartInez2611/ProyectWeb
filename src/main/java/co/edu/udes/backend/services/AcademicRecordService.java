@@ -14,26 +14,27 @@ import java.util.List;
 public class AcademicRecordService {
 
     private final AcademicRecordRepository academicRecordRepository;
+    private AcademicRecordMapper academicRecordMapper;
 
     public List<AcademicRecordDTO> getAll() {
         List<AcademicRecord> academicRecords = academicRecordRepository.findAll();
-        return AcademicRecordMapper.INSTANCE.toDtoList(academicRecords);
+        return academicRecordMapper.toDtoList(academicRecords);
     }
 
     public AcademicRecordDTO getById(Long id) {
-        return AcademicRecordMapper.INSTANCE.toDto(academicRecordRepository.findById(id)
+        return academicRecordMapper.toDto(academicRecordRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Academic record not found with id: " + id)));
     }
 
     public AcademicRecordDTO create(AcademicRecord academicRecord) {
-        return AcademicRecordMapper.INSTANCE.toDto(academicRecordRepository.save(academicRecord));
+        return academicRecordMapper.toDto(academicRecordRepository.save(academicRecord));
     }
 
     public AcademicRecordDTO update(Long id, AcademicRecord academicRecord) {
         academicRecordRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Academic record not found with id: " + id));
         academicRecord.setId(id);
-        return AcademicRecordMapper.INSTANCE.toDto(academicRecordRepository.save(academicRecord));
+        return academicRecordMapper.toDto(academicRecordRepository.save(academicRecord));
     }
 
     public void delete(Long id) {

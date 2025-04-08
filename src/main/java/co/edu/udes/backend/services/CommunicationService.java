@@ -14,19 +14,20 @@ import java.util.List;
 public class CommunicationService {
 
     private final CommunicationRepository communicationRepository;
+    private CommunicationMapper communicationMapper;
 
     public List<CommunicationDTO> getAll() {
         List<Communication> communications = communicationRepository.findAll();
-        return CommunicationMapper.INSTANCE.toDtoList(communications);
+        return communicationMapper.toDtoList(communications);
     }
 
     public CommunicationDTO getById(Long id) {
-        return CommunicationMapper.INSTANCE.toDto(communicationRepository.findById(id)
+        return communicationMapper.toDto(communicationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Communication not found with id: " + id)));
     }
 
     public CommunicationDTO create(Communication communication) {
-        return CommunicationMapper.INSTANCE.toDto(communicationRepository.save(communication));
+        return communicationMapper.toDto(communicationRepository.save(communication));
 
     }
 
@@ -34,7 +35,7 @@ public class CommunicationService {
         communicationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Communication not found with id: " + id));
         communication.setId(id);
-        return CommunicationMapper.INSTANCE.toDto(communicationRepository.save(communication));
+        return communicationMapper.toDto(communicationRepository.save(communication));
     }
 
     public void delete(Long id) {

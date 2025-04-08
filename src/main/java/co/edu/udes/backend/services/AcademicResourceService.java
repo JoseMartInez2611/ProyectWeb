@@ -16,26 +16,27 @@ import java.util.List;
 public class AcademicResourceService {
 
     private final AcademicResourceRepository academicResourceRepository;
+    private AcademicResourceMapper academicResourceMapper;
 
     public List<AcademicResourceDTO> getAll() {
         List<AcademicResource> academicResources = academicResourceRepository.findAll();
-        return AcademicResourceMapper.INSTANCE.toDtoList(academicResources);
+        return academicResourceMapper.toDtoList(academicResources);
     }
 
     public AcademicResourceDTO getById(Long id) {
-        return AcademicResourceMapper.INSTANCE.toDto(academicResourceRepository.findById(id)
+        return academicResourceMapper.toDto(academicResourceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Academic resource not found with id: " + id)));
     }
 
     public AcademicResourceDTO create(AcademicResource academicResource) {
-        return AcademicResourceMapper.INSTANCE.toDto(academicResourceRepository.save(academicResource));
+        return academicResourceMapper.toDto(academicResourceRepository.save(academicResource));
     }
 
     public AcademicResourceDTO update(Long id, AcademicResource academicResource) {
         academicResourceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Academic resource not found with id: " + id));
         academicResource.setId(id);
-        return AcademicResourceMapper.INSTANCE.toDto(academicResourceRepository.save(academicResource));
+        return academicResourceMapper.toDto(academicResourceRepository.save(academicResource));
     }
 
     public void delete(Long id) {

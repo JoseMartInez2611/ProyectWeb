@@ -15,26 +15,27 @@ import java.util.List;
 public class BorrowService {
 
     private final BorrowRepository borrowRepository;
+    private BorrowMapper borrowMapper;
 
     public List<BorrowDTO> getAll() {
         List<Borrow> borrows = borrowRepository.findAll();
-        return BorrowMapper.INSTANCE.toDtoList(borrows);
+        return borrowMapper.toDtoList(borrows);
     }
 
     public BorrowDTO getById(Long id) {
-        return BorrowMapper.INSTANCE.toDto(borrowRepository.findById(id)
+        return borrowMapper.toDto(borrowRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Borrow not found with id: " + id)));
     }
 
     public BorrowDTO create(Borrow borrow) {
-        return BorrowMapper.INSTANCE.toDto(borrowRepository.save(borrow));
+        return borrowMapper.toDto(borrowRepository.save(borrow));
     }
 
     public BorrowDTO update(Long id, Borrow borrow) {
         borrowRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Borrow not found with id: " + id));
         borrow.setId(id);
-        return BorrowMapper.INSTANCE.toDto(borrowRepository.save(borrow));
+        return borrowMapper.toDto(borrowRepository.save(borrow));
     }
 
     public void delete(Long id) {

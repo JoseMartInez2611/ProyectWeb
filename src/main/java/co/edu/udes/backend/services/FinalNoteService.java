@@ -14,26 +14,27 @@ import java.util.List;
 public class FinalNoteService {
 
     private final FinalNoteRepository finalNoteRepository;
+    private FinalNoteMapper finalNoteMapper;
 
     public List<FinalNoteDTO> getAll() {
         List<FinalNote> finalNotes = finalNoteRepository.findAll();
-        return FinalNoteMapper.INSTANCE.toDtoList(finalNotes);
+        return finalNoteMapper.toDtoList(finalNotes);
     }
 
     public FinalNoteDTO getById(Long id) {
-        return FinalNoteMapper.INSTANCE.toDto(finalNoteRepository.findById(id)
+        return finalNoteMapper.toDto(finalNoteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Final note not found with id: " + id)));
     }
 
     public FinalNoteDTO create(FinalNote finalNote) {
-        return FinalNoteMapper.INSTANCE.toDto(finalNoteRepository.save(finalNote));
+        return finalNoteMapper.toDto(finalNoteRepository.save(finalNote));
     }
 
     public FinalNoteDTO update(Long id, FinalNote finalNote) {
         finalNoteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Final note not found with id: " + id));
         finalNote.setId(id);
-        return FinalNoteMapper.INSTANCE.toDto(finalNoteRepository.save(finalNote));
+        return finalNoteMapper.toDto(finalNoteRepository.save(finalNote));
     }
 
     public void delete(Long id) {

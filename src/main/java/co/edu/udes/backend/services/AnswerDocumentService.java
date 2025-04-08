@@ -14,26 +14,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AnswerDocumentService {
     private final AnswerDocumentRepository answerDocumentRepository;
+    private AnswerDocumentMapper answerDocumentMapper;
 
     public List<AnswerDocumentDTO> getAll() {
         List<AnswerDocument> answerDocuments = answerDocumentRepository.findAll();
-        return AnswerDocumentMapper.INSTANCE.toDtoList(answerDocuments);
+        return answerDocumentMapper.toDtoList(answerDocuments);
     }
 
     public AnswerDocumentDTO getById(Long id) {
-        return AnswerDocumentMapper.INSTANCE.toDto(answerDocumentRepository.findById(id)
+        return answerDocumentMapper.toDto(answerDocumentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Answer document not found with id: " + id)));
     }
 
     public AnswerDocumentDTO create(AnswerDocument answerDocument) {
-        return AnswerDocumentMapper.INSTANCE.toDto(answerDocumentRepository.save(answerDocument));
+        return answerDocumentMapper.toDto(answerDocumentRepository.save(answerDocument));
     }
 
     public AnswerDocumentDTO update(Long id, AnswerDocument answerDocument) {
         answerDocumentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Answer document not found with id: " + id));
         answerDocument.setId(id);
-        return AnswerDocumentMapper.INSTANCE.toDto(answerDocumentRepository.save(answerDocument));
+        return answerDocumentMapper.toDto(answerDocumentRepository.save(answerDocument));
     }
 
     public void delete(Long id) {

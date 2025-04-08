@@ -14,26 +14,27 @@ import java.util.List;
 public class GroupService {
 
     private final GroupRepository groupRepository;
+    private GroupMapper groupMapper;
 
     public List<GroupDTO> getAll() {
         List<Group> groups = groupRepository.findAll();
-        return GroupMapper.INSTANCE.toDtoList(groups);
+        return groupMapper.toDtoList(groups);
     }
 
     public GroupDTO getById(Long id) {
-        return GroupMapper.INSTANCE.toDto(groupRepository.findById(id)
+        return groupMapper.toDto(groupRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Group not found with id: " + id)));
     }
 
     public GroupDTO create(Group group) {
-        return GroupMapper.INSTANCE.toDto(groupRepository.save(group));
+        return groupMapper.toDto(groupRepository.save(group));
     }
 
     public GroupDTO update(Long id, Group group) {
         groupRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Group not found with id: " + id));
         group.setId(id);
-        return GroupMapper.INSTANCE.toDto(groupRepository.save(group));
+        return groupMapper.toDto(groupRepository.save(group));
     }
 
     public void delete(Long id) {
