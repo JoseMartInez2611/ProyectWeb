@@ -20,6 +20,9 @@ public class AbsenceJustificationController {
     @Autowired
     private AbsenceJustificationService absenceJustificationService;
 
+    @Autowired
+    private AbsenceJustificationMapper absenceJustificationMapper;
+
     // Get all absence justifications
     @GetMapping
     public ResponseEntity<List<AbsenceJustificationDTO>> getAllAbsenceJustifications() {

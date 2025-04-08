@@ -20,6 +20,9 @@ public class ExamController {
     @Autowired
     private final ExamService examService;
 
+    @Autowired
+    private final ExamMapper examMapper;
+
     @GetMapping
     public ResponseEntity<List<ExamDTO>> getAll() {
         return ResponseEntity.ok(examService.getAll());

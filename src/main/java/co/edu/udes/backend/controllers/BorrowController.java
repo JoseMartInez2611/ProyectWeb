@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.BorrowMapper;
 import co.edu.udes.backend.models.Borrow;
 import co.edu.udes.backend.services.BorrowService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BorrowController {
 
+    @Autowired
     private final BorrowService borrowService;
+
+    @Autowired
+    private final BorrowMapper borrowMapper;
 
     @GetMapping
     public ResponseEntity<List<BorrowDTO>> getAll() {

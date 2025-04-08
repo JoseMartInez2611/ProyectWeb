@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.MessageMapper;
 import co.edu.udes.backend.models.Message;
 import co.edu.udes.backend.services.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageController {
 
+    @Autowired
     private final MessageService messageService;
+
+    @Autowired
+    private final MessageMapper messageMapper;
 
     @GetMapping
     public ResponseEntity<List<MessageDTO>> getAll() {

@@ -20,6 +20,9 @@ public class LessonController {
     @Autowired
     private LessonService lessonService;
 
+    @Autowired
+    private LessonMapper lessonMapper;
+
     // get all lessons
     @GetMapping
     public ResponseEntity<List<LessonDTO>> getAll(){

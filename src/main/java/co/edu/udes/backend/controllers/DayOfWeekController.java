@@ -21,6 +21,9 @@ public class DayOfWeekController {
     @Autowired
     private DayOfWeekService dayOfWeekService;
 
+    @Autowired
+    private DayOfWeekMapper dayOfWeekMapper;
+
     // get all days of the week
     @GetMapping
     public ResponseEntity<List<DayOfWeekDTO>> getAllDaysOfWeek() {

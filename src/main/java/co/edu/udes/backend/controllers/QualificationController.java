@@ -22,6 +22,9 @@ public class QualificationController {
     @Autowired
     private final QualificationService qualificationService;
 
+    @Autowired
+    private final QualificationMapper qualificationMapper;
+
     @GetMapping
     public ResponseEntity<List<QualificationDTO>> getAll() {
         return ResponseEntity.ok(qualificationService.getAll());

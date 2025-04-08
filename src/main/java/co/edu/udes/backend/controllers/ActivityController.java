@@ -20,6 +20,9 @@ public class ActivityController {
     @Autowired
     private final ActivityService activityService;
 
+    @Autowired
+    private final ActivityMapper activityMapper;
+
     @GetMapping
     public ResponseEntity<List<ActivityDTO>> getAll() {
         return ResponseEntity.ok(activityService.getAll());

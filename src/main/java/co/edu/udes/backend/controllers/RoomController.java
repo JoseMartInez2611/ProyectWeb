@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.RoomMapper;
 import co.edu.udes.backend.models.Room;
 import co.edu.udes.backend.services.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoomController {
 
+    @Autowired
     private final RoomService roomService;
+
+    @Autowired
+    private final RoomMapper roomMapper;
 
     @GetMapping
     public ResponseEntity<List<RoomDTO>> getAll() {

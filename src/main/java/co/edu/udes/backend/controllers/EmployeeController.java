@@ -20,6 +20,8 @@ public class EmployeeController {
 
     @Autowired
     private final EmployeeService employeeService;
+    @Autowired
+    private final EmployeeMapper employeeMapper;
 
     @GetMapping
     public ResponseEntity<List<EmployeeDTO>> getAll() {

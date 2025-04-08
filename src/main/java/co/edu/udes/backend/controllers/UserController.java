@@ -22,6 +22,9 @@ public class UserController {
     @Autowired
     private final UserService profileUService;
 
+    @Autowired
+    private final ProfileUMapper profileUMapper;
+
     @GetMapping
     public ResponseEntity<List<ProfileUDTO>> getAll() {
         return ResponseEntity.ok(profileUService.getAll());

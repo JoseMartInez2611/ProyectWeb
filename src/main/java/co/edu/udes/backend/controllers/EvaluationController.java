@@ -16,8 +16,12 @@ import java.util.List;
 @RequestMapping("/api/v1/evaluation")
 @RequiredArgsConstructor
 public class EvaluationController {
+
     @Autowired
     private final EvaluationService evaluationService;
+
+    @Autowired
+    private final EvaluationMapper evaluationMapper;
 
     @GetMapping
     public ResponseEntity<List<EvaluationDTO>> getAll() {

@@ -19,6 +19,9 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private CourseMapper courseMapper;
+
     // get all courses
     @GetMapping
     public ResponseEntity<List<CourseDTO>> getAllCourses() {

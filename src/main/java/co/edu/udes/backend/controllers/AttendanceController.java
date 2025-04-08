@@ -19,6 +19,9 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
+    @Autowired
+    private AttendanceMapper attendanceMapper;
+
     // get all attendances
     @GetMapping
     public ResponseEntity<List<AttendanceDTO>> getAllAttendances() {

@@ -21,6 +21,9 @@ public class QuestionController {
     @Autowired
     private final QuestionService questionService;
 
+    @Autowired
+    private final QuestionMapper questionMapper;
+
     @GetMapping
     public ResponseEntity<List<QuestionDTO>> getAll() {
         return ResponseEntity.ok(questionService.getAll());

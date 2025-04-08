@@ -20,6 +20,9 @@ public class TeacherController {
     @Autowired
     private final TeacherService teacherService;
 
+    @Autowired
+    private final TeacherMapper teacherMapper;
+
     @GetMapping
     public ResponseEntity<List<TeacherDTO>> getAll() {
         return ResponseEntity.ok(teacherService.getAll());

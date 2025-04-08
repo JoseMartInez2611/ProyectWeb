@@ -18,6 +18,10 @@ public class AcademicRegistrationController {
 
     @Autowired
     private AcademicRegistrationService academicRegistrationService;
+
+    @Autowired
+    private AcademicRegistrationMapper  academicRegistrationMapper;
+
     // get all academic registrations
     @GetMapping
     public ResponseEntity<List<AcademicRegistrationDTO>> getAll() {

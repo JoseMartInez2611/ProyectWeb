@@ -21,6 +21,9 @@ public class StudentController {
     @Autowired
     private final StudentService studentService;
 
+    @Autowired
+    private final StudentMapper studentMapper;
+
     @GetMapping
     public ResponseEntity<List<StudentDTO>> getAll() {
         return ResponseEntity.ok(studentService.getAll());

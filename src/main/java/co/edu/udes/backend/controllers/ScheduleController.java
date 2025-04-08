@@ -20,6 +20,9 @@ public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
 
+    @Autowired
+    private ScheduleMapper scheduleMapper;
+
     // get all schedules
     @GetMapping
     public ResponseEntity<List<ScheduleDTO>> getAllSchedules() {

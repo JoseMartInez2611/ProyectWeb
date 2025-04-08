@@ -19,6 +19,9 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
 
+    @Autowired
+    private GroupMapper groupMapper;
+
     // get all groups
     @GetMapping
     public ResponseEntity<List<GroupDTO>> getAll(){

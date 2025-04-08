@@ -19,6 +19,9 @@ public class FinalNoteController {
     @Autowired
     private FinalNoteService finalNoteService;
 
+    @Autowired
+    private FinalNoteMapper finalNoteMapper;
+
     // get all final notes
     @GetMapping
     public ResponseEntity<List<FinalNoteDTO>> getAllFinalNotes() {

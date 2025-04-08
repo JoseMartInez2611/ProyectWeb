@@ -4,6 +4,7 @@ import co.edu.udes.backend.mappers.AcademicResourceMapper;
 import co.edu.udes.backend.models.AcademicResource;
 import co.edu.udes.backend.services.AcademicResourceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AcademicResourceController {
 
+    @Autowired
     private final AcademicResourceService academicResourceService;
+
+    @Autowired
+    private final AcademicResourceMapper academicResourceMapper;
 
     @GetMapping
     public ResponseEntity<List<AcademicResourceDTO>> getAll() {

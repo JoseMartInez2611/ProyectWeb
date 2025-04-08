@@ -20,6 +20,9 @@ public class AnswerDocumentController {
     @Autowired
     private final AnswerDocumentService answerDocumentService;
 
+    @Autowired
+    private final AnswerDocumentMapper answerDocumentMapper;
+
     @GetMapping
     public ResponseEntity<List<AnswerDocumentDTO>> getAll() {
         return ResponseEntity.ok(answerDocumentService.getAll());

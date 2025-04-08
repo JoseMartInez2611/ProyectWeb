@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.NotificationMapper;
 import co.edu.udes.backend.models.Notification;
 import co.edu.udes.backend.services.NotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationController {
 
+    @Autowired
     private final NotificationService notificationService;
+
+    @Autowired
+    private final NotificationMapper notificationMapper;
 
     @GetMapping
     public ResponseEntity<List<NotificationDTO>> getAll() {
