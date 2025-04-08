@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.CommunicationMapper;
 import co.edu.udes.backend.models.inheritance.Communication;
 import co.edu.udes.backend.services.CommunicationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommunicationController {
 
+    @Autowired
     private final CommunicationService communicationService;
+
+    @Autowired
+    private final CommunicationMapper communicationMapper;
+
 
     @GetMapping
     public ResponseEntity<List<CommunicationDTO>> getAll() {
@@ -35,7 +41,7 @@ public class CommunicationController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody CommunicationDTO dto) {
         try{
-            Communication communication = CommunicationMapper.INSTANCE.toEntity(dto);
+            Communication communication = communicationMapper.toEntity(dto);
             return ResponseEntity.ok(communicationService.create(communication));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -45,7 +51,7 @@ public class CommunicationController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CommunicationDTO dto) {
         try{
-            Communication communication = CommunicationMapper.INSTANCE.toEntity(dto);
+            Communication communication = communicationMapper.toEntity(dto);
             return ResponseEntity.ok(communicationService.update(id, communication));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

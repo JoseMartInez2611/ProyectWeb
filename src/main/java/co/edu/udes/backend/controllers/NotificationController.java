@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.NotificationMapper;
 import co.edu.udes.backend.models.Notification;
 import co.edu.udes.backend.services.NotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationController {
 
+    @Autowired
     private final NotificationService notificationService;
+
+    @Autowired
+    private final NotificationMapper notificationMapper;
 
     @GetMapping
     public ResponseEntity<List<NotificationDTO>> getAll() {
@@ -35,7 +40,7 @@ public class NotificationController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody NotificationDTO dto) {
         try{
-            Notification notification = NotificationMapper.INSTANCE.toEntity(dto);
+            Notification notification = notificationMapper.toEntity(dto);
             return ResponseEntity.ok(notificationService.create(notification));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -45,7 +50,7 @@ public class NotificationController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody NotificationDTO dto) {
         try{
-            Notification notification = NotificationMapper.INSTANCE.toEntity(dto);
+            Notification notification = notificationMapper.toEntity(dto);
             return ResponseEntity.ok(notificationService.update(id, notification));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

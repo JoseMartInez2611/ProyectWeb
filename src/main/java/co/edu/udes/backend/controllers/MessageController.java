@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.MessageMapper;
 import co.edu.udes.backend.models.Message;
 import co.edu.udes.backend.services.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageController {
 
+    @Autowired
     private final MessageService messageService;
+
+    @Autowired
+    private final MessageMapper messageMapper;
 
     @GetMapping
     public ResponseEntity<List<MessageDTO>> getAll() {
@@ -35,7 +40,7 @@ public class MessageController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody MessageDTO dto) {
         try{
-            Message message = MessageMapper.INSTANCE.toEntity(dto);
+            Message message = messageMapper.toEntity(dto);
             return ResponseEntity.ok(messageService.create(message));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -45,7 +50,7 @@ public class MessageController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody MessageDTO dto) {
         try{
-            Message message = MessageMapper.INSTANCE.toEntity(dto);
+            Message message = messageMapper.toEntity(dto);
             return ResponseEntity.ok(messageService.update(id, message));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

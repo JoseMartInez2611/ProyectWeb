@@ -21,6 +21,9 @@ public class QuestionController {
     @Autowired
     private final QuestionService questionService;
 
+    @Autowired
+    private final QuestionMapper questionMapper;
+
     @GetMapping
     public ResponseEntity<List<QuestionDTO>> getAll() {
         return ResponseEntity.ok(questionService.getAll());
@@ -38,7 +41,7 @@ public class QuestionController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody QuestionDTO dto) {
         try{
-            Question question = QuestionMapper.INSTANCE.toEntity(dto);
+            Question question = questionMapper.toEntity(dto);
             return ResponseEntity.ok(questionService.create(question));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -48,7 +51,7 @@ public class QuestionController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody QuestionDTO dto) {
         try{
-            Question question = QuestionMapper.INSTANCE.toEntity(dto);
+            Question question = questionMapper.toEntity(dto);
             return ResponseEntity.ok(questionService.update(id, question));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

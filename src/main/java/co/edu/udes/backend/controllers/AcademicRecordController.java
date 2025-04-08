@@ -2,6 +2,7 @@ package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.AcademicRecordDTO;
 import co.edu.udes.backend.mappers.AcademicRecordMapper;
+import co.edu.udes.backend.models.AbsenceJustification;
 import co.edu.udes.backend.models.AcademicRecord;
 import co.edu.udes.backend.services.AcademicRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,10 @@ public class AcademicRecordController {
 
     @Autowired
     private AcademicRecordService academicRecordService;
+
+    @Autowired
+    private AcademicRecordMapper  academicRecordMapper;
+
     // get all academic records
     @GetMapping
     public ResponseEntity<List<AcademicRecordDTO>> getAll() {
@@ -28,7 +33,7 @@ public class AcademicRecordController {
     @PutMapping
     public ResponseEntity<?> create(@RequestBody AcademicRecordDTO dto) {
         try{
-            AcademicRecord academicRecord = AcademicRecordMapper.INSTANCE.toEntity(dto);
+            AcademicRecord academicRecord = academicRecordMapper.toEntity(dto);
             return ResponseEntity.ok(academicRecordService.create(academicRecord));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -49,7 +54,7 @@ public class AcademicRecordController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AcademicRecordDTO dto) {
         try{
-            AcademicRecord academicRecord = AcademicRecordMapper.INSTANCE.toEntity(dto);
+            AcademicRecord academicRecord = academicRecordMapper.toEntity(dto);
             return ResponseEntity.ok(academicRecordService.update(id, academicRecord));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

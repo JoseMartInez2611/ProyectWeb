@@ -19,6 +19,9 @@ public class FinalNoteController {
     @Autowired
     private FinalNoteService finalNoteService;
 
+    @Autowired
+    private FinalNoteMapper finalNoteMapper;
+
     // get all final notes
     @GetMapping
     public ResponseEntity<List<FinalNoteDTO>> getAllFinalNotes() {
@@ -29,7 +32,7 @@ public class FinalNoteController {
     @PostMapping
     public ResponseEntity<?> create(FinalNoteDTO dto) {
         try{
-            FinalNote finalNote = FinalNoteMapper.INSTANCE.toEntity(dto);
+            FinalNote finalNote = finalNoteMapper.toEntity(dto);
             return ResponseEntity.ok(finalNoteService.create(finalNote));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -50,7 +53,7 @@ public class FinalNoteController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(Long id, FinalNoteDTO dto) {
         try{
-            FinalNote finalNote = FinalNoteMapper.INSTANCE.toEntity(dto);
+            FinalNote finalNote = finalNoteMapper.toEntity(dto);
             return ResponseEntity.ok(finalNoteService.update(id, finalNote));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

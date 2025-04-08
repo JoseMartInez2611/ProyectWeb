@@ -18,6 +18,10 @@ public class AcademicRegistrationController {
 
     @Autowired
     private AcademicRegistrationService academicRegistrationService;
+
+    @Autowired
+    private AcademicRegistrationMapper  academicRegistrationMapper;
+
     // get all academic registrations
     @GetMapping
     public ResponseEntity<List<AcademicRegistrationDTO>> getAll() {
@@ -28,7 +32,7 @@ public class AcademicRegistrationController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody AcademicRegistrationDTO dto) {
         try{
-            AcademicRegistration academicRegistration = AcademicRegistrationMapper.INSTANCE.toEntity(dto);
+            AcademicRegistration academicRegistration = academicRegistrationMapper.toEntity(dto);
             return ResponseEntity.ok(academicRegistrationService.create(academicRegistration));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -49,7 +53,7 @@ public class AcademicRegistrationController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AcademicRegistrationDTO dto) {
         try{
-            AcademicRegistration academicRecord = AcademicRegistrationMapper.INSTANCE.toEntity(dto);
+            AcademicRegistration academicRecord = academicRegistrationMapper.toEntity(dto);
             return ResponseEntity.ok(academicRegistrationService.update(id, academicRecord));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

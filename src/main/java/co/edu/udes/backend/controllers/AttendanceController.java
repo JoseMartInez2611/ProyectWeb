@@ -19,6 +19,9 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
+    @Autowired
+    private AttendanceMapper attendanceMapper;
+
     // get all attendances
     @GetMapping
     public ResponseEntity<List<AttendanceDTO>> getAllAttendances() {
@@ -29,7 +32,7 @@ public class AttendanceController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody AttendanceDTO dto) {
         try{
-            Attendance attendance = AttendanceMapper.INSTANCE.toEntity(dto);
+            Attendance attendance = attendanceMapper.toEntity(dto);
             return ResponseEntity.ok(attendanceService.create(attendance));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -50,7 +53,7 @@ public class AttendanceController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AttendanceDTO dto) {
         try{
-            Attendance attendance = AttendanceMapper.INSTANCE.toEntity(dto);
+            Attendance attendance = attendanceMapper.toEntity(dto);
             return ResponseEntity.ok(attendanceService.update(id, attendance));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

@@ -22,6 +22,9 @@ public class UserController {
     @Autowired
     private final UserService profileUService;
 
+    @Autowired
+    private final ProfileUMapper profileUMapper;
+
     @GetMapping
     public ResponseEntity<List<ProfileUDTO>> getAll() {
         return ResponseEntity.ok(profileUService.getAll());
@@ -39,7 +42,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ProfileUDTO dto) {
         try{
-            ProfileU profileU = ProfileUMapper.INSTANCE.toEntity(dto);
+            ProfileU profileU = profileUMapper.toEntity(dto);
             return ResponseEntity.ok(profileUService.create(profileU));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -49,7 +52,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProfileUDTO dto) {
         try{
-            ProfileU profileU = ProfileUMapper.INSTANCE.toEntity(dto);
+            ProfileU profileU = profileUMapper.toEntity(dto);
             return ResponseEntity.ok(profileUService.update(id, profileU));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

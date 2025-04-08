@@ -16,8 +16,12 @@ import java.util.List;
 @RequestMapping("/api/v1/evaluation")
 @RequiredArgsConstructor
 public class EvaluationController {
+
     @Autowired
     private final EvaluationService evaluationService;
+
+    @Autowired
+    private final EvaluationMapper evaluationMapper;
 
     @GetMapping
     public ResponseEntity<List<EvaluationDTO>> getAll() {
@@ -36,7 +40,7 @@ public class EvaluationController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody EvaluationDTO dto) {
         try{
-            Evaluation evaluation = EvaluationMapper.INSTANCE.toEntity(dto);
+            Evaluation evaluation = evaluationMapper.toEntity(dto);
             return ResponseEntity.ok(evaluationService.create(evaluation));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -46,7 +50,7 @@ public class EvaluationController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody EvaluationDTO dto) {
         try{
-            Evaluation evaluation = EvaluationMapper.INSTANCE.toEntity(dto);
+            Evaluation evaluation = evaluationMapper.toEntity(dto);
             return ResponseEntity.ok(evaluationService.update(id, evaluation));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

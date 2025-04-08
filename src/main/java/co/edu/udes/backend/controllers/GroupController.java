@@ -19,6 +19,9 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
 
+    @Autowired
+    private GroupMapper groupMapper;
+
     // get all groups
     @GetMapping
     public ResponseEntity<List<GroupDTO>> getAll(){
@@ -29,7 +32,7 @@ public class GroupController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody GroupDTO dto){
         try{
-            Group group = GroupMapper.INSTANCE.toEntity(dto);
+            Group group = groupMapper.toEntity(dto);
             return ResponseEntity.ok(groupService.create(group));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -50,7 +53,7 @@ public class GroupController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody GroupDTO dto){
         try{
-            Group group = GroupMapper.INSTANCE.toEntity(dto);
+            Group group = groupMapper.toEntity(dto);
             return ResponseEntity.ok(groupService.update(id, group));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

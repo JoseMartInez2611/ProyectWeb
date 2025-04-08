@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.RoomMapper;
 import co.edu.udes.backend.models.Room;
 import co.edu.udes.backend.services.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoomController {
 
+    @Autowired
     private final RoomService roomService;
+
+    @Autowired
+    private final RoomMapper roomMapper;
 
     @GetMapping
     public ResponseEntity<List<RoomDTO>> getAll() {
@@ -35,7 +40,7 @@ public class RoomController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody RoomDTO dto) {
         try{
-            Room room = RoomMapper.INSTANCE.toEntity(dto);
+            Room room = roomMapper.toEntity(dto);
             return ResponseEntity.ok(roomService.create(room));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -45,7 +50,7 @@ public class RoomController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody RoomDTO dto) {
         try{
-            Room room = RoomMapper.INSTANCE.toEntity(dto);
+            Room room = roomMapper.toEntity(dto);
             return ResponseEntity.ok(roomService.update(id, room));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

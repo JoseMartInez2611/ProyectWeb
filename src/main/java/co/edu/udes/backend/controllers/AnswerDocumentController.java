@@ -20,6 +20,9 @@ public class AnswerDocumentController {
     @Autowired
     private final AnswerDocumentService answerDocumentService;
 
+    @Autowired
+    private final AnswerDocumentMapper answerDocumentMapper;
+
     @GetMapping
     public ResponseEntity<List<AnswerDocumentDTO>> getAll() {
         return ResponseEntity.ok(answerDocumentService.getAll());
@@ -37,7 +40,7 @@ public class AnswerDocumentController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody AnswerDocumentDTO dto) {
         try{
-            AnswerDocument answerDocument = AnswerDocumentMapper.INSTANCE.toEntity(dto);
+            AnswerDocument answerDocument = answerDocumentMapper.toEntity(dto);
             return ResponseEntity.ok(answerDocumentService.create(answerDocument));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -47,7 +50,7 @@ public class AnswerDocumentController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AnswerDocumentDTO dto) {
         try{
-            AnswerDocument answerDocument = AnswerDocumentMapper.INSTANCE.toEntity(dto);
+            AnswerDocument answerDocument = answerDocumentMapper.toEntity(dto);
             return ResponseEntity.ok(answerDocumentService.update(id, answerDocument));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

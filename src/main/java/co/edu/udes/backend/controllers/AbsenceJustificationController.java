@@ -20,6 +20,9 @@ public class AbsenceJustificationController {
     @Autowired
     private AbsenceJustificationService absenceJustificationService;
 
+    @Autowired
+    private AbsenceJustificationMapper absenceJustificationMapper;
+
     // Get all absence justifications
     @GetMapping
     public ResponseEntity<List<AbsenceJustificationDTO>> getAllAbsenceJustifications() {
@@ -30,7 +33,7 @@ public class AbsenceJustificationController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody AbsenceJustificationDTO dto){
         try{
-            AbsenceJustification absenceJustification = AbsenceJustificationMapper.INSTANCE.toEntity(dto);
+            AbsenceJustification absenceJustification = absenceJustificationMapper.toEntity(dto);
             return ResponseEntity.ok(absenceJustificationService.create(absenceJustification));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -50,7 +53,7 @@ public class AbsenceJustificationController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AbsenceJustificationDTO dto) {
         try{
-            AbsenceJustification absenceJustification = AbsenceJustificationMapper.INSTANCE.toEntity(dto);
+            AbsenceJustification absenceJustification = absenceJustificationMapper.toEntity(dto);
             return ResponseEntity.ok(absenceJustificationService.update(id, absenceJustification));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

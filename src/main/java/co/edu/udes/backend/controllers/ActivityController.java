@@ -20,6 +20,9 @@ public class ActivityController {
     @Autowired
     private final ActivityService activityService;
 
+    @Autowired
+    private final ActivityMapper activityMapper;
+
     @GetMapping
     public ResponseEntity<List<ActivityDTO>> getAll() {
         return ResponseEntity.ok(activityService.getAll());
@@ -38,7 +41,7 @@ public class ActivityController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ActivityDTO dto) {
         try{
-            Activity activity = ActivityMapper.INSTANCE.toEntity(dto);
+            Activity activity = activityMapper.toEntity(dto);
             return ResponseEntity.ok(activityService.create(activity));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -49,7 +52,7 @@ public class ActivityController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ActivityDTO dto) {
         try{
-            Activity activity = ActivityMapper.INSTANCE.toEntity(dto);
+            Activity activity = activityMapper.toEntity(dto);
             return ResponseEntity.ok(activityService.update(id, activity));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

@@ -20,6 +20,9 @@ public class TeacherController {
     @Autowired
     private final TeacherService teacherService;
 
+    @Autowired
+    private final TeacherMapper teacherMapper;
+
     @GetMapping
     public ResponseEntity<List<TeacherDTO>> getAll() {
         return ResponseEntity.ok(teacherService.getAll());
@@ -37,7 +40,7 @@ public class TeacherController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody TeacherDTO dto) {
         try{
-            Teacher teacher = TeacherMapper.INSTANCE.toEntity(dto);
+            Teacher teacher = teacherMapper.toEntity(dto);
             return ResponseEntity.ok(teacherService.create(teacher));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -47,7 +50,7 @@ public class TeacherController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody TeacherDTO dto) {
         try{
-            Teacher teacher = TeacherMapper.INSTANCE.toEntity(dto);
+            Teacher teacher = teacherMapper.toEntity(dto);
             return ResponseEntity.ok(teacherService.update(id, teacher));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
