@@ -31,5 +31,9 @@ public class Question {
     String answer;
 
     @ManyToOne(targetEntity = Exam.class)
+    @JoinColumn(name = "id_exam",
+            nullable = false,
+            columnDefinition = "BIGINT"
+    )
     Exam exam;
 }

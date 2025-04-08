@@ -30,7 +30,8 @@ public class Activity extends Evaluation {
     @OneToMany(
             targetEntity = AnswerDocument.class,
             fetch = FetchType.LAZY,
-            orphanRemoval = true
+            orphanRemoval = true,
+            mappedBy = "activity"
     )
     List<AnswerDocument> answerDocuments;
 }
