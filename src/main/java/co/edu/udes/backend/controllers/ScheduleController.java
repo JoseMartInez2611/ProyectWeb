@@ -33,7 +33,7 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ScheduleDTO dto) {
         try{
-            Schedule schedule = ScheduleMapper.INSTANCE.toEntity(dto);
+            Schedule schedule = scheduleMapper.toEntity(dto);
             return ResponseEntity.ok(scheduleService.create(schedule));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -54,7 +54,7 @@ public class ScheduleController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ScheduleDTO dto) {
         try{
-            Schedule schedule = ScheduleMapper.INSTANCE.toEntity(dto);
+            Schedule schedule = scheduleMapper.toEntity(dto);
             return ResponseEntity.ok(scheduleService.update(id, schedule));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

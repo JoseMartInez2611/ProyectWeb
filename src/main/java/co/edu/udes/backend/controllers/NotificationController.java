@@ -40,7 +40,7 @@ public class NotificationController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody NotificationDTO dto) {
         try{
-            Notification notification = NotificationMapper.INSTANCE.toEntity(dto);
+            Notification notification = notificationMapper.toEntity(dto);
             return ResponseEntity.ok(notificationService.create(notification));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -50,7 +50,7 @@ public class NotificationController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody NotificationDTO dto) {
         try{
-            Notification notification = NotificationMapper.INSTANCE.toEntity(dto);
+            Notification notification = notificationMapper.toEntity(dto);
             return ResponseEntity.ok(notificationService.update(id, notification));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

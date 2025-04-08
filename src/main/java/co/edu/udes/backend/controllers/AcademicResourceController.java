@@ -39,7 +39,7 @@ public class AcademicResourceController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody AcademicResourceDTO dto) {
         try{
-            AcademicResource academicResource = AcademicResourceMapper.INSTANCE.toEntity(dto);
+            AcademicResource academicResource = academicResourceMapper.toEntity(dto);
             return ResponseEntity.ok(academicResourceService.create(academicResource));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -50,7 +50,7 @@ public class AcademicResourceController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AcademicResourceDTO dto) {
         try{
-            AcademicResource academicResource = AcademicResourceMapper.INSTANCE.toEntity(dto);
+            AcademicResource academicResource = academicResourceMapper.toEntity(dto);
             return ResponseEntity.ok(academicResourceService.update(id, academicResource));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

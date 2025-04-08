@@ -40,7 +40,7 @@ public class RoomController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody RoomDTO dto) {
         try{
-            Room room = RoomMapper.INSTANCE.toEntity(dto);
+            Room room = roomMapper.toEntity(dto);
             return ResponseEntity.ok(roomService.create(room));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -50,7 +50,7 @@ public class RoomController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody RoomDTO dto) {
         try{
-            Room room = RoomMapper.INSTANCE.toEntity(dto);
+            Room room = roomMapper.toEntity(dto);
             return ResponseEntity.ok(roomService.update(id, room));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

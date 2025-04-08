@@ -41,7 +41,7 @@ public class StudentController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody StudentDTO dto) {
         try{
-            Student student = StudentMapper.INSTANCE.toEntity(dto);
+            Student student = studentMapper.toEntity(dto);
             return ResponseEntity.ok(studentService.create(student));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -51,7 +51,7 @@ public class StudentController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody StudentDTO dto) {
         try{
-            Student student = StudentMapper.INSTANCE.toEntity(dto);
+            Student student = studentMapper.toEntity(dto);
             return ResponseEntity.ok(studentService.update(id, student));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

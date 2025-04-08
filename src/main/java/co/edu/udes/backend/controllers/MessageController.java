@@ -40,7 +40,7 @@ public class MessageController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody MessageDTO dto) {
         try{
-            Message message = MessageMapper.INSTANCE.toEntity(dto);
+            Message message = messageMapper.toEntity(dto);
             return ResponseEntity.ok(messageService.create(message));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -50,7 +50,7 @@ public class MessageController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody MessageDTO dto) {
         try{
-            Message message = MessageMapper.INSTANCE.toEntity(dto);
+            Message message = messageMapper.toEntity(dto);
             return ResponseEntity.ok(messageService.update(id, message));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

@@ -42,7 +42,7 @@ public class QualificationController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody QualificationDTO dto) {
         try{
-            Qualification qualification = QualificationMapper.INSTANCE.toEntity(dto);
+            Qualification qualification = qualificationMapper.toEntity(dto);
             return ResponseEntity.ok(qualificationService.create(qualification));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -52,7 +52,7 @@ public class QualificationController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody QualificationDTO dto) {
         try{
-            Qualification qualification = QualificationMapper.INSTANCE.toEntity(dto);
+            Qualification qualification = qualificationMapper.toEntity(dto);
             return ResponseEntity.ok(qualificationService.update(id, qualification));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

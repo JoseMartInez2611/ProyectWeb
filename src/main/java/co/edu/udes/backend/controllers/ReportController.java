@@ -40,7 +40,7 @@ public class ReportController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ReportDTO dto) {
         try{
-            Report report = ReportMapper.INSTANCE.toEntity(dto);
+            Report report = reportMapper.toEntity(dto);
             return ResponseEntity.ok(reportService.create(report));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -50,7 +50,7 @@ public class ReportController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ReportDTO dto) {
         try{
-            Report report = ReportMapper.INSTANCE.toEntity(dto);
+            Report report = reportMapper.toEntity(dto);
             return ResponseEntity.ok(reportService.update(id, report));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

@@ -33,7 +33,7 @@ public class LessonController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody LessonDTO dto){
         try{
-            Lesson lesson = LessonMapper.INSTANCE.toEntity(dto);
+            Lesson lesson = lessonMapper.toEntity(dto);
             return ResponseEntity.ok(lessonService.create(lesson));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -54,7 +54,7 @@ public class LessonController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody LessonDTO dto){
         try{
-            Lesson lesson = LessonMapper.INSTANCE.toEntity(dto);
+            Lesson lesson = lessonMapper.toEntity(dto);
             return ResponseEntity.ok(lessonService.update(id, lesson));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

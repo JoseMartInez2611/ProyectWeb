@@ -34,7 +34,7 @@ public class DayOfWeekController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody DayOfWeekDTO dto) {
         try{
-            DayOfWeek dayOfWeek = DayOfWeekMapper.INSTANCE.toEntity(dto);
+            DayOfWeek dayOfWeek = dayOfWeekMapper.toEntity(dto);
             return ResponseEntity.ok(dayOfWeekService.create(dayOfWeek));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -55,7 +55,7 @@ public class DayOfWeekController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody DayOfWeekDTO dto) {
         try{
-            DayOfWeek dayOfWeek = DayOfWeekMapper.INSTANCE.toEntity(dto);
+            DayOfWeek dayOfWeek = dayOfWeekMapper.toEntity(dto);
             return ResponseEntity.ok(dayOfWeekService.update(id, dayOfWeek));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

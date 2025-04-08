@@ -40,7 +40,7 @@ public class EmployeeController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody EmployeeDTO dto) {
         try{
-            Employee employee = EmployeeMapper.INSTANCE.toEntity(dto);
+            Employee employee = employeeMapper.toEntity(dto);
             return ResponseEntity.ok(employeeService.create(employee));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -50,7 +50,7 @@ public class EmployeeController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody EmployeeDTO dto) {
         try{
-            Employee employee = EmployeeMapper.INSTANCE.toEntity(dto);
+            Employee employee = employeeMapper.toEntity(dto);
             return ResponseEntity.ok(employeeService.update(id, employee));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

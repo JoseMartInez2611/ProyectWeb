@@ -40,7 +40,7 @@ public class ExamController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ExamDTO dto) {
         try{
-            Exam exam = ExamMapper.INSTANCE.toEntity(dto);
+            Exam exam = examMapper.toEntity(dto);
             return ResponseEntity.ok(examService.create(exam));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -50,7 +50,7 @@ public class ExamController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ExamDTO dto) {
         try{
-            Exam exam = ExamMapper.INSTANCE.toEntity(dto);
+            Exam exam = examMapper.toEntity(dto);
             return ResponseEntity.ok(examService.update(id, exam));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

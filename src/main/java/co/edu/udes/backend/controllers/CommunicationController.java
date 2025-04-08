@@ -41,7 +41,7 @@ public class CommunicationController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody CommunicationDTO dto) {
         try{
-            Communication communication = CommunicationMapper.INSTANCE.toEntity(dto);
+            Communication communication = communicationMapper.toEntity(dto);
             return ResponseEntity.ok(communicationService.create(communication));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
@@ -51,7 +51,7 @@ public class CommunicationController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CommunicationDTO dto) {
         try{
-            Communication communication = CommunicationMapper.INSTANCE.toEntity(dto);
+            Communication communication = communicationMapper.toEntity(dto);
             return ResponseEntity.ok(communicationService.update(id, communication));
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
