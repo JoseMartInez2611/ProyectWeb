@@ -1,9 +1,6 @@
 package co.edu.udes.backend.mappers;
 
-
-import co.edu.udes.backend.dto.AttendanceDTO;
 import co.edu.udes.backend.dto.BorrowDTO;
-import co.edu.udes.backend.models.Attendance;
 import co.edu.udes.backend.models.Borrow;
 import org.mapstruct.factory.Mappers;
 

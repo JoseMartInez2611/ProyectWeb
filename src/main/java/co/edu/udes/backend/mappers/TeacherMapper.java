@@ -1,8 +1,6 @@
 package co.edu.udes.backend.mappers;
 
-import co.edu.udes.backend.dto.StudentDTO;
 import co.edu.udes.backend.dto.TeacherDTO;
-import co.edu.udes.backend.models.Student;
 import co.edu.udes.backend.models.Teacher;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
