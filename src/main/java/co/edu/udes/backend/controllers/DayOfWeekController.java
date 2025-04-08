@@ -44,7 +44,7 @@ public class DayOfWeekController {
         try{
             return ResponseEntity.ok().body(dayOfWeekService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Day Of Week not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -53,9 +53,9 @@ public class DayOfWeekController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody DayOfWeekDTO dto) {
         try{
             DayOfWeek dayOfWeek = DayOfWeekMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(dayOfWeekService.update(id, dto));
+            return ResponseEntity.ok(dayOfWeekService.update(id, dayOfWeek));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Day Of Week not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -68,7 +68,7 @@ public class DayOfWeekController {
             dayOfWeekService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Day Of Week not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

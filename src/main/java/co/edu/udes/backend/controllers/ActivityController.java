@@ -31,7 +31,7 @@ public class ActivityController {
         try{
             return ResponseEntity.ok().body(activityService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Activity not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -50,9 +50,9 @@ public class ActivityController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ActivityDTO dto) {
         try{
             Activity activity = ActivityMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(activityService.update(id, dto));
+            return ResponseEntity.ok(activityService.update(id, activity));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Activity not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -65,7 +65,7 @@ public class ActivityController {
             activityService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Activity not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 

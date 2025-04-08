@@ -43,7 +43,7 @@ public class AbsenceJustificationController {
         try{
             return ResponseEntity.ok().body(absenceJustificationService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Absence justification not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
     // Update absence justification
@@ -51,9 +51,9 @@ public class AbsenceJustificationController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AbsenceJustificationDTO dto) {
         try{
             AbsenceJustification absenceJustification = AbsenceJustificationMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(absenceJustificationService.update(id, dto));
+            return ResponseEntity.ok(absenceJustificationService.update(id, absenceJustification));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Absence justification not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -67,7 +67,7 @@ public class AbsenceJustificationController {
             absenceJustificationService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Absence justification not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

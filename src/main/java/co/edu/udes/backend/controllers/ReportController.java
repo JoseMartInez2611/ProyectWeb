@@ -28,7 +28,7 @@ public class ReportController {
         try{
             return ResponseEntity.ok().body(reportService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Report not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -46,9 +46,9 @@ public class ReportController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ReportDTO dto) {
         try{
             Report report = ReportMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(reportService.update(id, dto));
+            return ResponseEntity.ok(reportService.update(id, report));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Report not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -60,7 +60,7 @@ public class ReportController {
             reportService.delete(id);
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Report not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 
         }
     }

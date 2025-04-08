@@ -25,7 +25,7 @@ public class AcademicRecordController {
     }
 
     // create academic record rest api
-    @PutMapping
+    @PostMapping
     public ResponseEntity<?> create(@RequestBody AcademicRecordDTO dto) {
         try{
             AcademicRecord academicRecord = AcademicRecordMapper.INSTANCE.toEntity(dto);
@@ -41,7 +41,7 @@ public class AcademicRecordController {
         try{
             return ResponseEntity.ok().body(academicRecordService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Record not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -50,9 +50,9 @@ public class AcademicRecordController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AcademicRecordDTO dto) {
         try{
             AcademicRecord academicRecord = AcademicRecordMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(academicRecordService.update(id, dto));
+            return ResponseEntity.ok(academicRecordService.update(id, academicRecord));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Record not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -65,7 +65,7 @@ public class AcademicRecordController {
             academicRecordService.delete(id);
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Record not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

@@ -29,7 +29,7 @@ public class EvaluationController {
         try{
             return ResponseEntity.ok().body(evaluationService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Evaluation not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -47,9 +47,9 @@ public class EvaluationController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody EvaluationDTO dto) {
         try{
             Evaluation evaluation = EvaluationMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(evaluationService.update(id, dto));
+            return ResponseEntity.ok(evaluationService.update(id, evaluation));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Evaluation not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -61,7 +61,7 @@ public class EvaluationController {
             evaluationService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Evaluation not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

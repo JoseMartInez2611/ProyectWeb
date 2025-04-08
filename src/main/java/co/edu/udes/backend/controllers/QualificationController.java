@@ -32,7 +32,7 @@ public class QualificationController {
         try{
             return ResponseEntity.ok().body(qualificationService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Qualification not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -50,9 +50,9 @@ public class QualificationController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody QualificationDTO dto) {
         try{
             Qualification qualification = QualificationMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(qualificationService.update(id, dto));
+            return ResponseEntity.ok(qualificationService.update(id, qualification));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Qualification not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -64,7 +64,7 @@ public class QualificationController {
             qualificationService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Qualification not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
     }

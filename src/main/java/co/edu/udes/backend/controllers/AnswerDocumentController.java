@@ -30,7 +30,7 @@ public class AnswerDocumentController {
         try{
             return ResponseEntity.ok().body(answerDocumentService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Answer Document not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -48,9 +48,9 @@ public class AnswerDocumentController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AnswerDocumentDTO dto) {
         try{
             AnswerDocument answerDocument = AnswerDocumentMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(answerDocumentService.update(id, dto));
+            return ResponseEntity.ok(answerDocumentService.update(id, answerDocument));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Answer Document not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -63,7 +63,7 @@ public class AnswerDocumentController {
             answerDocumentService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Answer Document not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
     }

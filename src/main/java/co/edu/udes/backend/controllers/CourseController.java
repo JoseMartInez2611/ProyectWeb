@@ -42,7 +42,7 @@ public class CourseController {
         try{
             return ResponseEntity.ok().body(courseService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -51,9 +51,9 @@ public class CourseController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CourseDTO dto) {
         try{
             Course course = CourseMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(courseService.update(id, dto));
+            return ResponseEntity.ok(courseService.update(id, course));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -67,6 +67,6 @@ public class CourseController {
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e) {
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found with id: " + id);}
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());}
     }
 }

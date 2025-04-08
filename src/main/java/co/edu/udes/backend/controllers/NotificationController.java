@@ -28,7 +28,7 @@ public class NotificationController {
         try{
             return ResponseEntity.ok().body(notificationService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Notification not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -46,9 +46,9 @@ public class NotificationController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody NotificationDTO dto) {
         try{
             Notification notification = NotificationMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(notificationService.update(id, dto));
+            return ResponseEntity.ok(notificationService.update(id, notification));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Notification not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -60,7 +60,7 @@ public class NotificationController {
             notificationService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Notification not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

@@ -31,7 +31,7 @@ public class QuestionController {
         try{
             return ResponseEntity.ok().body(questionService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Question not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -49,9 +49,9 @@ public class QuestionController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody QuestionDTO dto) {
         try{
             Question question = QuestionMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(questionService.update(id, dto));
+            return ResponseEntity.ok(questionService.update(id, question));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Question not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -63,7 +63,7 @@ public class QuestionController {
             questionService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Question not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
     }

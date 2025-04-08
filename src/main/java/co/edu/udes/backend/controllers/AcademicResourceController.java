@@ -27,7 +27,7 @@ public class AcademicResourceController {
         try{
             return ResponseEntity.ok().body(academicResourceService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Resource not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -46,9 +46,9 @@ public class AcademicResourceController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AcademicResourceDTO dto) {
         try{
             AcademicResource academicResource = AcademicResourceMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(academicResourceService.update(id, dto));
+            return ResponseEntity.ok(academicResourceService.update(id, academicResource));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Resource not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -61,7 +61,7 @@ public class AcademicResourceController {
             academicResourceService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Resource not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }
