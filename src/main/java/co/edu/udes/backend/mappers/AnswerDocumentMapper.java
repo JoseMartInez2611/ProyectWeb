@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring", uses = {ActivityMapper.class})
 public interface AnswerDocumentMapper {
     AnswerDocumentMapper INSTANCE = Mappers.getMapper(AnswerDocumentMapper.class);
 

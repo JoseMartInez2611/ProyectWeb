@@ -7,8 +7,14 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
-public interface TeacherMapper {
+@Mapper(componentModel = "spring",
+        uses = {GroupMapper.class,
+                MessageMapper.class,
+                ReportMapper.class,
+                BorrowMapper.class,
+                CommunicationMapper.class
+        }
+)public interface TeacherMapper {
     TeacherMapper INSTANCE = Mappers.getMapper(TeacherMapper.class);
 
     Teacher toEntity(TeacherDTO teacher);

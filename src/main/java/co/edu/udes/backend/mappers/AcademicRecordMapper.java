@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring", uses = {StudentMapper.class, FinalNoteMapper.class})
 public interface AcademicRecordMapper {
     AcademicRecordMapper INSTANCE = Mappers.getMapper(AcademicRecordMapper.class);
     AcademicRecord toEntity(AcademicRecordDTO academicRecord);
