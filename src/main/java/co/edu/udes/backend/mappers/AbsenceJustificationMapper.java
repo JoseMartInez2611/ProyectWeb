@@ -15,7 +15,6 @@ public class AbsenceJustificationMapper {
         if (dto == null) {
             return null;
         }
-
         return AbsenceJustification.builder()
                 .id(dto.getId())
                 .motive(dto.getMotive())

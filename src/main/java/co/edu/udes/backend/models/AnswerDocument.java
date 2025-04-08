@@ -23,5 +23,6 @@ public class AnswerDocument {
     private String filePath;
 
     @ManyToOne(targetEntity = Activity.class)
+    @JoinColumn(name = "activity_id", nullable = false, columnDefinition = "BIGINT")
     private Activity activity;
 }
