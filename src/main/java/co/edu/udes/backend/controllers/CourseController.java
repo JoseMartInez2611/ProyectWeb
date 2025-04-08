@@ -1,14 +1,15 @@
 package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.CourseDTO;
+import co.edu.udes.backend.mappers.CourseMapper;
+import co.edu.udes.backend.models.Course;
 import co.edu.udes.backend.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 // @CrossOrigin(origins = "http://localhost")
 @RestController
@@ -26,28 +27,46 @@ public class CourseController {
 
     // create course rest api
     @PostMapping
-    public ResponseEntity<CourseDTO> create(@RequestBody CourseDTO dto) {
-        return ResponseEntity.ok(courseService.create(dto));
+    public ResponseEntity<?> create(@RequestBody CourseDTO dto) {
+        try{
+            Course course = CourseMapper.INSTANCE.toEntity(dto);
+            return ResponseEntity.ok(courseService.create(course));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     // get course by id rest api
     @GetMapping("/{id}")
-    public ResponseEntity<CourseDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(courseService.getById(id));
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        try{
+            return ResponseEntity.ok().body(courseService.getById(id));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found with id: " + id);
+        }
     }
 
     // update course rest api
     @PutMapping("/{id}")
-    public ResponseEntity<CourseDTO> update(@PathVariable Long id, @RequestBody CourseDTO dto) {
-        return ResponseEntity.ok(courseService.update(id, dto));
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CourseDTO dto) {
+        try{
+            Course course = CourseMapper.INSTANCE.toEntity(dto);
+            return ResponseEntity.ok(courseService.update(id, dto));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found with id: " + id);
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     // delete course rest api
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable Long id) {
-        courseService.delete(id);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            courseService.delete(id);
+            return ResponseEntity.noContent().build();
+        }catch (RuntimeException e) {
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found with id: " + id);}
     }
 }

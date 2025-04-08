@@ -1,14 +1,15 @@
 package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.ScheduleDTO;
+import co.edu.udes.backend.mappers.ScheduleMapper;
+import co.edu.udes.backend.models.Schedule;
 import co.edu.udes.backend.services.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 //@CrossOrigin(origin = "http://localhost")
@@ -27,28 +28,46 @@ public class ScheduleController {
 
     // create schedule
     @PostMapping
-    public ResponseEntity<ScheduleDTO> create(@RequestBody ScheduleDTO dto) {
-        return ResponseEntity.ok(scheduleService.create(dto));
+    public ResponseEntity<?> create(@RequestBody ScheduleDTO dto) {
+        try{
+            Schedule schedule = ScheduleMapper.INSTANCE.toEntity(dto);
+            return ResponseEntity.ok(scheduleService.create(schedule));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     // get schedule by id
     @GetMapping("/{id}")
-    public ResponseEntity<ScheduleDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(scheduleService.getById(id));
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        try{
+            return ResponseEntity.ok().body(scheduleService.getById(id));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Schedule not found with id: " + id);
+        }
     }
 
     // update schedule
     @PutMapping("/{id}")
-    public ResponseEntity<ScheduleDTO> update(@PathVariable Long id, @RequestBody ScheduleDTO dto) {
-        return ResponseEntity.ok(scheduleService.update(id, dto));
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ScheduleDTO dto) {
+        try{
+            Schedule schedule = ScheduleMapper.INSTANCE.toEntity(dto);
+            return ResponseEntity.ok(scheduleService.update(id, dto));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Schedule not found with id: " + id);
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     // delete schedule
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable Long id) {
-        scheduleService.delete(id);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            scheduleService.delete(id);
+            return ResponseEntity.noContent().build();
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Schedule not found with id: " + id);
     }
+        }
 }

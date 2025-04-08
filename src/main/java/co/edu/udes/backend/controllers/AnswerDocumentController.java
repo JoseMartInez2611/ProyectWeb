@@ -1,9 +1,12 @@
 package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.AnswerDocumentDTO;
+import co.edu.udes.backend.mappers.AnswerDocumentMapper;
+import co.edu.udes.backend.models.AnswerDocument;
 import co.edu.udes.backend.services.AnswerDocumentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,24 +26,46 @@ public class AnswerDocumentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AnswerDocumentDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(answerDocumentService.getById(id));
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        try{
+            return ResponseEntity.ok().body(answerDocumentService.getById(id));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Answer Document not found with id: " + id);
+        }
     }
 
     @PostMapping
-    public ResponseEntity<AnswerDocumentDTO> create(@RequestBody AnswerDocumentDTO dto) {
-        return ResponseEntity.ok(answerDocumentService.create(dto));
+    public ResponseEntity<?> create(@RequestBody AnswerDocumentDTO dto) {
+        try{
+            AnswerDocument answerDocument = AnswerDocumentMapper.INSTANCE.toEntity(dto);
+            return ResponseEntity.ok(answerDocumentService.create(answerDocument));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AnswerDocumentDTO> update(@PathVariable Long id, @RequestBody AnswerDocumentDTO dto) {
-        return ResponseEntity.ok(answerDocumentService.update(id, dto));
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AnswerDocumentDTO dto) {
+        try{
+            AnswerDocument answerDocument = AnswerDocumentMapper.INSTANCE.toEntity(dto);
+            return ResponseEntity.ok(answerDocumentService.update(id, dto));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Answer Document not found with id: " + id);
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        answerDocumentService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try{
+            answerDocumentService.delete(id);
+            return ResponseEntity.noContent().build();
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Answer Document not found with id: " + id);
+        }
+
     }
 
 }

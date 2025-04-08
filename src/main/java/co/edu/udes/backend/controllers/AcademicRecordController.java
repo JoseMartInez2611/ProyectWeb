@@ -1,14 +1,15 @@
 package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.AcademicRecordDTO;
+import co.edu.udes.backend.mappers.AcademicRecordMapper;
+import co.edu.udes.backend.models.AcademicRecord;
 import co.edu.udes.backend.services.AcademicRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 // @CrossOrigin(origins = "http://localhost")
 @RestController
@@ -25,28 +26,46 @@ public class AcademicRecordController {
 
     // create academic record rest api
     @PutMapping
-    public ResponseEntity<AcademicRecordDTO> create(@RequestBody AcademicRecordDTO dto) {
-        return ResponseEntity.ok(academicRecordService.create(dto));
+    public ResponseEntity<?> create(@RequestBody AcademicRecordDTO dto) {
+        try{
+            AcademicRecord academicRecord = AcademicRecordMapper.INSTANCE.toEntity(dto);
+            return ResponseEntity.ok(academicRecordService.create(academicRecord));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     // get academic record by id rest api
     @GetMapping("/{id}")
-    public ResponseEntity<AcademicRecordDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(academicRecordService.getById(id));
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        try{
+            return ResponseEntity.ok().body(academicRecordService.getById(id));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Record not found with id: " + id);
+        }
     }
 
     // update academic record rest api
     @PutMapping("/{id}")
-    public ResponseEntity<AcademicRecordDTO> update(@PathVariable Long id, @RequestBody AcademicRecordDTO dto) {
-        return ResponseEntity.ok(academicRecordService.update(id, dto));
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AcademicRecordDTO dto) {
+        try{
+            AcademicRecord academicRecord = AcademicRecordMapper.INSTANCE.toEntity(dto);
+            return ResponseEntity.ok(academicRecordService.update(id, dto));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Record not found with id: " + id);
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     // delete academic record rest api
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable Long id) {
-        academicRecordService.delete(id);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            academicRecordService.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Record not found with id: " + id);
+        }
     }
 }

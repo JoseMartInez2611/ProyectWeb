@@ -1,8 +1,11 @@
 package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.AcademicRegistrationDTO;
+import co.edu.udes.backend.mappers.AcademicRegistrationMapper;
+import co.edu.udes.backend.models.AcademicRegistration;
 import co.edu.udes.backend.services.AcademicRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,28 +28,47 @@ public class AcademicRegistrationController {
 
     // create academic registration rest api
     @PostMapping
-    public ResponseEntity<AcademicRegistrationDTO> create(@RequestBody AcademicRegistrationDTO dto) {
+    public ResponseEntity<?> create(@RequestBody AcademicRegistrationDTO dto) {
+        try{
+            AcademicRegistration academicRegistration = AcademicRegistrationMapper.INSTANCE.toEntity(dto);
+            return ResponseEntity.ok(academicRegistrationService.create(academicRegistration));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
         return ResponseEntity.ok(academicRegistrationService.create(dto));
+        }
     }
 
     // get academic registration by id rest api
     @GetMapping("/{id}")
-    public ResponseEntity<AcademicRegistrationDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(academicRegistrationService.getById(id));
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        try{
+            return ResponseEntity.ok().body(academicRegistrationService.getById(id));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Registration  not found with id: " + id);
+        }
     }
 
     // update academic registration rest api
     @PutMapping("/{id}")
-    public ResponseEntity<AcademicRegistrationDTO> update(@PathVariable Long id, @RequestBody AcademicRegistrationDTO dto) {
-        return ResponseEntity.ok(academicRegistrationService.update(id, dto));
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AcademicRegistrationDTO dto) {
+        try{
+            AcademicRegistration academicRegistration = AcademicRegistrationMapper.INSTANCE.toEntity(dto);
+            return ResponseEntity.ok(academicRegistrationService.update(id, dto));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Registration not found with id: " + id);
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body("Please check the data you are sending");
+        }
     }
 
     // delete academic registration rest api
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable Long id) {
-        academicRegistrationService.delete(id);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            academicRegistrationService.delete(id);
+            return ResponseEntity.noContent().build();
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Registration  not found with id: " + id);
+        }
     }
 }
