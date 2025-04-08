@@ -28,7 +28,7 @@ public class BorrowController {
         try{
             return ResponseEntity.ok().body(borrowService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Borrow not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -46,9 +46,9 @@ public class BorrowController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody BorrowDTO dto) {
         try{
             Borrow borrow = BorrowMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(borrowService.update(id, dto));
+            return ResponseEntity.ok(borrowService.update(id, borrow));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Borrow not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -60,7 +60,7 @@ public class BorrowController {
             borrowService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Borrow not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

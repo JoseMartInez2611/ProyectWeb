@@ -28,7 +28,7 @@ public class CommunicationController {
         try{
             return ResponseEntity.ok().body(communicationService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Communication not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -46,9 +46,9 @@ public class CommunicationController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CommunicationDTO dto) {
         try{
             Communication communication = CommunicationMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(communicationService.update(id, dto));
+            return ResponseEntity.ok(communicationService.update(id, communication));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Communication not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -60,7 +60,7 @@ public class CommunicationController {
             communicationService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Communication not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

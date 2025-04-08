@@ -42,7 +42,7 @@ public class FinalNoteController {
         try{
             return ResponseEntity.ok().body(finalNoteService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Final Note not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -51,9 +51,9 @@ public class FinalNoteController {
     public ResponseEntity<?> update(Long id, FinalNoteDTO dto) {
         try{
             FinalNote finalNote = FinalNoteMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(finalNoteService.update(id, dto));
+            return ResponseEntity.ok(finalNoteService.update(id, finalNote));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Final Note not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -66,7 +66,7 @@ public class FinalNoteController {
             finalNoteService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Final Note not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

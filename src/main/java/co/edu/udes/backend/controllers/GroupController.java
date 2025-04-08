@@ -42,7 +42,7 @@ public class GroupController {
         try{
             return ResponseEntity.ok().body(groupService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Group not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -51,9 +51,9 @@ public class GroupController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody GroupDTO dto){
         try{
             Group group = GroupMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(groupService.update(id, dto));
+            return ResponseEntity.ok(groupService.update(id, group));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Group not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -66,6 +66,6 @@ public class GroupController {
             groupService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Group not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 }

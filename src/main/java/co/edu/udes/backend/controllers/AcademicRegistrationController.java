@@ -44,7 +44,7 @@ public class AcademicRegistrationController {
         try{
             return ResponseEntity.ok().body(academicRegistrationService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Registration  not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -52,10 +52,10 @@ public class AcademicRegistrationController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AcademicRegistrationDTO dto) {
         try{
-            AcademicRegistration academicRegistration = AcademicRegistrationMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(academicRegistrationService.update(id, dto));
+            AcademicRegistration academicRecord = AcademicRegistrationMapper.INSTANCE.toEntity(dto);
+            return ResponseEntity.ok(academicRegistrationService.update(id, academicRecord));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Registration not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -68,7 +68,7 @@ public class AcademicRegistrationController {
             academicRegistrationService.delete(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Academic Registration  not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

@@ -30,7 +30,7 @@ public class ExamController {
         try{
             return ResponseEntity.ok().body(examService.getById(id));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exam not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -48,9 +48,9 @@ public class ExamController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ExamDTO dto) {
         try{
             Exam exam = ExamMapper.INSTANCE.toEntity(dto);
-            return ResponseEntity.ok(examService.update(id, dto));
+            return ResponseEntity.ok(examService.update(id, exam));
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exam not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending");
         }
@@ -62,7 +62,7 @@ public class ExamController {
             examService.getById(id);
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exam not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }
