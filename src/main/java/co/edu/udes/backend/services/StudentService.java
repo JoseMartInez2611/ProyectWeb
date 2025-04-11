@@ -30,8 +30,9 @@ public class StudentService {
                 .orElseThrow(() -> new RuntimeException("Student not found with id: " + id)));
     }
 
-    public StudentDTO create(Student student) {
-        return studentMapper.toDto(studentRepository.save(student));
+    public StudentDTO create(StudentDTO student) {
+        System.out.println(student);
+        return studentMapper.toDto(studentRepository.save(studentMapper.toEntity(student)));
 
     }
 

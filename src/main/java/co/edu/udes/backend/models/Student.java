@@ -19,7 +19,8 @@ import java.util.List;
 @ToString(includeFieldNames = false, callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-
+@Data
+@Builder
 public class Student extends ProfileU {
 
     @Column(name = "semester", columnDefinition = "INTEGER", nullable = false)
