@@ -1,5 +1,6 @@
 package co.edu.udes.backend.dto.inheritanceDTO;
 
+import co.edu.udes.backend.models.inheritance.ProfileU;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,11 +11,11 @@ import java.util.List;
 
 @Data
 @SuperBuilder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class CommunicationDTO {
     private Long id;
-    private List<ProfileUDTO> receiver;
+    private List<ProfileU> receiver;
     private LocalDate sentDate;
     private String content;
     private boolean read;

@@ -6,12 +6,14 @@ import lombok.Data;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.io.File;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class ReportDTO {
     private Long id;
     private String reportType;

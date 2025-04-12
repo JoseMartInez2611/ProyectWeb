@@ -13,7 +13,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-
 public class StudentService {
 
     private final StudentRepository studentRepository;
@@ -30,9 +29,9 @@ public class StudentService {
                 .orElseThrow(() -> new RuntimeException("Student not found with id: " + id)));
     }
 
-    public StudentDTO create(StudentDTO student) {
+    public StudentDTO create(Student student) {
         System.out.println(student);
-        return studentMapper.toDto(studentRepository.save(studentMapper.toEntity(student)));
+        return studentMapper.toDto(studentRepository.save(student));
 
     }
 

@@ -9,8 +9,8 @@ import java.util.List;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class RoomDTO {
     private Long id;
     private int capacity;

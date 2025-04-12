@@ -12,9 +12,9 @@ import java.util.Date;
 
 @Data
 @SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@NoArgsConstructor
 public class EvaluationDTO {
 
     long id;

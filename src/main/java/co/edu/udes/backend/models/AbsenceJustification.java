@@ -9,13 +9,13 @@ import lombok.*;
 @Setter
 @Builder
 @EqualsAndHashCode
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class AbsenceJustification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(name = "motive",
             nullable = false,

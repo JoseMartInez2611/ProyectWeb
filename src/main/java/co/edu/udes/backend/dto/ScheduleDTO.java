@@ -9,8 +9,8 @@ import java.time.LocalTime;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class ScheduleDTO {
 
     private long id;

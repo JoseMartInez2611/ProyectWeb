@@ -10,10 +10,9 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class ExamDTO extends EvaluationDTO {
 
     EvaluationDTO evaluation;
