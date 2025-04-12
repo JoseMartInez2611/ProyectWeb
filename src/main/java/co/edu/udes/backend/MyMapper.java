@@ -1,17 +1,14 @@
 package co.edu.udes.backend;
 
-import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
+import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel =  MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = "spring")
 public interface MyMapper {
 
-    @Mapping(source = "amountOfSeats", target = "numberOfSeats")
-    @Mapping(source = "maxSpeed", target = "maximumSpeed")
-    CarEntity toEntity(Car car);
+    MyMapper INSTANCE = Mappers.getMapper(MyMapper.class);
 
-    @InheritInverseConfiguration
-    Car fromEntity(CarEntity entity);
+    CarEntity toEntity(CarDTO carDTO);
+
+    CarDTO fromEntity(CarEntity entity);
 }
