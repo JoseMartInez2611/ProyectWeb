@@ -8,13 +8,10 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "borrow")
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@Builder
 
 public class Borrow {
     @Id

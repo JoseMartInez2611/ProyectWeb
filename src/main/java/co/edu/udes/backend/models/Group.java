@@ -5,12 +5,10 @@ import lombok.*;
 
 @Entity
 @Table(name = "groups")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode
 public class Group {
 
     @Id

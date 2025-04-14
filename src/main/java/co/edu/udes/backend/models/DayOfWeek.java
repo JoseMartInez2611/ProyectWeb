@@ -5,12 +5,10 @@ import lombok.*;
 
 @Entity
 @Table(name = "days")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode
 public class DayOfWeek {
 
     @Id

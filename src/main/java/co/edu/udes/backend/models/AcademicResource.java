@@ -5,13 +5,10 @@ import lombok.*;
 
 @Entity
 @Table(name = "academic_resource")
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@Builder
 
 public class AcademicResource {
 

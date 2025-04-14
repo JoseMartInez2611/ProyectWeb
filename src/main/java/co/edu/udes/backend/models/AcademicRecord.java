@@ -6,10 +6,8 @@ import lombok.*;
 
 @Entity
 @Table(name = "academic_records")
-@Getter
-@Setter
+@Data
 @Builder
-@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class AcademicRecord {

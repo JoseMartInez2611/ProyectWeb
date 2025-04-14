@@ -7,7 +7,12 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {AcademicResourceMapper.class, EmployeeMapper.class})
+@Mapper(componentModel = "spring",
+        uses = {AcademicResourceMapper.class,
+                EmployeeMapper.class
+        }
+)
+
 public interface BorrowMapper {
     BorrowMapper INSTANCE = Mappers.getMapper(BorrowMapper.class);
 
