@@ -1,17 +1,16 @@
 package co.edu.udes.backend.dto;
 
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 @Data
-@Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+
 public class AnswerDocumentDTO {
 
-    long id;
-    String fileName;
-    String filePath;
-    ActivityDTO activity;
+    private long id;
+    private String fileName;
+    private String filePath;
+    private ActivityDTO activity;
 }

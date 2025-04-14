@@ -8,13 +8,10 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "borrow")
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@Builder
 
 public class Borrow {
     @Id
@@ -34,9 +31,6 @@ public class Borrow {
     @JoinColumn(name = "resource", nullable = false, columnDefinition = "BIGINT")
     private AcademicResource resource;
 
-    @ManyToOne(targetEntity = Employee.class)
-    @JoinColumn(name = "lender", columnDefinition = "BIGINT")
-    private Employee lender;
 
     @ManyToOne(targetEntity = ProfileU.class)
     private ProfileU petitioner;

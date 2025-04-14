@@ -7,13 +7,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "room")
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@Builder
 
 public class Room {
 

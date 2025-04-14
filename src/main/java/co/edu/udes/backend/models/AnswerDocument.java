@@ -3,13 +3,13 @@ package co.edu.udes.backend.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Table(name = "answer_documents")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "answer_documents")
+
 public class AnswerDocument {
 
     @Id

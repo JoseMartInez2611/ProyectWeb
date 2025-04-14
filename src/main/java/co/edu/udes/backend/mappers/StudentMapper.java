@@ -8,7 +8,9 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper
+
 public interface StudentMapper {
+
     StudentMapper INSTANCE = Mappers.getMapper(StudentMapper.class);
 
     Student toEntity(StudentDTO student);

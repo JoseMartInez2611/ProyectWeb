@@ -18,5 +18,4 @@ public class BorrowDTO {
     private LocalDate returnDate;
     private String duration;
     private AcademicResourceDTO resource;
-    private EmployeeDTO lender;
 }

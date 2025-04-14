@@ -3,29 +3,26 @@ package co.edu.udes.backend.models;
 import co.edu.udes.backend.models.inheritance.Evaluation;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@Entity
-@Table(name = "activity")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE)
+@SuperBuilder
+@Entity
 @ToString(includeFieldNames = false, callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@SuperBuilder
+@Table(name = "activity")
 
 public class Activity extends Evaluation {
 
     @Column(name = "description", columnDefinition = "VARCHAR(1024)", nullable = false)
-    String description;
+    private String description;
 
     @Column(name = "answer_text", columnDefinition = "VARCHAR(1024)", nullable = false)
-    String answerText;
+    private String answerText;
 
     @OneToMany(
             targetEntity = AnswerDocument.class,
@@ -33,5 +30,5 @@ public class Activity extends Evaluation {
             orphanRemoval = true,
             mappedBy = "activity"
     )
-    List<AnswerDocument> answerDocuments;
+    private List<AnswerDocument> answerDocuments;
 }

@@ -9,12 +9,9 @@ import java.util.List;
 
 @Entity
 @Table (name = "communication")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
 @SuperBuilder
 @Inheritance(strategy = InheritanceType.JOINED)
 

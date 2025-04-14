@@ -1,18 +1,17 @@
 package co.edu.udes.backend.dto;
 
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 @Data
-@Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+
 public class QuestionDTO {
 
-    long id;
-    String question;
-    String questionType;
-    String answer;
-    ExamDTO exam;
+    private long id;
+    private String question;
+    private String questionType;
+    private String answer;
+    private ExamDTO exam;
 }

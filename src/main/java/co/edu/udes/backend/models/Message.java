@@ -9,12 +9,13 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table (name = "message")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
 @SuperBuilder
+@Builder
+@EqualsAndHashCode(callSuper = true)
+@ToString(includeFieldNames = false, callSuper = true)
 
 public class Message extends Communication {
 

@@ -8,7 +8,10 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {ProfileUMapper.class})
+@Mapper(componentModel = "spring",
+        uses = {ProfileUMapper.class}
+)
+
 public interface CommunicationMapper {
     CommunicationMapper INSTANCE = Mappers.getMapper(CommunicationMapper.class);
 

@@ -3,32 +3,28 @@ package co.edu.udes.backend.models;
 import co.edu.udes.backend.models.inheritance.ProfileU;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@Entity
-@Table(name = "teacher")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE)
+@SuperBuilder
+@Entity
 @ToString(includeFieldNames = false, callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@SuperBuilder
-
+@Table(name = "teacher")
 public class Teacher extends ProfileU {
 
     @Column(name = "speciality", columnDefinition = "VARCHAR(255)", nullable = false)
-    String speciality;
+    private String speciality;
 
     @OneToMany(
             targetEntity = Group.class,
             fetch = FetchType.LAZY,
             mappedBy = "teacher"
     )
-    List<Group> groups;
+    private List<Group> groups;
 
 }
