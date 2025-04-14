@@ -7,7 +7,10 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {AcademicResourceMapper.class})
+@Mapper(componentModel = "spring",
+        uses = {AcademicResourceMapper.class}
+)
+
 public interface RoomMapper {
     RoomMapper INSTANCE = Mappers.getMapper(RoomMapper.class);
 

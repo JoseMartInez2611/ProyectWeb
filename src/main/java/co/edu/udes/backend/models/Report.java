@@ -9,13 +9,10 @@ import java.time.LocalDate;
 
 @Entity
 @Table (name = "report")
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@Builder
 
 public class Report {
 
