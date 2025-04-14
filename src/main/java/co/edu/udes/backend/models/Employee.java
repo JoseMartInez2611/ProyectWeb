@@ -3,25 +3,21 @@ package co.edu.udes.backend.models;
 import co.edu.udes.backend.models.inheritance.ProfileU;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
 
-@Entity
-@Table(name = "employee")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE)
+@SuperBuilder
+@Entity
 @ToString(includeFieldNames = false, callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@SuperBuilder
+@Table(name = "employee")
 
 public class Employee extends ProfileU {
 
     @Column(name="work_space", columnDefinition = "VARCHAR(255)", nullable = false)
-    String workSpace;
+    private String workSpace;
 
 }

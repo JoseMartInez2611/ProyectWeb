@@ -2,20 +2,20 @@ package co.edu.udes.backend.dto;
 
 import co.edu.udes.backend.dto.inheritanceDTO.ProfileUDTO;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
-@SuperBuilder
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+
 public class TeacherDTO extends ProfileUDTO {
 
-    String speciality;
-    List<GroupDTO> groups;
+    private String speciality;
+    private List<GroupDTO> groups;
 
 }
