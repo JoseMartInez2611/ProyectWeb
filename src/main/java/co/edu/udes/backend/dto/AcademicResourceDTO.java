@@ -12,4 +12,5 @@ public class AcademicResourceDTO {
     private String name;
     private String category;
     private boolean availability;
+    
 }
