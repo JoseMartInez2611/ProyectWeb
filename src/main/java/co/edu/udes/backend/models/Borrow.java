@@ -31,9 +31,6 @@ public class Borrow {
     @JoinColumn(name = "resource", nullable = false, columnDefinition = "BIGINT")
     private AcademicResource resource;
 
-    @ManyToOne(targetEntity = Employee.class)
-    @JoinColumn(name = "lender", columnDefinition = "BIGINT")
-    private Employee lender;
 
     @ManyToOne(targetEntity = ProfileU.class)
     private ProfileU petitioner;

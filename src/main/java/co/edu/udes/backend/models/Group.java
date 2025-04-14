@@ -2,6 +2,7 @@ package co.edu.udes.backend.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.context.annotation.Lazy;
 
 @Entity
 @Table(name = "groups")
@@ -27,6 +28,7 @@ public class Group {
             nullable = false,
             columnDefinition = "BIGINT"
     )
+    @Lazy
     private Teacher teacher;
 
     @Column(name = "academic_period",

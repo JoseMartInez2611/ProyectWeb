@@ -16,7 +16,7 @@ import java.util.List;
                 ProfileUMapper.class
         }
 )public interface TeacherMapper {
-    TeacherMapper INSTANCE = Mappers.getMapper(TeacherMapper.class);
+
 
     Teacher toEntity(TeacherDTO teacher);
     List<Teacher> toEntityList(List<TeacherDTO> teachers);
