@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper(componentModel = "spring",
-        uses = {GroupMapper.class,
+        uses = {
                 MessageMapper.class,
                 ReportMapper.class,
                 BorrowMapper.class,
