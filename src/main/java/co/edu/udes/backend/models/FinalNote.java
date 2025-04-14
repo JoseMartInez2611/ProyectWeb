@@ -5,12 +5,10 @@ import lombok.*;
 
 @Entity
 @Table(name = "final_notes")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode
 public class FinalNote {
 
     @Id

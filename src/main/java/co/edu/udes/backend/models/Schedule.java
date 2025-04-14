@@ -6,12 +6,10 @@ import lombok.*;
 
 @Entity
 @Table(name = "schedules")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode
 public class Schedule {
 
     @Id

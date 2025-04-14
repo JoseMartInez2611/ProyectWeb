@@ -5,10 +5,8 @@ import lombok.*;
 
 @Entity
 @Table(name = "absence_justifications")
-@Getter
-@Setter
+@Data
 @Builder
-@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 public class AbsenceJustification {

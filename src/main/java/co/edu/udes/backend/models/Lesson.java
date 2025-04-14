@@ -5,12 +5,10 @@ import lombok.*;
 
 @Entity
 @Table(name = "lesson")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode
 public class Lesson {
 
     @Id
