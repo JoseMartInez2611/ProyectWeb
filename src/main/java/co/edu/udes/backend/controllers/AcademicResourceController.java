@@ -37,14 +37,13 @@ public class AcademicResourceController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody AcademicResourceDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<AcademicResourceDTO> dtos){
         try{
-            AcademicResource academicResource = academicResourceMapper.toEntity(dto);
-            return ResponseEntity.ok(academicResourceService.create(academicResource));
+            List<AcademicResource> entities = academicResourceMapper.toEntityList(dtos);
+            return ResponseEntity.ok(academicResourceService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
-
     }
 
     @PutMapping("/{id}")

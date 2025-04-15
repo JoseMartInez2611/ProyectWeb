@@ -1,7 +1,9 @@
 package co.edu.udes.backend.controllers;
 
+import co.edu.udes.backend.dto.AcademicResourceDTO;
 import co.edu.udes.backend.dto.BorrowDTO;
 import co.edu.udes.backend.mappers.BorrowMapper;
+import co.edu.udes.backend.models.AcademicResource;
 import co.edu.udes.backend.models.Borrow;
 import co.edu.udes.backend.services.BorrowService;
 import lombok.RequiredArgsConstructor;
@@ -38,12 +40,12 @@ public class BorrowController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody BorrowDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<BorrowDTO> dtos){
         try{
-            Borrow borrow = borrowMapper.toEntity(dto);
-            return ResponseEntity.ok(borrowService.create(borrow));
+            List<Borrow> entities = borrowMapper.toEntityList(dtos);
+            return ResponseEntity.ok(borrowService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
 

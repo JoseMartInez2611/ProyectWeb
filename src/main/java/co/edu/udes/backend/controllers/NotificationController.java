@@ -1,7 +1,9 @@
 package co.edu.udes.backend.controllers;
 
+import co.edu.udes.backend.dto.MessageDTO;
 import co.edu.udes.backend.dto.NotificationDTO;
 import co.edu.udes.backend.mappers.NotificationMapper;
+import co.edu.udes.backend.models.Message;
 import co.edu.udes.backend.models.Notification;
 import co.edu.udes.backend.services.NotificationService;
 import lombok.RequiredArgsConstructor;
@@ -38,12 +40,12 @@ public class NotificationController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody NotificationDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<NotificationDTO> dtos){
         try{
-            Notification notification = notificationMapper.toEntity(dto);
-            return ResponseEntity.ok(notificationService.create(notification));
+            List<Notification> entities = notificationMapper.toEntityList(dtos);
+            return ResponseEntity.ok(notificationService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
 

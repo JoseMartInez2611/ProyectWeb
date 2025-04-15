@@ -1,7 +1,9 @@
 package co.edu.udes.backend.controllers;
 
+import co.edu.udes.backend.dto.ReportDTO;
 import co.edu.udes.backend.dto.RoomDTO;
 import co.edu.udes.backend.mappers.RoomMapper;
+import co.edu.udes.backend.models.Report;
 import co.edu.udes.backend.models.Room;
 import co.edu.udes.backend.services.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -38,12 +40,12 @@ public class RoomController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody RoomDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<RoomDTO> dtos){
         try{
-            Room room = roomMapper.toEntity(dto);
-            return ResponseEntity.ok(roomService.create(room));
+            List<Room> entities = roomMapper.toEntityList(dtos);
+            return ResponseEntity.ok(roomService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
 

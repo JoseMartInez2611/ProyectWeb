@@ -1,7 +1,9 @@
 package co.edu.udes.backend.services;
 
+import co.edu.udes.backend.dto.BorrowDTO;
 import co.edu.udes.backend.dto.inheritanceDTO.CommunicationDTO;
 import co.edu.udes.backend.mappers.CommunicationMapper;
+import co.edu.udes.backend.models.Borrow;
 import co.edu.udes.backend.models.inheritance.Communication;
 import co.edu.udes.backend.repositories.CommunicationRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
@@ -21,6 +23,12 @@ public class CommunicationService {
     public List<CommunicationDTO> getAll() {
         List<Communication> communications = communicationRepository.findAll();
         return communicationMapper.toDtoList(communications);
+    }
+
+    public List<CommunicationDTO> createMultiple(List<Communication> list) {
+        return communicationMapper.toDtoList(
+                communicationRepository.saveAll(list)
+        );
     }
 
     public CommunicationDTO getById(Long id) {
