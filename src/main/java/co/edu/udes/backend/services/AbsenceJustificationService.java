@@ -29,7 +29,15 @@ public class AbsenceJustificationService {
     }
 
     public AbsenceJustificationDTO create(AbsenceJustification absenceJustification) {
-        return absenceJustificationMapper.toDto(absenceJustification);
+        return absenceJustificationMapper.toDto(
+                absenceJustificationRepository.save(absenceJustification)
+        );
+    }
+
+    public List<AbsenceJustificationDTO> createMultiple(List<AbsenceJustification> absenceJustifications) {
+        return absenceJustificationMapper.toDtoList(
+                absenceJustificationRepository.saveAll(absenceJustifications)
+        );
     }
 
     public AbsenceJustificationDTO update(Long id, AbsenceJustification absenceJustification) {

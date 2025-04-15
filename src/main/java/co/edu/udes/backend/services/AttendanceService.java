@@ -33,6 +33,12 @@ public class AttendanceService {
         return attendanceMapper.toDto(attendanceRepository.save(attendance));
     }
 
+    public List<AttendanceDTO> createMultiple(List<Attendance> attendances) {
+        return attendanceMapper.toDtoList(
+                attendanceRepository.saveAll(attendances)
+        );
+    }
+
     public AttendanceDTO update(Long id, Attendance attendance) {
         attendanceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Attendance not found with id: " + id));

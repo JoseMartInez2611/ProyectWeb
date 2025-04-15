@@ -32,6 +32,12 @@ public class AcademicRegistrationService {
         return academicRegistrationMapper.toDto(academicRegistrationRepository.save(academicRegistration));
     }
 
+    public List<AcademicRegistrationDTO> createMultiple(List<AcademicRegistration> academicRegistrations) {
+        return academicRegistrationMapper.toDtoList(
+                academicRegistrationRepository.saveAll(academicRegistrations)
+        );
+    }
+
     public AcademicRegistrationDTO update(Long id, AcademicRegistration academicRegistration) {
         academicRegistrationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Academic registration not found with id: " + id));

@@ -30,12 +30,12 @@ public class AttendanceController {
 
     // create attendance rest api
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody AttendanceDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<AttendanceDTO> dtos){
         try{
-            Attendance attendance = attendanceMapper.toEntity(dto);
-            return ResponseEntity.ok(attendanceService.create(attendance));
+            List<Attendance> entities = attendanceMapper.toEntityList(dtos);
+            return ResponseEntity.ok(attendanceService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
 

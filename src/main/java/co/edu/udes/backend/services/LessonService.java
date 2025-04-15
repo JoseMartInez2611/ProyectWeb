@@ -32,6 +32,12 @@ public class LessonService {
         return lessonMapper.toDto(lessonRepository.save(lesson));
     }
 
+    public List<LessonDTO> createMultiple(List<Lesson> lessons) {
+        return lessonMapper.toDtoList(
+                lessonRepository.saveAll(lessons)
+        );
+    }
+
     public LessonDTO update(Long id, Lesson lesson) {
         lessonRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Lesson not found with id: " + id));
