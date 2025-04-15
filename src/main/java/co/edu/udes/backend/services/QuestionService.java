@@ -33,6 +33,12 @@ public class QuestionService {
 
     }
 
+    public List<QuestionDTO> createMultiple(List<Question> users) {
+        return questionMapper.toDtoList(
+                questionRepository.saveAll(users)
+        );
+    }
+
     public QuestionDTO update(Long id, Question question) {
         questionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Question not found with id: " + id));

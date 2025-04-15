@@ -38,12 +38,12 @@ public class AnswerDocumentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody AnswerDocumentDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<AnswerDocumentDTO> dtos){
         try{
-            AnswerDocument answerDocument = answerDocumentMapper.toEntity(dto);
-            return ResponseEntity.ok(answerDocumentService.create(answerDocument));
+            List<AnswerDocument> entities = answerDocumentMapper.toEntityList(dtos);
+            return ResponseEntity.ok(answerDocumentService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
 

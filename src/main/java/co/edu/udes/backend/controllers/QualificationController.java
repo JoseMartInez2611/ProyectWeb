@@ -40,14 +40,15 @@ public class QualificationController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody QualificationDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<QualificationDTO> dtos){
         try{
-            Qualification qualification = qualificationMapper.toEntity(dto);
-            return ResponseEntity.ok(qualificationService.create(qualification));
+            List<Qualification> entities = qualificationMapper.toEntityList(dtos);
+            return ResponseEntity.ok(qualificationService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody QualificationDTO dto) {

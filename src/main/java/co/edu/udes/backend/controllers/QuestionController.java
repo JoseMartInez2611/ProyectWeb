@@ -39,14 +39,15 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody QuestionDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<QuestionDTO> dtos){
         try{
-            Question question = questionMapper.toEntity(dto);
-            return ResponseEntity.ok(questionService.create(question));
+            List<Question> entities = questionMapper.toEntityList(dtos);
+            return ResponseEntity.ok(questionService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody QuestionDTO dto) {

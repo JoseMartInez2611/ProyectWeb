@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class ProfileUService {
 
     private final UserRepository userRepository;
     @Autowired
@@ -24,6 +24,7 @@ public class UserService {
     }
 
     public List<ProfileU> createMultiple(List<ProfileU> users) {
+
         return userRepository.saveAll(users);
     }
 

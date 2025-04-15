@@ -33,6 +33,12 @@ public class TeacherService {
 
     }
 
+    public List<TeacherDTO> createMultiple(List<Teacher> data) {
+        return teacherMapper.toDtoList(
+                teacherRepository.saveAll(data)
+        );
+    }
+
     public TeacherDTO update(Long id, Teacher teacher) {
         teacherRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Teacher not found with id: " + id));

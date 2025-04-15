@@ -33,6 +33,12 @@ public class QualificationService {
 
     }
 
+    public List<QualificationDTO> createMultiple(List<Qualification> users) {
+        return qualificationMapper.toDtoList(
+                qualificationRepository.saveAll(users)
+        );
+    }
+
     public QualificationDTO update(Long id, Qualification qualification) {
         qualificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Qualification not found with id: " + id));

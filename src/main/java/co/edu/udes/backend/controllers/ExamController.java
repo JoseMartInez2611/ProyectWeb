@@ -38,12 +38,12 @@ public class ExamController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ExamDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<ExamDTO> dtos){
         try{
-            Exam exam = examMapper.toEntity(dto);
-            return ResponseEntity.ok(examService.create(exam));
+            List<Exam> entities = examMapper.toEntityList(dtos);
+            return ResponseEntity.ok(examService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
 
