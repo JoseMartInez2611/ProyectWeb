@@ -40,12 +40,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ProfileUDTO dto) {
-        try{
-            ProfileU profileU = profileUMapper.toEntity(dto);
-            return ResponseEntity.ok(profileUService.create(profileU));
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+    public ResponseEntity<?> create(@RequestBody List<ProfileUDTO> dtoList) {
+        try {
+            List<ProfileU> profileUList = profileUMapper.toEntityList(dtoList);
+            List<ProfileU> createdUsers = profileUService.createMultiple(profileUList); // Modifica el servicio
+            return ResponseEntity.ok(profileUMapper.toDtoList(createdUsers)); // Devuelve DTOs
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Please check the data you are sending: " + e.getMessage()); // Incluye el mensaje de error
         }
     }
 

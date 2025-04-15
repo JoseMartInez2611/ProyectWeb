@@ -1,8 +1,10 @@
 package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.EmployeeDTO;
+import co.edu.udes.backend.dto.inheritanceDTO.ProfileUDTO;
 import co.edu.udes.backend.mappers.EmployeeMapper;
 import co.edu.udes.backend.models.Employee;
+import co.edu.udes.backend.models.inheritance.ProfileU;
 import co.edu.udes.backend.services.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +40,13 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody EmployeeDTO dto) {
-        try{
-            Employee employee = employeeMapper.toEntity(dto);
-            return ResponseEntity.ok(employeeService.create(employee));
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+    public ResponseEntity<?> create(@RequestBody List<EmployeeDTO> dtoList) {
+        try {
+            List<Employee> profileUList = employeeMapper.toEntityList(dtoList);
+            List<Employee> createdUsers = employeeService.createMultiple(profileUList); // Modifica el servicio
+            return ResponseEntity.ok(employeeMapper.toDtoList(createdUsers)); // Devuelve DTOs
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Please check the data you are sending: " + e.getMessage()); // Incluye el mensaje de error
         }
     }
 

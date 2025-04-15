@@ -24,6 +24,10 @@ public class EmployeeService {
         return employeeMapper.toDtoList(employees);
     }
 
+    public List<Employee> createMultiple(List<Employee> employees) {
+        return employeeRepository.saveAll(employees);
+    }
+
     public EmployeeDTO getById(Long id) {
         return employeeMapper.toDto(employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id)));

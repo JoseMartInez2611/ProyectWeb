@@ -23,6 +23,10 @@ public class UserService {
         return profileUMapper.toDtoList(profilesU);
     }
 
+    public List<ProfileU> createMultiple(List<ProfileU> users) {
+        return userRepository.saveAll(users);
+    }
+
     public ProfileUDTO getById(Long id) {
         return profileUMapper.toDto(userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id)));
