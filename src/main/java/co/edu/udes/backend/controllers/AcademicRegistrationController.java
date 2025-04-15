@@ -2,7 +2,6 @@ package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.AcademicRegistrationDTO;
 import co.edu.udes.backend.mappers.AcademicRegistrationMapper;
-import co.edu.udes.backend.models.AcademicRecord;
 import co.edu.udes.backend.models.AcademicRegistration;
 import co.edu.udes.backend.services.AcademicRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
