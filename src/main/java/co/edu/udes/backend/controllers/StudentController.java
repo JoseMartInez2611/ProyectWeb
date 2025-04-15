@@ -39,15 +39,15 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody StudentDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<StudentDTO> dtos){
         try{
-            Student student = studentMapper.toEntity(dto);
-            return ResponseEntity.ok(studentService.create(student));
+            List<Student> entities = studentMapper.toEntityList(dtos);
+            return ResponseEntity.ok(studentService.createMultiple(entities));
         }catch (Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody StudentDTO dto) {

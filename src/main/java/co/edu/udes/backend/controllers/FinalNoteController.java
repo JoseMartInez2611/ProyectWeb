@@ -30,14 +30,15 @@ public class FinalNoteController {
 
     // create final note
     @PostMapping
-    public ResponseEntity<?> create(FinalNoteDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<FinalNoteDTO> dtos){
         try{
-            FinalNote finalNote = finalNoteMapper.toEntity(dto);
-            return ResponseEntity.ok(finalNoteService.create(finalNote));
+            List<FinalNote> entities = finalNoteMapper.toEntityList(dtos);
+            return ResponseEntity.ok(finalNoteService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
+
 
     // get final note by id
     @GetMapping("/{id}")

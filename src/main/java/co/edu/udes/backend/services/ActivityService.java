@@ -33,6 +33,12 @@ public class ActivityService {
         return activityMapper.toDto(activityRepository.save(activity));
     }
 
+    public List<ActivityDTO> createMultiple(List<Activity> users) {
+        return activityMapper.toDtoList(
+                activityRepository.saveAll(users)
+        );
+    }
+
     public ActivityDTO update(Long id, Activity activity) {
         activityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Activity not found with id: " + id));

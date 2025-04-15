@@ -38,14 +38,15 @@ public class TeacherController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody TeacherDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<TeacherDTO> dtos){
         try{
-            Teacher teacher = teacherMapper.toEntity(dto);
-            return ResponseEntity.ok(teacherService.create(teacher));
+            List<Teacher> entities = teacherMapper.toEntityList(dtos);
+            return ResponseEntity.ok(teacherService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody TeacherDTO dto) {

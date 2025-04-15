@@ -32,6 +32,12 @@ public class ExamService {
 
     }
 
+    public List<ExamDTO> createMultiple(List<Exam> users) {
+        return examMapper.toDtoList(
+                examRepository.saveAll(users)
+        );
+    }
+
     public ExamDTO update(Long id, Exam exam) {
         examRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Exam not found with id: " + id));

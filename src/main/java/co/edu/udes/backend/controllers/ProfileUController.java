@@ -5,7 +5,7 @@ package co.edu.udes.backend.controllers;
 import co.edu.udes.backend.dto.inheritanceDTO.ProfileUDTO;
 import co.edu.udes.backend.mappers.ProfileUMapper;
 import co.edu.udes.backend.models.inheritance.ProfileU;
-import co.edu.udes.backend.services.UserService;
+import co.edu.udes.backend.services.ProfileUService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,10 +17,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
-public class UserController {
+public class ProfileUController {
 
     @Autowired
-    private final UserService profileUService;
+    private final ProfileUService profileUService;
 
     @Autowired
     private final ProfileUMapper profileUMapper;

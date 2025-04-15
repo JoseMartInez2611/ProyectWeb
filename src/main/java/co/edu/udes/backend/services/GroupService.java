@@ -32,6 +32,13 @@ public class GroupService {
         return groupMapper.toDto(groupRepository.save(group));
     }
 
+    public List<GroupDTO> createMultiple(List<Group> groups) {
+        return groupMapper.toDtoList(
+                groupRepository.saveAll(groups)
+        );
+    }
+
+
     public GroupDTO update(Long id, Group group) {
         groupRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Group not found with id: " + id));

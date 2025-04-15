@@ -32,6 +32,12 @@ public class DayOfWeekService {
         return dayOfWeekMapper.toDto(dayOfWeekRepository.save(dayOfWeek));
     }
 
+    public List<DayOfWeekDTO> createMultiple(List<DayOfWeek> dayOfWeeks) {
+        return dayOfWeekMapper.toDtoList(
+                dayOfWeekRepository.saveAll(dayOfWeeks)
+        );
+    }
+
     public DayOfWeekDTO update(Long id, DayOfWeek dayOfWeek) {
         dayOfWeekRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found with id: " + id));

@@ -39,15 +39,15 @@ public class ActivityController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ActivityDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<ActivityDTO> dtos){
         try{
-            Activity activity = activityMapper.toEntity(dto);
-            return ResponseEntity.ok(activityService.create(activity));
+            List<Activity> entities = activityMapper.toEntityList(dtos);
+            return ResponseEntity.ok(activityService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
-
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ActivityDTO dto) {

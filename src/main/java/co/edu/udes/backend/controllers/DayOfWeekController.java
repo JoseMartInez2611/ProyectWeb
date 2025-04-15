@@ -9,9 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 //@CrossOrigin(origin = "http://localhost")
 @RestController
@@ -32,12 +30,12 @@ public class DayOfWeekController {
 
     // create day of the week rest api
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody DayOfWeekDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<DayOfWeekDTO> dtos){
         try{
-            DayOfWeek dayOfWeek = dayOfWeekMapper.toEntity(dto);
-            return ResponseEntity.ok(dayOfWeekService.create(dayOfWeek));
+            List<DayOfWeek> entities = dayOfWeekMapper.toEntityList(dtos);
+            return ResponseEntity.ok(dayOfWeekService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
 

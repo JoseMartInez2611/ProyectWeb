@@ -32,6 +32,12 @@ public class EvaluationService {
 
     }
 
+    public List<EvaluationDTO> createMultiple(List<Evaluation> users) {
+        return evaluationMapper.toDtoList(
+                evaluationRepository.saveAll(users)
+        );
+    }
+
     public EvaluationDTO update(Long id, Evaluation evaluation) {
         evaluationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Evaluation not found with id: " + id));

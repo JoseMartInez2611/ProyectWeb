@@ -32,6 +32,12 @@ public class AnswerDocumentService {
         return answerDocumentMapper.toDto(answerDocumentRepository.save(answerDocument));
     }
 
+    public List<AnswerDocumentDTO> createMultiple(List<AnswerDocument> users) {
+        return answerDocumentMapper.toDtoList(
+                answerDocumentRepository.saveAll(users)
+        );
+    }
+
     public AnswerDocumentDTO update(Long id, AnswerDocument answerDocument) {
         answerDocumentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Answer document not found with id: " + id));

@@ -38,12 +38,12 @@ public class EvaluationController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody EvaluationDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<EvaluationDTO> dtos){
         try{
-            Evaluation evaluation = evaluationMapper.toEntity(dto);
-            return ResponseEntity.ok(evaluationService.create(evaluation));
+            List<Evaluation> entities = evaluationMapper.toEntityList(dtos);
+            return ResponseEntity.ok(evaluationService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
 

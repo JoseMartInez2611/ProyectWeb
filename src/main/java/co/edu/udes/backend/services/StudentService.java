@@ -35,6 +35,12 @@ public class StudentService {
 
     }
 
+    public List<StudentDTO> createMultiple(List<Student> users) {
+        return studentMapper.toDtoList(
+                studentRepository.saveAll(users)
+        );
+    }
+
     public StudentDTO update(Long id, Student student) {
         studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
