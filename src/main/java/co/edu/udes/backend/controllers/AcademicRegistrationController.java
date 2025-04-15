@@ -2,6 +2,7 @@ package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.AcademicRegistrationDTO;
 import co.edu.udes.backend.mappers.AcademicRegistrationMapper;
+import co.edu.udes.backend.models.AcademicRecord;
 import co.edu.udes.backend.models.AcademicRegistration;
 import co.edu.udes.backend.services.AcademicRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +31,12 @@ public class AcademicRegistrationController {
 
     // create academic registration rest api
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody AcademicRegistrationDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<AcademicRegistrationDTO> dtos){
         try{
-            AcademicRegistration academicRegistration = academicRegistrationMapper.toEntity(dto);
-            return ResponseEntity.ok(academicRegistrationService.create(academicRegistration));
+            List<AcademicRegistration> entities = academicRegistrationMapper.toEntityList(dtos);
+            return ResponseEntity.ok(academicRegistrationService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
 

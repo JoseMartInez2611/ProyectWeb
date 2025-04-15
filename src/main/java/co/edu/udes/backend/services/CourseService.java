@@ -32,6 +32,12 @@ public class CourseService {
         return courseMapper.toDto(courseRepository.save(course));
     }
 
+    public List<CourseDTO> createMultiple(List<Course> courses) {
+        return courseMapper.toDtoList(
+                courseRepository.saveAll(courses)
+        );
+    }
+
     public CourseDTO update(Long id, Course course) {
         courseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Course not found with id: " + id));

@@ -29,13 +29,13 @@ public class AcademicRecordController {
     }
 
     // create academic record rest api
-    @PutMapping
-    public ResponseEntity<?> create(@RequestBody AcademicRecordDTO dto) {
+    @PostMapping
+    public ResponseEntity<?> create(@RequestBody List<AcademicRecordDTO> dtos){
         try{
-            AcademicRecord academicRecord = academicRecordMapper.toEntity(dto);
-            return ResponseEntity.ok(academicRecordService.create(academicRecord));
+            List<AcademicRecord> entities = academicRecordMapper.toEntityList(dtos);
+            return ResponseEntity.ok(academicRecordService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
 

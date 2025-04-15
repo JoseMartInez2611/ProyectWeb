@@ -29,14 +29,14 @@ public class AbsenceJustificationController {
         return ResponseEntity.ok(absenceJustificationService.getAll());
     }
 
-    // Create absence justification  (HACER ESTO EN TODOS LOS POST Y PUT DE LOS CONTROLLERS)
+    // Create absence justification
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody AbsenceJustificationDTO dto){
+    public ResponseEntity<?> create(@RequestBody List<AbsenceJustificationDTO> dtos){
         try{
-            AbsenceJustification absenceJustification = absenceJustificationMapper.toEntity(dto);
-            return ResponseEntity.ok(absenceJustificationService.create(absenceJustification));
+            List<AbsenceJustification> entities = absenceJustificationMapper.toEntityList(dtos);
+            return ResponseEntity.ok(absenceJustificationService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
 

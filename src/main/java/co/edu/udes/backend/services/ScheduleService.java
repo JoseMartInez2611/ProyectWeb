@@ -16,27 +16,33 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     @Autowired
-    private ScheduleMapper ScheduleMapper;
+    private ScheduleMapper scheduleMapper;
 
     public List<ScheduleDTO> getAll() {
         List<Schedule> schedules = scheduleRepository.findAll();
-        return ScheduleMapper.toDtoList(schedules);
+        return scheduleMapper.toDtoList(schedules);
     }
 
     public ScheduleDTO getById(Long id) {
-        return ScheduleMapper.toDto(scheduleRepository.findById(id)
+        return scheduleMapper.toDto(scheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Schedule not found with id: " + id)));
     }
 
     public ScheduleDTO create(Schedule schedule) {
-        return ScheduleMapper.toDto(scheduleRepository.save(schedule));
+        return scheduleMapper.toDto(scheduleRepository.save(schedule));
+    }
+
+    public List<ScheduleDTO> createMultiple(List<Schedule> schedules) {
+        return scheduleMapper.toDtoList(
+                scheduleRepository.saveAll(schedules)
+        );
     }
 
     public ScheduleDTO update(Long id, Schedule schedule) {
         scheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Schedule not found with id: " + id));
         schedule.setId(id);
-        return ScheduleMapper.toDto(scheduleRepository.save(schedule));
+        return scheduleMapper.toDto(scheduleRepository.save(schedule));
     }
 
     public void delete(Long id) {

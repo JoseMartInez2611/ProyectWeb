@@ -32,6 +32,12 @@ public class AcademicRecordService {
         return academicRecordMapper.toDto(academicRecordRepository.save(academicRecord));
     }
 
+    public List<AcademicRecordDTO> createMultiple(List<AcademicRecord> academicRecords) {
+        return academicRecordMapper.toDtoList(
+                academicRecordRepository.saveAll(academicRecords)
+        );
+    }
+
     public AcademicRecordDTO update(Long id, AcademicRecord academicRecord) {
         academicRecordRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Academic record not found with id: " + id));

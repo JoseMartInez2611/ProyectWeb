@@ -32,6 +32,12 @@ public class FinalNoteService {
         return finalNoteMapper.toDto(finalNoteRepository.save(finalNote));
     }
 
+    public List<FinalNoteDTO> createMultiple(List<FinalNote> finalNotes) {
+        return finalNoteMapper.toDtoList(
+                finalNoteRepository.saveAll(finalNotes)
+        );
+    }
+
     public FinalNoteDTO update(Long id, FinalNote finalNote) {
         finalNoteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Final note not found with id: " + id));
