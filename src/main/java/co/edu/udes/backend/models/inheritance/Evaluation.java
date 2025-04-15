@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -26,7 +26,7 @@ public class Evaluation {
     private String evaluationRubric;
 
     @Column(name="date", columnDefinition = "DATE", nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @ManyToOne(targetEntity = Group.class)
     private Group group;

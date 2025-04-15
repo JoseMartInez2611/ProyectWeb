@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -16,7 +16,7 @@ public class EvaluationDTO {
 
     private long id;
     private String evaluationRubric;
-    private Date date;
+    private LocalDate date;
     private GroupDTO group;
 
 }
