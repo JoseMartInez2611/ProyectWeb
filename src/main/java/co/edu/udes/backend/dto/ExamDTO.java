@@ -14,7 +14,6 @@ import java.util.List;
 @ToString(callSuper = true)
 public class ExamDTO extends EvaluationDTO {
 
-    private EvaluationDTO evaluation;
     private List<QuestionDTO> question;
 
 }

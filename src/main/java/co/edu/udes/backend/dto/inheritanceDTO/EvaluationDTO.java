@@ -17,6 +17,6 @@ public class EvaluationDTO {
     private long id;
     private String evaluationRubric;
     private LocalDate date;
-    private GroupDTO group;
+    private long groupId;
 
 }

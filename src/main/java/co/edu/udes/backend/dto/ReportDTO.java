@@ -19,5 +19,5 @@ public class ReportDTO {
     private String reportType;
     private String content;
     private LocalDate generationDate;
-    private ProfileUDTO requestingUserId;
+    private long requestingUserId;
 }
