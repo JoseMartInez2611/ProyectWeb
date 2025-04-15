@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Printable;
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -29,8 +31,9 @@ public class QualificationService {
     }
 
     public QualificationDTO create(Qualification qualification) {
+        validateQualification(qualification.getQualification());
+        System.out.println("salio");
         return qualificationMapper.toDto(qualificationRepository.save(qualification));
-
     }
 
     public List<QualificationDTO> createMultiple(List<Qualification> users) {
@@ -51,5 +54,12 @@ public class QualificationService {
         qualificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Qualification not found with id: " + id));
         qualificationRepository.deleteById(id);
+    }
+
+    public void validateQualification(float qualification) {
+            System.out.println("Entro");
+            if(qualification < 0 || qualification > 5) {
+                throw new RuntimeException("Qualification must be between 0 and 5");
+            }
     }
 }

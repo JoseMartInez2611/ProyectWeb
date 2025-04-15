@@ -18,14 +18,14 @@ public class Qualification {
     private Long id;
 
     @OneToOne(targetEntity = Student.class)
-    @JoinColumn(name="student_id", nullable = false)
+    @JoinColumn(name="student_id")
     private Student student;
 
     @Column(name = "qualification", columnDefinition = "FLOAT", nullable = false)
     private float qualification;
 
     @OneToOne(targetEntity = Evaluation.class)
-    @JoinColumn(name = "evaluation_id", nullable = false)
+    @JoinColumn(name = "evaluation_id")
     private Evaluation evaluation;
 
 }
