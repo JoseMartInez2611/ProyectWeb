@@ -31,14 +31,13 @@ public class QualificationService {
     }
 
     public QualificationDTO create(Qualification qualification) {
-        validateQualification(qualification.getQualification());
-        System.out.println("salio");
         return qualificationMapper.toDto(qualificationRepository.save(qualification));
     }
 
-    public List<QualificationDTO> createMultiple(List<Qualification> users) {
+    public List<QualificationDTO> createMultiple(List<Qualification> data) {
+        validateQualification(data);
         return qualificationMapper.toDtoList(
-                qualificationRepository.saveAll(users)
+                qualificationRepository.saveAll(data)
         );
     }
 
@@ -56,10 +55,21 @@ public class QualificationService {
         qualificationRepository.deleteById(id);
     }
 
-    public void validateQualification(float qualification) {
-            System.out.println("Entro");
-            if(qualification < 0 || qualification > 5) {
-                throw new RuntimeException("Qualification must be between 0 and 5");
+    public float getObject(List<?> data, int i) {
+        Qualification qualification = (Qualification)data.get(i);
+        return  qualification.getQualification();
+
+    }
+
+    public void validateQualification(List<?> data) {
+
+        for(int i = 0; i < data.size(); i++) {
+            float x= getObject(data, i);
+            if(x < 0 || x > 5 ) {
+                throw new RuntimeException("Qualification must be between 0.1 and 5");
             }
+
+        }
+
     }
 }

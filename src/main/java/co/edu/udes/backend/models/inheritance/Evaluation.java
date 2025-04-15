@@ -22,6 +22,9 @@ public class Evaluation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name="Name", columnDefinition = "VARCHAR(255)", nullable = false)
+    private String name;
+
     @Column(name = "evaluation_rubric", columnDefinition = "VARCHAR(1024)", nullable = false)
     private String evaluationRubric;
 

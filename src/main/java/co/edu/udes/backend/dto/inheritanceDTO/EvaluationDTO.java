@@ -15,6 +15,7 @@ import java.util.Date;
 public class EvaluationDTO {
 
     private long id;
+    private String name;
     private String evaluationRubric;
     private Date date;
     private GroupDTO group;

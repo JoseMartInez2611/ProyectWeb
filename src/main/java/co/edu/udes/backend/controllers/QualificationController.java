@@ -45,7 +45,7 @@ public class QualificationController {
             List<Qualification> entities = qualificationMapper.toEntityList(dtos);
             return ResponseEntity.ok(qualificationService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
