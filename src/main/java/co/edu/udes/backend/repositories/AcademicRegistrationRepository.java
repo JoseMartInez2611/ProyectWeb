@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AcademicRegistrationRepository extends JpaRepository<AcademicRegistration, Long> {
+
+    boolean existsByStudentIdAndGroupId(Long studentId, Long groupId);
 }
