@@ -1,6 +1,7 @@
 package co.edu.udes.backend.dto;
 
 import co.edu.udes.backend.models.Employee;
+import co.edu.udes.backend.models.inheritance.ProfileU;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Builder;
@@ -17,5 +18,6 @@ public class BorrowDTO {
     private LocalDate borrowDate;
     private LocalDate returnDate;
     private String duration;
-    private AcademicResourceDTO resource;
+    private long resourceId;
+    private long petitionerId;
 }
