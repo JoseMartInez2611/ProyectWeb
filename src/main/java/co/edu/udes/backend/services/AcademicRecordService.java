@@ -52,4 +52,14 @@ public class AcademicRecordService {
     }
 
 
+    public void getReport(long id){
+        Double average=academicRecordRepository.findAverageScoreByStudentId(id);
+
+        if (average <= 3.0 ) {
+            System.out.println("");
+
+
+        }
+    }
+
 }
