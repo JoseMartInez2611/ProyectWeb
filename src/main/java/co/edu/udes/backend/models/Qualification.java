@@ -4,6 +4,8 @@ import co.edu.udes.backend.models.inheritance.Evaluation;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,8 +32,15 @@ public class Qualification {
     @Column(name = "qualification", columnDefinition = "FLOAT", nullable = false)
     private float qualification;
 
-    @OneToOne(targetEntity = Evaluation.class)
-    @JoinColumn(name = "evaluation_id", nullable = false)
+
+
+
+    @ManyToOne(targetEntity = Evaluation.class)
+    @JoinColumn(
+            name = "evaluation_id",
+            nullable = false,
+            columnDefinition = "BIGINT"
+    )
     private Evaluation evaluation;
 
 }
