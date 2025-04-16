@@ -1,9 +1,7 @@
 package co.edu.udes.backend.services;
 
-import co.edu.udes.backend.dto.ReportDTO;
 import co.edu.udes.backend.dto.RoomDTO;
 import co.edu.udes.backend.mappers.RoomMapper;
-import co.edu.udes.backend.models.Report;
 import co.edu.udes.backend.models.Room;
 import co.edu.udes.backend.repositories.RoomRepository;
 import lombok.RequiredArgsConstructor;

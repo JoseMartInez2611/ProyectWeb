@@ -1,10 +1,8 @@
 package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.EmployeeDTO;
-import co.edu.udes.backend.dto.inheritanceDTO.ProfileUDTO;
 import co.edu.udes.backend.mappers.EmployeeMapper;
 import co.edu.udes.backend.models.Employee;
-import co.edu.udes.backend.models.inheritance.ProfileU;
 import co.edu.udes.backend.services.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

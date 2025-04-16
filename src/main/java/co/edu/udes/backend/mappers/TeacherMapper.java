@@ -3,8 +3,6 @@ package co.edu.udes.backend.mappers;
 import co.edu.udes.backend.dto.TeacherDTO;
 import co.edu.udes.backend.models.Teacher;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
-
 import java.util.List;
 
 @Mapper(componentModel = "spring",
@@ -16,7 +14,6 @@ import java.util.List;
                 ProfileUMapper.class
         }
 )public interface TeacherMapper {
-
 
     Teacher toEntity(TeacherDTO teacher);
     List<Teacher> toEntityList(List<TeacherDTO> teachers);

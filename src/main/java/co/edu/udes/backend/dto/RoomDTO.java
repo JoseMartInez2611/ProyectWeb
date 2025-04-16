@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomDTO {
-    private Long id;
+    private long id;
     private int capacity;
     private String number;
     private String floor;

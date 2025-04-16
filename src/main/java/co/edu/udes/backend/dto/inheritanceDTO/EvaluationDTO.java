@@ -1,6 +1,5 @@
 package co.edu.udes.backend.dto.inheritanceDTO;
 
-import co.edu.udes.backend.dto.GroupDTO;
 import co.edu.udes.backend.models.Qualification;
 import lombok.AllArgsConstructor;
 import lombok.Data;
