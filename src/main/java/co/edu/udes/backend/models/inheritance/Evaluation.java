@@ -37,13 +37,6 @@ public class Evaluation {
     @ManyToOne(targetEntity = Group.class)
     private Group group;
 
-    @OneToMany(
-            targetEntity = Question.class,
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            mappedBy = "exam"
-    )
-    private List<Question> questions;
 
     @OneToMany(
             targetEntity = Qualification.class,
