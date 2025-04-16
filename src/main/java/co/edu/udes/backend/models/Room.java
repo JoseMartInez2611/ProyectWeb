@@ -30,8 +30,7 @@ public class Room {
     @Column(name = "building", nullable = false, columnDefinition = "char")
     private char building;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "room_id", nullable = false, columnDefinition = "BIGINT")
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
     private List<AcademicResource> resources ;
 
 }
