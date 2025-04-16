@@ -12,12 +12,12 @@ import java.util.List;
 public interface FinalNoteMapper {
     FinalNoteMapper INSTANCE = Mappers.getMapper(FinalNoteMapper.class);
 
-    @Mapping(source = "studentId", target = "student.id")
+    @Mapping(source = "academicRecordId", target = "academicRecord.id")
     @Mapping(source = "groupId", target = "group.id")
     FinalNote toEntity(FinalNoteDTO finalNote);
     List<FinalNote> toEntityList(List<FinalNoteDTO> finalNotes);
 
-    @Mapping(source = "student.id", target = "studentId")
+    @Mapping(source = "academicRecord.id", target = "academicRecordId")
     @Mapping(source = "group.id", target = "groupId")
     FinalNoteDTO toDto(FinalNote finalNote);
     List<FinalNoteDTO> toDtoList(List<FinalNote> finalNotes);
