@@ -12,11 +12,11 @@ import java.util.List;
 public interface AcademicRecordMapper {
     AcademicRecordMapper INSTANCE = Mappers.getMapper(AcademicRecordMapper.class);
 
-    @Mapping(source = "academicRecordId", target = "student.id")
+    @Mapping(source = "academicRecordId", target = "academicRecord.id")
     AcademicRecord toEntity(AcademicRecordDTO academicRecord);
     List<AcademicRecord> toEntityList(List<AcademicRecordDTO> academicRecords);
 
-    @Mapping(source = "student.id", target = "studentId")
+    @Mapping(source = "academicRecord.id", target = "academicRecordId")
     AcademicRecordDTO toDto(AcademicRecord academicRecord);
     List<AcademicRecordDTO> toDtoList(List<AcademicRecord> academicRecords);
 }
