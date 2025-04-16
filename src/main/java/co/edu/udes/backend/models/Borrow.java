@@ -31,7 +31,6 @@ public class Borrow {
     @JoinColumn(name = "resource", nullable = false, columnDefinition = "BIGINT")
     private AcademicResource resource;
 
-
     @ManyToOne(targetEntity = ProfileU.class)
     private ProfileU petitioner;
 }
