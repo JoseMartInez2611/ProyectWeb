@@ -55,11 +55,14 @@ public class AcademicRecordService {
     public void getReport(long id){
         Double average=academicRecordRepository.findAverageScoreByStudentId(id);
 
-        if (average <= 3.0 ) {
-            System.out.println("");
-
-
+        if (average <= 3.5 ) {
+            System.out.println("The Student has a low academic performance");
+        }else if (average > 3.5 && average <= 4.5) {
+            System.out.println("The Student has a medium academic performance");
+        }else if (average > 4.5 && average <= 5.0) {
+            System.out.println("The Student has a good academic performance");
         }
+
     }
 
 }
