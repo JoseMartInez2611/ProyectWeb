@@ -2,7 +2,6 @@ package co.edu.udes.backend.dto;
 
 
 import co.edu.udes.backend.dto.inheritanceDTO.CommunicationDTO;
-import co.edu.udes.backend.dto.inheritanceDTO.ProfileUDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

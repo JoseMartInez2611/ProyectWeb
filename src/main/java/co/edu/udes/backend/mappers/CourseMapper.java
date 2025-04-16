@@ -3,7 +3,6 @@ package co.edu.udes.backend.mappers;
 import co.edu.udes.backend.dto.CourseDTO;
 import co.edu.udes.backend.models.Course;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
