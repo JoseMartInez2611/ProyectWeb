@@ -12,8 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Printable;
-import java.security.Principal;
+
 import java.util.List;
 
 @Service
@@ -92,10 +91,20 @@ public class QualificationService {
         for(int i = 0; i < data.size(); i++) {
             float x= getObject(data, i);
             if(x < 0 || x > 5 ) {
-                throw new RuntimeException("Qualification must be between 0.1 and 5");
+                throw new RuntimeException("Qualification must be between 0 and 5");
             }
 
         }
 
     }
+
+    public Double getAverage(long id){
+
+        Double average=qualificationRepository.findAverageScoreByStudentId(id);
+        return average != null ? average.floatValue() : 0.0;
+
+    }
+
+
+
 }
