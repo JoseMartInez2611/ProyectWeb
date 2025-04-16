@@ -12,11 +12,13 @@ import java.util.List;
 public interface QualificationMapper {
     QualificationMapper INSTANCE = Mappers.getMapper(QualificationMapper.class);
 
-
+    @Mapping(source = "studentId", target = "student.id")
+    @Mapping(source = "evaluationId", target = "evaluation.id")
     Qualification toEntity(QualificationDTO qualification);
     List<Qualification> toEntityList(List<QualificationDTO>  qualifications);
 
-
+    @Mapping(source = "student.id", target = "studentId")
+    @Mapping(source = "evaluation.id", target = "evaluationId")
     QualificationDTO toDto(Qualification qualification);
     List<QualificationDTO> toDtoList(List<Qualification> qualifications);
 }

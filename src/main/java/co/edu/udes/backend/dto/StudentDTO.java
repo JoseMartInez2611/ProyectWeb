@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -22,5 +23,6 @@ public class StudentDTO extends ProfileUDTO {
     private String career;
     private List<AttendanceDTO> attendance;
     private List<AcademicRegistrationDTO> academicRegistration;
+    private List<QualificationDTO> qualification;
 
 }

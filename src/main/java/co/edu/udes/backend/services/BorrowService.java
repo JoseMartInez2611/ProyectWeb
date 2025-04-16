@@ -1,8 +1,10 @@
 package co.edu.udes.backend.services;
 
 
+import co.edu.udes.backend.dto.AcademicResourceDTO;
 import co.edu.udes.backend.dto.BorrowDTO;
 import co.edu.udes.backend.mappers.BorrowMapper;
+import co.edu.udes.backend.models.AcademicResource;
 import co.edu.udes.backend.models.Borrow;
 import co.edu.udes.backend.repositories.BorrowRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
@@ -22,6 +24,12 @@ public class BorrowService {
     public List<BorrowDTO> getAll() {
         List<Borrow> borrows = borrowRepository.findAll();
         return borrowMapper.toDtoList(borrows);
+    }
+
+    public List<BorrowDTO> createMultiple(List<Borrow> list) {
+        return borrowMapper.toDtoList(
+                borrowRepository.saveAll(list)
+        );
     }
 
     public BorrowDTO getById(Long id) {

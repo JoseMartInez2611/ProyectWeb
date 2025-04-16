@@ -1,7 +1,9 @@
 package co.edu.udes.backend.controllers;
 
+import co.edu.udes.backend.dto.NotificationDTO;
 import co.edu.udes.backend.dto.ReportDTO;
 import co.edu.udes.backend.mappers.ReportMapper;
+import co.edu.udes.backend.models.Notification;
 import co.edu.udes.backend.models.Report;
 import co.edu.udes.backend.services.ReportService;
 import lombok.RequiredArgsConstructor;
@@ -38,12 +40,12 @@ public class ReportController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ReportDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<ReportDTO> dtos){
         try{
-            Report report = reportMapper.toEntity(dto);
-            return ResponseEntity.ok(reportService.create(report));
+            List<Report> entities = reportMapper.toEntityList(dtos);
+            return ResponseEntity.ok(reportService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
 

@@ -23,6 +23,12 @@ public class MessageService {
         return messageMapper.toDtoList(messages);
     }
 
+    public List<MessageDTO> createMultiple(List<Message> list) {
+        return messageMapper.toDtoList(
+                messageRepository.saveAll(list)
+        );
+    }
+
     public MessageDTO getById(Long id) {
         return messageMapper.toDto(messageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Message not found with id: " + id)));

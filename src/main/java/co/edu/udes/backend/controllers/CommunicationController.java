@@ -1,7 +1,9 @@
 package co.edu.udes.backend.controllers;
 
+import co.edu.udes.backend.dto.BorrowDTO;
 import co.edu.udes.backend.dto.inheritanceDTO.CommunicationDTO;
 import co.edu.udes.backend.mappers.CommunicationMapper;
+import co.edu.udes.backend.models.Borrow;
 import co.edu.udes.backend.models.inheritance.Communication;
 import co.edu.udes.backend.services.CommunicationService;
 import lombok.RequiredArgsConstructor;
@@ -39,12 +41,12 @@ public class CommunicationController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody CommunicationDTO dto) {
+    public ResponseEntity<?> create(@RequestBody List<CommunicationDTO> dtos){
         try{
-            Communication communication = communicationMapper.toEntity(dto);
-            return ResponseEntity.ok(communicationService.create(communication));
+            List<Communication> entities = communicationMapper.toEntityList(dtos);
+            return ResponseEntity.ok(communicationService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
     }
 

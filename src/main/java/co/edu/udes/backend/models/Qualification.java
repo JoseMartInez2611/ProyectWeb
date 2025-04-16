@@ -4,6 +4,8 @@ import co.edu.udes.backend.models.inheritance.Evaluation;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,15 +19,28 @@ public class Qualification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(targetEntity = Student.class)
-    @JoinColumn(name="student_id")
+
+
+    @ManyToOne(targetEntity = Student.class)
+    @JoinColumn(
+            name="id_student",
+            nullable = false,
+            columnDefinition = "BIGINT"
+    )
     private Student student;
 
     @Column(name = "qualification", columnDefinition = "FLOAT", nullable = false)
     private float qualification;
 
-    @OneToOne(targetEntity = Evaluation.class)
-    @JoinColumn(name = "evaluation_id")
+
+
+
+    @ManyToOne(targetEntity = Evaluation.class)
+    @JoinColumn(
+            name = "evaluation_id",
+            nullable = false,
+            columnDefinition = "BIGINT"
+    )
     private Evaluation evaluation;
 
 }

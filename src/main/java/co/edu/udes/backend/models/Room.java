@@ -31,7 +31,7 @@ public class Room {
     private char building;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name = "room_id", nullable = false, columnDefinition = "BIGINT")
     private List<AcademicResource> resources ;
 
 }

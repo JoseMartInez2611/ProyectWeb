@@ -1,7 +1,9 @@
 package co.edu.udes.backend.services;
 
+import co.edu.udes.backend.dto.ReportDTO;
 import co.edu.udes.backend.dto.RoomDTO;
 import co.edu.udes.backend.mappers.RoomMapper;
+import co.edu.udes.backend.models.Report;
 import co.edu.udes.backend.models.Room;
 import co.edu.udes.backend.repositories.RoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,12 @@ public class RoomService {
     public List<RoomDTO> getAll() {
         List<Room> rooms = roomRepository.findAll();
         return roomMapper.toDtoList(rooms);
+    }
+
+    public List<RoomDTO> createMultiple(List<Room> list) {
+        return roomMapper.toDtoList(
+                roomRepository.saveAll(list)
+        );
     }
 
     public RoomDTO getById(Long id) {

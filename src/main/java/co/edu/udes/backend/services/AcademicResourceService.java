@@ -25,6 +25,12 @@ public class AcademicResourceService {
         return academicResourceMapper.toDtoList(academicResources);
     }
 
+    public List<AcademicResourceDTO> createMultiple(List<AcademicResource> list) {
+        return academicResourceMapper.toDtoList(
+                academicResourceRepository.saveAll(list)
+        );
+    }
+
     public AcademicResourceDTO getById(Long id) {
         return academicResourceMapper.toDto(academicResourceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Academic resource not found with id: " + id)));
