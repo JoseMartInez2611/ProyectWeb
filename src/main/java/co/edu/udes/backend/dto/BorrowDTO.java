@@ -1,6 +1,5 @@
 package co.edu.udes.backend.dto;
 
-import co.edu.udes.backend.models.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Builder;
@@ -13,9 +12,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BorrowDTO {
-    private Long id;
+    private long id;
     private LocalDate borrowDate;
     private LocalDate returnDate;
     private String duration;
-    private AcademicResourceDTO resource;
+    private long resourceId;
+    private long petitionerId;
 }

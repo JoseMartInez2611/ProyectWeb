@@ -1,9 +1,7 @@
 package co.edu.udes.backend.controllers;
 
-import co.edu.udes.backend.dto.AcademicResourceDTO;
 import co.edu.udes.backend.dto.BorrowDTO;
 import co.edu.udes.backend.mappers.BorrowMapper;
-import co.edu.udes.backend.models.AcademicResource;
 import co.edu.udes.backend.models.Borrow;
 import co.edu.udes.backend.services.BorrowService;
 import lombok.RequiredArgsConstructor;
