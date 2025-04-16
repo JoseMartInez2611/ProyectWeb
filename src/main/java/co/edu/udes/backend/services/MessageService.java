@@ -1,10 +1,8 @@
 package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.MessageDTO;
-import co.edu.udes.backend.dto.inheritanceDTO.CommunicationDTO;
 import co.edu.udes.backend.mappers.MessageMapper;
 import co.edu.udes.backend.models.Message;
-import co.edu.udes.backend.models.inheritance.Communication;
 import co.edu.udes.backend.repositories.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

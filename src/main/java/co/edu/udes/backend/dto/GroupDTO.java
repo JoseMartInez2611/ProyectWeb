@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class GroupDTO {
 
     private long id;
-    private CourseDTO course;
-    private TeacherDTO teacher;
+    private long courseId;
+    private long teacherId;
     private String academicPeriod;
 }

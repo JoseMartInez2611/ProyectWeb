@@ -20,7 +20,7 @@ public class EvaluationDTO {
     private String evaluationName;
     private String evaluationRubric;
     private LocalDate date;
-    private GroupDTO group;
+    private long groupId;
     private List<Qualification> qualification;
 
 }
