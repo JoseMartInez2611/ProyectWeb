@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class AcademicRegistrationDTO {
 
     private long id;
-    private Long studentId;
-    public Long groupID;
+    private long studentId;
+    public long groupId;
     private LocalDate registrationDate;
 }

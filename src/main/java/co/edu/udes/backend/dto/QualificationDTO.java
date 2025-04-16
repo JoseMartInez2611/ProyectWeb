@@ -11,8 +11,8 @@ import lombok.*;
 public class QualificationDTO {
 
     private long id;
-    private StudentDTO student;
+    private long studentId;
     private float qualification;
-    private EvaluationDTO evaluation;
+    private long evaluationId;
 
 }

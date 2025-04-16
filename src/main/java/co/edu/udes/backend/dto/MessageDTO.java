@@ -16,5 +16,5 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class MessageDTO extends CommunicationDTO {
     private String subject;
-    private ProfileUDTO sender;
+    private long senderId;
 }

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -29,7 +29,7 @@ public class Student extends ProfileU {
             name = "date_birth",
             columnDefinition = "DATE",
             nullable = false)
-    private Date dateBirth;
+    private LocalDate dateBirth;
 
     @Column(
             name = "address",
@@ -56,6 +56,15 @@ public class Student extends ProfileU {
             mappedBy = "student"
     )
     private List<AcademicRegistration> academicRegistration;
+
+
+    @OneToMany(
+            targetEntity = Qualification.class,
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            mappedBy = "student"
+    )
+    private List<Qualification> qualification;
 
 
 }

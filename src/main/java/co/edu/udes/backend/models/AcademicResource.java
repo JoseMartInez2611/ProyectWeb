@@ -19,10 +19,17 @@ public class AcademicResource {
     @Column(name = "name", nullable = false, columnDefinition = "varchar(255)")
     private String name;
 
+    @Column(name = "description", nullable = false, columnDefinition = "varchar(255)")
+    private String description;
+
     @Column(name = "category", nullable = false, columnDefinition = "varchar(255)")
     private String category;
 
     @Column(name = "availability", nullable = false, columnDefinition = "boolean")
     private boolean availability;
+
+    @ManyToOne
+    @JoinColumn (name = "id_room", nullable = false, columnDefinition = "BIGINT")
+    private Room room;
 
 }

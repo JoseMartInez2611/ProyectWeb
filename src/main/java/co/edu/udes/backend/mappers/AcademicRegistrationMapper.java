@@ -12,13 +12,15 @@ import java.util.List;
 public interface AcademicRegistrationMapper {
     AcademicRegistrationMapper INSTANCE = Mappers.getMapper(AcademicRegistrationMapper.class);
 
+
     @Mapping(source = "studentId", target = "student.id")
-    @Mapping(source = "groupID", target = "group.id")
+    @Mapping(source = "groupId", target = "group.id")
     AcademicRegistration toEntity(AcademicRegistrationDTO academicRegistration);
     List<AcademicRegistration> toEntityList(List<AcademicRegistrationDTO> academicRegistrations);
 
+
     @Mapping(source = "student.id", target = "studentId")
-    @Mapping(source = "group.id", target = "groupID")
+    @Mapping(source = "group.id", target = "groupId")
     AcademicRegistrationDTO toDto(AcademicRegistration academicRegistration);
     List<AcademicRegistrationDTO> toDtoList(List<AcademicRegistration> academicRegistrations);
 }

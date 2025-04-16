@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class FinalNoteDTO {
 
     private long id;
-    private AcademicRecordDTO academicRecord;
-    private GroupDTO group;
+    private long academicRecordId;
+    private long groupId;
     private float note;
 }

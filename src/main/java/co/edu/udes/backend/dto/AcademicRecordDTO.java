@@ -15,6 +15,6 @@ public class AcademicRecordDTO {
 
     private long id;
     private float academicAverage;
-    private StudentDTO student;
+    private long studentId;
     private List<FinalNoteDTO> finalNotes;
 }
