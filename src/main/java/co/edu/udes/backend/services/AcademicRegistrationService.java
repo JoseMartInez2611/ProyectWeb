@@ -5,6 +5,7 @@ import co.edu.udes.backend.mappers.AcademicRegistrationMapper;
 import co.edu.udes.backend.models.*;
 import co.edu.udes.backend.repositories.AcademicRecordRepository;
 import co.edu.udes.backend.repositories.AcademicRegistrationRepository;
+import co.edu.udes.backend.repositories.LessonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class AcademicRegistrationService {
 
     private final AcademicRegistrationRepository academicRegistrationRepository;
     private final AcademicRecordRepository academicRecordRepository;
+    private final LessonRepository lessonRepository;
     @Autowired
     private AcademicRegistrationMapper academicRegistrationMapper;
 
@@ -62,6 +64,37 @@ public class AcademicRegistrationService {
         academicRegistrationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Academic registration not found with id: " + id));
         academicRegistrationRepository.deleteById(id);
+    }
+
+    private void validateScheduleAvailability(Student student, Group group){
+        List<Lesson> lessons = lessonRepository.findByGroupId(group.getId());
+
+        List<AcademicRegistration> currentRegistrations = academicRegistrationRepository.findByStudentId(student.getId());
+        List<Long> currentGroupIds = currentRegistrations.stream()
+                .map(registration -> registration.getGroup().getId())
+                .toList();
+        List<Lesson> currentLessons = lessonRepository.findByGroupIdIn(currentGroupIds);
+
+        for (Lesson lesson : lessons) {
+            Schedule schedule = lesson.getSchedule();
+
+            for (Lesson currentLesson : currentLessons) {
+                Schedule currentSchedule = currentLesson.getSchedule();
+
+                boolean sameDay = schedule.getDayOfWeek().getDay().equals(currentSchedule.getDayOfWeek().getDay());
+
+                boolean isStartInside = schedule.getStartHour().isBefore(currentSchedule.getEndHour())
+                        && schedule.getStartHour().isAfter(currentSchedule.getStartHour());
+                boolean isEndInside = schedule.getEndHour().isBefore(currentSchedule.getEndHour())
+                        && schedule.getEndHour().isAfter(currentSchedule.getStartHour());
+                boolean isInside = schedule.getStartHour().isAfter(currentSchedule.getStartHour())
+                        && schedule.getEndHour().isBefore(currentSchedule.getEndHour());
+
+                if (sameDay && (isStartInside || isEndInside || isInside)) {
+                    throw new RuntimeException("The student cannot enroll in this group because the schedule conflicts with another group.");
+                }
+            }
+        }
     }
 
     private void validatePrerequisites(Student student, Group group) {
