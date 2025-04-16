@@ -17,8 +17,14 @@ public class Qualification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(targetEntity = Student.class)
-    @JoinColumn(name="student_id", nullable = false)
+
+
+    @ManyToOne(targetEntity = Student.class)
+    @JoinColumn(
+            name="id_student",
+            nullable = false,
+            columnDefinition = "BIGINT"
+    )
     private Student student;
 
     @Column(name = "qualification", columnDefinition = "FLOAT", nullable = false)

@@ -13,5 +13,5 @@ public class QuestionDTO {
     private String question;
     private String questionType;
     private String answer;
-    private ExamDTO exam;
+    private long examId;
 }
