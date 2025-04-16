@@ -3,6 +3,7 @@ package co.edu.udes.backend.mappers;
 import co.edu.udes.backend.dto.AttendanceDTO;
 import co.edu.udes.backend.models.Attendance;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -16,9 +17,15 @@ import java.util.List;
 public interface AttendanceMapper {
     AttendanceMapper INSTANCE = Mappers.getMapper(AttendanceMapper.class);
 
+    @Mapping(source = "lessonId", target = "lesson.id")
+    @Mapping(source = "studentID", target = "student.id")
+    @Mapping(source = "justificationID", target = "justification.id")
     Attendance toEntity(AttendanceDTO attendance);
     List<Attendance> toEntityList(List<AttendanceDTO> attendances);
 
+    @Mapping(source = "lesson.id", target = "lessonId")
+    @Mapping(source = "student.id", target = "studentID")
+    @Mapping(source = "justification.id", target = "justificationID")
     AttendanceDTO toDto(Attendance attendance);
     List<AttendanceDTO> toDtoList(List<Attendance> attendances);
 }
