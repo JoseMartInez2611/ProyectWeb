@@ -17,7 +17,7 @@ import java.util.List;
 public interface LessonMapper {
     LessonMapper INSTANCE = Mappers.getMapper(LessonMapper.class);
 
-    @Mapping(source = "scheduleID", target = "schedule.id")
+    @Mapping(source = "scheduleId", target = "schedule.id")
     @Mapping(source = "classroomId", target = "classroom.id")
     @Mapping(source = "groupId", target = "group.id")
     Lesson toEntity(LessonDTO lesson);
