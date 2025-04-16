@@ -16,5 +16,5 @@ public class ScheduleDTO {
     private long id;
     private LocalTime startHour;
     private LocalTime endHour;
-    private DayOfWeekDTO dayOfWeek;
+    private long dayId;
 }
