@@ -1,12 +1,11 @@
 package co.edu.udes.backend.dto.inheritanceDTO;
 
-import co.edu.udes.backend.dto.GroupDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -17,7 +16,7 @@ public class EvaluationDTO {
     private long id;
     private String name;
     private String evaluationRubric;
-    private Date date;
-    private GroupDTO group;
+    private LocalDate date;
+    private long groupId;
 
 }

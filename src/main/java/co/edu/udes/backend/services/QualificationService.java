@@ -3,7 +3,11 @@ package co.edu.udes.backend.services;
 import co.edu.udes.backend.dto.QualificationDTO;
 import co.edu.udes.backend.mappers.QualificationMapper;
 import co.edu.udes.backend.models.Qualification;
+import co.edu.udes.backend.models.Student;
+import co.edu.udes.backend.models.inheritance.Evaluation;
+import co.edu.udes.backend.repositories.EvaluationRepository;
 import co.edu.udes.backend.repositories.QualificationRepository;
+import co.edu.udes.backend.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,8 @@ public class QualificationService {
     private final QualificationRepository qualificationRepository;
     @Autowired
     private QualificationMapper qualificationMapper;
+    private final StudentRepository studentRepository;
+    private final EvaluationRepository evaluationRepository;
 
     public List<QualificationDTO> getAll() {
         List<Qualification> qualifications =   qualificationRepository.findAll();
@@ -36,6 +42,8 @@ public class QualificationService {
 
     public List<QualificationDTO> createMultiple(List<Qualification> data) {
         validateQualification(data);
+        System.out.println("Service "+data);
+        getIds(data);
         return qualificationMapper.toDtoList(
                 qualificationRepository.saveAll(data)
         );
@@ -55,11 +63,29 @@ public class QualificationService {
         qualificationRepository.deleteById(id);
     }
 
+    public void getIds(List<Qualification> data) {
+        System.out.println("Ingresa a getIds");
+        for (Qualification q : data) {
+            if (q.getStudent() != null && q.getStudent().getId() != 0) {
+                Student student = studentRepository.findById(q.getStudent().getId())
+                        .orElseThrow(() -> new RuntimeException("Student not found with ID: " + q.getStudent().getId()));
+                q.setStudent(student);
+            }
+
+            if (q.getEvaluation() != null && q.getEvaluation().getId() != 0) {
+                Evaluation evaluation = evaluationRepository.findById(q.getEvaluation().getId())
+                        .orElseThrow(() -> new RuntimeException("Evaluation not found with ID: " + q.getEvaluation().getId()));
+                q.setEvaluation(evaluation);
+            }
+        }
+    }
+
+
     public float getObject(List<?> data, int i) {
         Qualification qualification = (Qualification)data.get(i);
         return  qualification.getQualification();
-
     }
+
 
     public void validateQualification(List<?> data) {
 

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.plaf.synth.SynthSpinnerUI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,9 @@ public class QualificationController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody List<QualificationDTO> dtos){
         try{
+            System.out.println("Controller dato que llega"+dtos);
             List<Qualification> entities = qualificationMapper.toEntityList(dtos);
+            System.out.println("Controller "+qualificationService.createMultiple(entities));
             return ResponseEntity.ok(qualificationService.createMultiple(entities));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
