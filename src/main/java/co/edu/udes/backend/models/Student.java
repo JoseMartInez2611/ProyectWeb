@@ -36,11 +36,13 @@ public class Student extends ProfileU {
             nullable = false)
     private String address;
 
-    @Column(
-            name = "career",
-            columnDefinition = "VARCHAR(255)",
-            nullable = false)
-    private String career;
+    @ManyToOne
+    @JoinColumn(
+            name = "career_id",
+            nullable = false,
+            columnDefinition = "BIGINT"
+    )
+    private Career career;
 
     @OneToMany(
             targetEntity = Attendance.class,

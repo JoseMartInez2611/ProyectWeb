@@ -18,7 +18,7 @@ public class StudentDTO extends ProfileUDTO {
     private String code;
     private LocalDate dateBirth;
     private String address;
-    private String career;
+    private long careerId;
     private List<AttendanceDTO> attendance;
     private List<AcademicRegistrationDTO> academicRegistration;
 }

@@ -9,9 +9,11 @@ import java.util.List;
 
 public interface StudentMapper {
 
+    @Mapping(source = "careerId", target = "career.id")
     Student toEntity(StudentDTO student);
     List<Student> toEntityList(List<StudentDTO> students);
 
+    @Mapping(source = "career.id", target = "careerId")
     StudentDTO toDto(Student student);
     List<StudentDTO> toDtoList(List<Student> students);
 }
