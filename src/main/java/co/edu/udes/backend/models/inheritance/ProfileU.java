@@ -63,11 +63,7 @@ public class ProfileU {
     )
     private List<Borrow> borrow;
 
-    @ManyToMany(
-            targetEntity = Communication.class,
-            fetch = FetchType.LAZY
-    )
-    @JoinTable(joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "communication_id"))
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "receivers")
     private List<Communication> communication;
 
 }
