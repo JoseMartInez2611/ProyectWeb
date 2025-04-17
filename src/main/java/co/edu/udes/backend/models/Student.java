@@ -55,15 +55,4 @@ public class Student extends ProfileU {
             mappedBy = "student"
     )
     private List<AcademicRegistration> academicRegistration;
-
-
-    @OneToMany(
-            targetEntity = Qualification.class,
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            mappedBy = "student"
-    )
-    private List<Qualification> qualification;
-
-
 }

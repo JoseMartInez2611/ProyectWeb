@@ -21,6 +21,4 @@ public class StudentDTO extends ProfileUDTO {
     private String career;
     private List<AttendanceDTO> attendance;
     private List<AcademicRegistrationDTO> academicRegistration;
-    private List<QualificationDTO> qualification;
-
 }

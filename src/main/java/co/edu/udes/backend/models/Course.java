@@ -60,4 +60,7 @@ public class Course {
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "course_competences", joinColumns = @JoinColumn(name = "id_course"))
     private List<String> competences;
+
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
+    private List<Career> careers;
 }

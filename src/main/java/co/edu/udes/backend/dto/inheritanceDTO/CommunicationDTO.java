@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CommunicationDTO {
     private long id;
-    private List<ProfileU> receiver;
+    private List<Long> receiverIds;
     private LocalDate sentDate;
     private String content;
     private boolean read;

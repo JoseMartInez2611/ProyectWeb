@@ -9,12 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FinalNoteDTO {
+public class CareerDTO {
 
     private long id;
-    private String title;
-    private int percentage;
-    private float note;
-    private long academicRecordId;
-    private long groupId;
+    private String name;
+    private String description;
+    private String code;
+    private int duration;
+    private String modality;
+    private String type;
 }

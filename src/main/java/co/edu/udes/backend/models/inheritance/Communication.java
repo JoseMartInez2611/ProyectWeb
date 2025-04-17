@@ -22,7 +22,7 @@ public class Communication {
     private long id;
 
     @ManyToMany(mappedBy = "communication", fetch = FetchType.LAZY)
-    private List<ProfileU> receiver;
+    private List<ProfileU> receivers;
 
     @Column(name = "sent_date", nullable = false, columnDefinition = "DATE")
     private LocalDate sentDate;
