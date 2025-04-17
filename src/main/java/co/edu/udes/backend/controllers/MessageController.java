@@ -40,6 +40,7 @@ public class MessageController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody List<MessageDTO> dtos){
         try{
+            System.out.println(dtos);
             List<Message> entities = messageMapper.toEntityList(dtos);
             return ResponseEntity.ok(messageService.createMultiple(entities));
         }catch (Exception e){
