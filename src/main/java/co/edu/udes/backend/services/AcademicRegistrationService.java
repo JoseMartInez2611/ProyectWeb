@@ -3,13 +3,12 @@ package co.edu.udes.backend.services;
 import co.edu.udes.backend.dto.AcademicRegistrationDTO;
 import co.edu.udes.backend.mappers.AcademicRegistrationMapper;
 import co.edu.udes.backend.models.*;
-import co.edu.udes.backend.repositories.AcademicRecordRepository;
-import co.edu.udes.backend.repositories.AcademicRegistrationRepository;
-import co.edu.udes.backend.repositories.LessonRepository;
+import co.edu.udes.backend.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,6 +18,9 @@ public class AcademicRegistrationService {
     private final AcademicRegistrationRepository academicRegistrationRepository;
     private final AcademicRecordRepository academicRecordRepository;
     private final LessonRepository lessonRepository;
+    private final StudentRepository studentRepository;
+    private final GroupRepository groupRepository;
+    private final CourseRepository courseRepository;
     @Autowired
     private AcademicRegistrationMapper academicRegistrationMapper;
 
@@ -33,24 +35,22 @@ public class AcademicRegistrationService {
     }
 
     public AcademicRegistrationDTO create(AcademicRegistration academicRegistration) {
+        alreadyRegistered(academicRegistration);
+        validateSameCareer(academicRegistration.getStudent(), academicRegistration.getGroup());
         validatePrerequisites(academicRegistration.getStudent(), academicRegistration.getGroup());
-
-        boolean exists = academicRegistrationRepository.existsByStudentIdAndGroupId(
-                academicRegistration.getStudent().getId(),
-                academicRegistration.getGroup().getId()
-        );
-
-        if (exists) {
-            throw new RuntimeException("The student is already matriculated in this group");
-        }
-
+        validateScheduleAvailability(academicRegistration.getStudent(), academicRegistration.getGroup());
         return academicRegistrationMapper.toDto(academicRegistrationRepository.save(academicRegistration));
     }
 
     public List<AcademicRegistrationDTO> createMultiple(List<AcademicRegistration> academicRegistrations) {
-        return academicRegistrationMapper.toDtoList(
-                academicRegistrationRepository.saveAll(academicRegistrations)
-        );
+
+        List<AcademicRegistrationDTO> academicRegistrationDTOS = new ArrayList<>();
+
+        for (AcademicRegistration academicRegistration : academicRegistrations) {
+            AcademicRegistrationDTO newAcademicRegistration = create(academicRegistration);
+            academicRegistrationDTOS.add(newAcademicRegistration);
+        }
+        return academicRegistrationDTOS;
     }
 
     public AcademicRegistrationDTO update(Long id, AcademicRegistration academicRegistration) {
@@ -68,12 +68,16 @@ public class AcademicRegistrationService {
 
     private void validateScheduleAvailability(Student student, Group group){
         List<Lesson> lessons = lessonRepository.findByGroupId(group.getId());
+        System.out.println("Lessons: " + lessons);
 
         List<AcademicRegistration> currentRegistrations = academicRegistrationRepository.findByStudentId(student.getId());
+        System.out.println("Current Registrations: " + currentRegistrations);
+
         List<Long> currentGroupIds = currentRegistrations.stream()
                 .map(registration -> registration.getGroup().getId())
                 .toList();
         List<Lesson> currentLessons = lessonRepository.findByGroupIdIn(currentGroupIds);
+        System.out.println("Current Lessons: " + currentLessons);
 
         for (Lesson lesson : lessons) {
             Schedule schedule = lesson.getSchedule();
@@ -81,24 +85,25 @@ public class AcademicRegistrationService {
             for (Lesson currentLesson : currentLessons) {
                 Schedule currentSchedule = currentLesson.getSchedule();
 
-                boolean sameDay = schedule.getDayOfWeek().getDay().equals(currentSchedule.getDayOfWeek().getDay());
-
-                boolean isStartInside = schedule.getStartHour().isBefore(currentSchedule.getEndHour())
-                        && schedule.getStartHour().isAfter(currentSchedule.getStartHour());
-                boolean isEndInside = schedule.getEndHour().isBefore(currentSchedule.getEndHour())
-                        && schedule.getEndHour().isAfter(currentSchedule.getStartHour());
-                boolean isInside = schedule.getStartHour().isAfter(currentSchedule.getStartHour())
-                        && schedule.getEndHour().isBefore(currentSchedule.getEndHour());
-
-                if (sameDay && (isStartInside || isEndInside || isInside)) {
+                if (schedulesOverlap(schedule, currentSchedule)) {
                     throw new RuntimeException("The student cannot enroll in this group because the schedule conflicts with another group.");
                 }
             }
         }
     }
 
+    private boolean schedulesOverlap(Schedule s1, Schedule s2) {
+        if (!s1.getDayOfWeek().equals(s2.getDayOfWeek())) return false;
+        return s1.getStartHour().isBefore(s2.getEndHour()) &&
+                s1.getEndHour().isAfter(s2.getStartHour());
+    }
+
     private void validatePrerequisites(Student student, Group group) {
-        Course course = group.getCourse();
+
+        Group groupComplete = groupRepository.findById(group.getId())
+                .orElseThrow(() -> new RuntimeException("Group not found with id: " + group.getId()));
+
+        Course course = groupComplete.getCourse();
         List<Course> prerequisites = course.getPrerequisites();
 
         if (prerequisites == null || prerequisites.isEmpty()) {
@@ -119,8 +124,37 @@ public class AcademicRegistrationService {
                 .toList();
 
         if (!missing.isEmpty()) {
-            throw new RuntimeException("The student cannot enroll in '" + course.getName() +
-                    "' because the following prerequisite(s) have not been approved: " + String.join(", ", missing));
+            throw new RuntimeException("The student cannot enroll in " + course.getName() +
+                    " because the following prerequisite(s) have not been approved: " + String.join(", ", missing));
+        }
+    }
+
+    private void alreadyRegistered(AcademicRegistration academicRegistration) {
+        boolean exists = academicRegistrationRepository.existsByStudentIdAndGroupId(
+                academicRegistration.getStudent().getId(),
+                academicRegistration.getGroup().getId()
+        );
+
+        if (exists) {
+            throw new RuntimeException("The student is already matriculated in this group");
+        }
+    }
+
+    private void validateSameCareer(Student student, Group group){
+        Student studentComplete = studentRepository.findById(student.getId())
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + student.getId()));
+
+        Group groupComplete = groupRepository.findById(group.getId())
+                .orElseThrow(() -> new RuntimeException("Group not found with id: " + group.getId()));
+
+        Course courseWithCareers  = courseRepository.findByIdWithCareers(groupComplete.getCourse().getId())
+                .orElseThrow(() -> new RuntimeException("Course not found with id: " + groupComplete.getCourse().getId()));
+
+        boolean belongsToSameCareer = courseWithCareers.getCareers().stream()
+                .anyMatch(career -> career.getId().equals(studentComplete.getCareer().getId()));
+
+        if (!belongsToSameCareer) {
+            throw new RuntimeException("The student does not belong to the same career as the group");
         }
     }
 }
