@@ -63,4 +63,18 @@ public class Career {
             inverseJoinColumns = @JoinColumn(name = "id_course")
     )
     private List<Course> courses;
+
+    public void addCourse(Course course) {
+        if (!courses.contains(course)) {
+            courses.add(course);
+        }
+        if (!course.getCareers().contains(this)) {
+            course.getCareers().add(this);
+        }
+    }
+
+    public void removeCourse(Course course) {
+        courses.remove(course);
+        course.getCareers().remove(this);
+    }
 }

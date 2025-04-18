@@ -42,8 +42,7 @@ public class Attendance {
     )
     private LocalDate date;
 
-    @OneToOne
-    @JoinColumn(name = "id_justification", columnDefinition = "BIGINT")
+    @OneToOne(mappedBy = "attendance")
     private AbsenceJustification justification;
 
 }

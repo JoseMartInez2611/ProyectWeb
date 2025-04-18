@@ -18,5 +18,4 @@ public class AttendanceDTO {
     private long studentId;
     private boolean assistance;
     private LocalDate date;
-    private long justificationId;
 }

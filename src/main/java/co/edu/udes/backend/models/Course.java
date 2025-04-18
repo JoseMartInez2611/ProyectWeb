@@ -63,4 +63,18 @@ public class Course {
 
     @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
     private List<Career> careers;
+
+    public void addCareer(Career career) {
+        if (!careers.contains(career)) {
+            careers.add(career);
+        }
+        if (!career.getCourses().contains(this)) {
+            career.getCourses().add(this);
+        }
+    }
+
+    public void removeCareer(Career career) {
+        careers.remove(career);
+        career.getCourses().remove(this);
+    }
 }
