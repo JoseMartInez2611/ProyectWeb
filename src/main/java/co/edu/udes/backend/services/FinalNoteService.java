@@ -114,4 +114,18 @@ public class FinalNoteService {
     }
 
 
+    public String getGroupPerformance(long id){
+        Double average = finalNoteRepository.getGroupAverage(id);
+        String name= finalNoteRepository.findCourseNameByGroupId(id);
+        if (average <= 3.5 ) {
+            return "The Group "+name+" has a low academic performance. Performance: "+average;
+        }else if (average > 3.5 && average <= 4.5) {
+            return"The Group "+name+" has a medium academic performance. Performance: "+average;
+        }else if (average > 4.5 && average <= 5.0) {
+            return "The Group "+name+" has a good academic performance. Performance: "+average;
+        }
+        return "The Group Doesn't have a performance";
+
+    }
+
 }

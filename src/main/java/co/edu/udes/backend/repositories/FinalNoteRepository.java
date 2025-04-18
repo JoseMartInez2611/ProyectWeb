@@ -27,5 +27,13 @@ public interface FinalNoteRepository extends JpaRepository<FinalNote, Long> {
     """)
     String findStudentFullNameByAcademicRecordId(@Param("academicRecordId") Long academicRecordId);
 
+    @Query("SELECT AVG(fn.note) FROM FinalNote fn WHERE fn.group.id = :groupId")
+    Double getGroupAverage(@Param("groupId") Long groupId);
 
+    @Query("SELECT DISTINCT c.name " +
+            "FROM FinalNote fn " +
+            "JOIN fn.group g " +
+            "JOIN g.course c " +
+            "WHERE g.id = :groupId")
+    String findCourseNameByGroupId(@Param("groupId") Long groupId);
 }
