@@ -41,8 +41,6 @@ public class QualificationService {
 
     public List<QualificationDTO> createMultiple(List<Qualification> data) {
         validateQualification(data);
-        System.out.println("Service "+data);
-        getIds(data);
         return qualificationMapper.toDtoList(
                 qualificationRepository.saveAll(data)
         );
@@ -62,34 +60,15 @@ public class QualificationService {
         qualificationRepository.deleteById(id);
     }
 
-    public void getIds(List<Qualification> data) {
-        System.out.println("Ingresa a getIds");
-        for (Qualification q : data) {
-            if (q.getStudent() != null && q.getStudent().getId() != 0) {
-                Student student = studentRepository.findById(q.getStudent().getId())
-                        .orElseThrow(() -> new RuntimeException("Student not found with ID: " + q.getStudent().getId()));
-                q.setStudent(student);
-            }
-
-            if (q.getEvaluation() != null && q.getEvaluation().getId() != 0) {
-                Evaluation evaluation = evaluationRepository.findById(q.getEvaluation().getId())
-                        .orElseThrow(() -> new RuntimeException("Evaluation not found with ID: " + q.getEvaluation().getId()));
-                q.setEvaluation(evaluation);
-            }
-        }
-    }
-
-
-    public float getObject(List<?> data, int i) {
+    public float getValue(List<?> data, int i) {
         Qualification qualification = (Qualification)data.get(i);
         return  qualification.getQualification();
     }
 
-
     public void validateQualification(List<?> data) {
 
         for(int i = 0; i < data.size(); i++) {
-            float x= getObject(data, i);
+            float x= getValue(data, i);
             if(x < 0 || x > 5 ) {
                 throw new RuntimeException("Qualification must be between 0 and 5");
             }
@@ -98,13 +77,13 @@ public class QualificationService {
 
     }
 
-    public Double getAverage(long id){
-
+    public String getAverage(long id){
+        System.out.println("Service GetAverage");
+        String name= qualificationRepository.findFullNameByStudentId(id);
         Double average=qualificationRepository.findAverageScoreByStudentId(id);
-        return average != null ? average.floatValue() : 0.0;
+        return "The to "+name+" average is : "+ (average != null ? average.floatValue() : 0.0);
 
     }
-
 
 
 }

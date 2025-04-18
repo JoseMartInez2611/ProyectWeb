@@ -9,7 +9,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AcademicRecordRepository extends JpaRepository<AcademicRecord, Long> {
 
-    @Query("SELECT a.academicAverage FROM AcademicRecord a WHERE a.student.id = :studentId")
-    Double findAverageScoreByStudentId( @Param("studentId") Long studentId);
-
 }

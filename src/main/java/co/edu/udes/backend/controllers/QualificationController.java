@@ -40,6 +40,17 @@ public class QualificationController {
         }
     }
 
+    @GetMapping("average/{id}")
+    public ResponseEntity<?> getAverageById(@PathVariable Long id) {
+        System.out.println("Controller GertAverageById");
+        try{
+            return ResponseEntity.ok().body(qualificationService.getAverage(id));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+
     @PostMapping
     public ResponseEntity<?> create(@RequestBody List<QualificationDTO> dtos){
         try{

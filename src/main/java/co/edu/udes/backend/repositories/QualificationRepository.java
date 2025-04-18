@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -17,6 +18,12 @@ public interface QualificationRepository extends JpaRepository<Qualification, Lo
     @Query("SELECT AVG(q.qualification) FROM Qualification q WHERE q.student.id = :studentId")
     Double findAverageScoreByStudentId(@Param("studentId") Long studentId);
 
+    @Query("SELECT DISTINCT CONCAT(p.firstName,' ',p.lastName) AS fullName\n" +
+            "FROM Qualification q\n" +
+            "JOIN q.student s\n" +
+            "JOIN ProfileU p ON s.id = p.id\n" +
+            "WHERE s.id = :studentId\n")
+    String findFullNameByStudentId(@Param("studentId") Long studentId);
 
 }
 
