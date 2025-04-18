@@ -19,13 +19,11 @@ public interface AttendanceMapper {
 
     @Mapping(source = "lessonId", target = "lesson.id")
     @Mapping(source = "studentId", target = "student.id")
-    @Mapping(source = "justificationId", target = "justification.id")
     Attendance toEntity(AttendanceDTO attendance);
     List<Attendance> toEntityList(List<AttendanceDTO> attendances);
 
     @Mapping(source = "lesson.id", target = "lessonId")
     @Mapping(source = "student.id", target = "studentId")
-    @Mapping(source = "justification.id", target = "justificationId")
     AttendanceDTO toDto(Attendance attendance);
     List<AttendanceDTO> toDtoList(List<Attendance> attendances);
 }
