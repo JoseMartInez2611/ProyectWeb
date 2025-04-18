@@ -3,8 +3,6 @@ package co.edu.udes.backend.services;
 import co.edu.udes.backend.dto.QualificationDTO;
 import co.edu.udes.backend.mappers.QualificationMapper;
 import co.edu.udes.backend.models.Qualification;
-import co.edu.udes.backend.models.Student;
-import co.edu.udes.backend.models.inheritance.Evaluation;
 import co.edu.udes.backend.repositories.EvaluationRepository;
 import co.edu.udes.backend.repositories.QualificationRepository;
 import co.edu.udes.backend.repositories.StudentRepository;
