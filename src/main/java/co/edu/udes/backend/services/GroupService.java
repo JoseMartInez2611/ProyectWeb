@@ -51,4 +51,6 @@ public class GroupService {
                 .orElseThrow(() -> new RuntimeException("Group not found with id: " + id));
         groupRepository.deleteById(id);
     }
+
+
 }

@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AcademicRecordRepository extends JpaRepository<AcademicRecord, Long> {
+
 }

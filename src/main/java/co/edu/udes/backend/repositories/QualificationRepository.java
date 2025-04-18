@@ -17,6 +17,12 @@ public interface QualificationRepository extends JpaRepository<Qualification, Lo
     @Query("SELECT AVG(q.qualification) FROM Qualification q WHERE q.student.id = :studentId")
     Double findAverageScoreByStudentId(@Param("studentId") Long studentId);
 
+    @Query("SELECT DISTINCT CONCAT(p.firstName,' ',p.lastName) AS fullName" +
+            "FROM Qualification q" +
+            "JOIN q.student s" +
+            "JOIN ProfileU p ON s.id = p.id" +
+            "WHERE s.id = :studentId")
+    String findFullNameByStudentId(@Param("studentId") Long studentId);
 
 }
 

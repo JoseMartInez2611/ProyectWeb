@@ -10,9 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/v1/qualification")
@@ -39,13 +38,26 @@ public class QualificationController {
         }
     }
 
+    @GetMapping("average/{id}")
+    public ResponseEntity<?> getAverageById(@PathVariable Long id) {
+        System.out.println("Controller GertAverageById");
+        try{
+            return ResponseEntity.ok().body(qualificationService.getAverage(id));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+
     @PostMapping
     public ResponseEntity<?> create(@RequestBody List<QualificationDTO> dtos){
         try{
+            System.out.println("Controller dato que llega"+dtos);
             List<Qualification> entities = qualificationMapper.toEntityList(dtos);
+            System.out.println("Controller "+qualificationService.createMultiple(entities));
             return ResponseEntity.ok(qualificationService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
