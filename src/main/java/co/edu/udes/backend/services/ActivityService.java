@@ -3,12 +3,15 @@ package co.edu.udes.backend.services;
 import co.edu.udes.backend.dto.ActivityDTO;
 import co.edu.udes.backend.mappers.ActivityMapper;
 import co.edu.udes.backend.models.Activity;
+import co.edu.udes.backend.models.Group;
 import co.edu.udes.backend.repositories.ActivityRepository;
+import co.edu.udes.backend.repositories.GroupRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,6 +19,7 @@ import java.util.List;
 public class ActivityService {
 
     private final ActivityRepository activityRepository;
+    private final GroupRepository groupRepository;
     @Autowired
     private ActivityMapper activityMapper;
 
@@ -52,5 +56,40 @@ public class ActivityService {
         activityRepository.deleteById(id);
     }
 
+    //modulos
+
+    /**
+     * Crea una nueva actividad y la asocia a un grupo.
+     *
+     * @param activity La entidad Activity a crear. Debe contener la información del grupo asociado (a través de su ID).
+     * @return El ActivityDTO de la actividad creada.
+     * @throws ResourceNotFoundException Si no se encuentra el grupo con el ID proporcionado en la actividad.
+     */
+    public ActivityDTO createActivity(Activity activity) {
+        // Buscar el grupo asociado por el ID
+        Group group = groupRepository.findById(activity.getGroup().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Group not found with id: " + activity.getGroup().getId()));
+
+        // Establecer la relación entre la actividad y el grupo
+        activity.setGroup(group);
+
+        // Guardar la nueva actividad
+        Activity savedActivity = activityRepository.save(activity);
+        return activityMapper.toDto(savedActivity);
+    }
+
+    /**
+     * Crea múltiples actividades y las asocia a sus respectivos grupos.
+     *
+     * @param activities Una lista de entidades Activity a crear. Cada actividad debe contener la información del grupo asociado.
+     * @return Una lista de ActivityDTO de las actividades creadas.
+     */
+    public List<ActivityDTO> createMultipleActivities(List<Activity> activities) {
+        List<ActivityDTO> createdActivities = new ArrayList<>();
+        for (Activity activity : activities) {
+            createdActivities.add(createActivity(activity));
+        }
+        return createdActivities;
+    }
 
 }
