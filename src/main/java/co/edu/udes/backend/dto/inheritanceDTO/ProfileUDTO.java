@@ -27,6 +27,4 @@ public class ProfileUDTO {
     private List<ReportDTO> report;
     private List<BorrowDTO> borrow;
     private List<CommunicationDTO> communication;
-
-
 }

@@ -21,8 +21,13 @@ public class Communication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToMany(mappedBy = "communication", fetch = FetchType.LAZY)
-    private List<ProfileU> receiver;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "communication_profileU",
+            inverseJoinColumns= @JoinColumn(name = "user_id"),
+            joinColumns = @JoinColumn(name = "communication_id")
+    )
+    private List<ProfileU> receivers;
 
     @Column(name = "sent_date", nullable = false, columnDefinition = "DATE")
     private LocalDate sentDate;

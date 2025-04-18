@@ -29,4 +29,8 @@ public class AbsenceJustification {
 
     @Column(name = "justified", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean justified;
+
+    @OneToOne
+    @JoinColumn(name = "attendance_id", columnDefinition = "BIGINT")
+    private Attendance attendance;
 }

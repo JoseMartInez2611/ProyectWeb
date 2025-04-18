@@ -18,14 +18,12 @@ public interface AttendanceMapper {
     AttendanceMapper INSTANCE = Mappers.getMapper(AttendanceMapper.class);
 
     @Mapping(source = "lessonId", target = "lesson.id")
-    @Mapping(source = "studentID", target = "student.id")
-    @Mapping(source = "justificationID", target = "justification.id")
+    @Mapping(source = "studentId", target = "student.id")
     Attendance toEntity(AttendanceDTO attendance);
     List<Attendance> toEntityList(List<AttendanceDTO> attendances);
 
     @Mapping(source = "lesson.id", target = "lessonId")
-    @Mapping(source = "student.id", target = "studentID")
-    @Mapping(source = "justification.id", target = "justificationID")
+    @Mapping(source = "student.id", target = "studentId")
     AttendanceDTO toDto(Attendance attendance);
     List<AttendanceDTO> toDtoList(List<Attendance> attendances);
 }
