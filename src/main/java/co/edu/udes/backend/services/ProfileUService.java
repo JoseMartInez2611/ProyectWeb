@@ -3,7 +3,7 @@ package co.edu.udes.backend.services;
 import co.edu.udes.backend.dto.inheritanceDTO.ProfileUDTO;
 import co.edu.udes.backend.mappers.ProfileUMapper;
 import co.edu.udes.backend.models.inheritance.ProfileU;
-import co.edu.udes.backend.repositories.UserRepository;
+import co.edu.udes.backend.repositories.ProfileURepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProfileUService {
 
-    private final UserRepository userRepository;
+    private final ProfileURepository userRepository;
     @Autowired
     private ProfileUMapper profileUMapper;
 

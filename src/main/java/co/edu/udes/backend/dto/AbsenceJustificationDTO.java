@@ -15,4 +15,5 @@ public class AbsenceJustificationDTO {
     private String motive;
     private String description;
     private boolean justified;
+    private long attendanceId;
 }

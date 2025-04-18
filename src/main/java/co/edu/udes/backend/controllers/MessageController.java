@@ -1,10 +1,8 @@
 package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.MessageDTO;
-import co.edu.udes.backend.dto.inheritanceDTO.CommunicationDTO;
 import co.edu.udes.backend.mappers.MessageMapper;
 import co.edu.udes.backend.models.Message;
-import co.edu.udes.backend.models.inheritance.Communication;
 import co.edu.udes.backend.services.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +40,7 @@ public class MessageController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody List<MessageDTO> dtos){
         try{
+            System.out.println(dtos);
             List<Message> entities = messageMapper.toEntityList(dtos);
             return ResponseEntity.ok(messageService.createMultiple(entities));
         }catch (Exception e){

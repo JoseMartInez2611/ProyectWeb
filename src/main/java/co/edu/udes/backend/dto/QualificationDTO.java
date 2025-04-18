@@ -1,6 +1,5 @@
 package co.edu.udes.backend.dto;
 
-import co.edu.udes.backend.dto.inheritanceDTO.EvaluationDTO;
 import lombok.*;
 
 @Data

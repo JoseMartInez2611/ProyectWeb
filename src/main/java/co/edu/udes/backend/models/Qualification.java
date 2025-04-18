@@ -4,8 +4,6 @@ import co.edu.udes.backend.models.inheritance.Evaluation;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

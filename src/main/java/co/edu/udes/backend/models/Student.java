@@ -4,7 +4,6 @@ import co.edu.udes.backend.models.inheritance.ProfileU;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -37,11 +36,13 @@ public class Student extends ProfileU {
             nullable = false)
     private String address;
 
-    @Column(
-            name = "career",
-            columnDefinition = "VARCHAR(255)",
-            nullable = false)
-    private String career;
+    @ManyToOne
+    @JoinColumn(
+            name = "career_id",
+            nullable = false,
+            columnDefinition = "BIGINT"
+    )
+    private Career career;
 
     @OneToMany(
             targetEntity = Attendance.class,
@@ -56,15 +57,4 @@ public class Student extends ProfileU {
             mappedBy = "student"
     )
     private List<AcademicRegistration> academicRegistration;
-
-
-    @OneToMany(
-            targetEntity = Qualification.class,
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            mappedBy = "student"
-    )
-    private List<Qualification> qualification;
-
-
 }

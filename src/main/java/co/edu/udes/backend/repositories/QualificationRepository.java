@@ -19,3 +19,5 @@ public interface QualificationRepository extends JpaRepository<Qualification, Lo
 
 
 }
+
+

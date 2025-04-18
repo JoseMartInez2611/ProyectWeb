@@ -12,5 +12,5 @@ public class AnswerDocumentDTO {
     private long id;
     private String fileName;
     private String filePath;
-    private ActivityDTO activity;
+    private long activityId;
 }

@@ -18,8 +18,9 @@ public class CourseDTO {
     private int credits;
     private int theoreticalHours;
     private int practicalHours;
-    private List<CourseDTO> prerequisites;
+    private List<Long> prerequisiteIds;
     private List<String> objectives;
     private List<String> content;
     private List<String> competences;
+    private List<Long> careerIds;
 }

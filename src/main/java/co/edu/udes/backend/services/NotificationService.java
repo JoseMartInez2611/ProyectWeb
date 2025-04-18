@@ -1,9 +1,7 @@
 package co.edu.udes.backend.services;
 
-import co.edu.udes.backend.dto.MessageDTO;
 import co.edu.udes.backend.dto.NotificationDTO;
 import co.edu.udes.backend.mappers.NotificationMapper;
-import co.edu.udes.backend.models.Message;
 import co.edu.udes.backend.models.Notification;
 import co.edu.udes.backend.repositories.NotificationRepository;
 import lombok.RequiredArgsConstructor;

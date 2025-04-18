@@ -2,12 +2,15 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.CourseDTO;
 import co.edu.udes.backend.mappers.CourseMapper;
+import co.edu.udes.backend.models.Career;
 import co.edu.udes.backend.models.Course;
+import co.edu.udes.backend.repositories.CareerRepository;
 import co.edu.udes.backend.repositories.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,6 +18,7 @@ import java.util.List;
 public class CourseService {
 
     private final CourseRepository courseRepository;
+    private final CareerRepository careerRepository;
     @Autowired
     private CourseMapper courseMapper;
 
@@ -29,13 +33,30 @@ public class CourseService {
     }
 
     public CourseDTO create(Course course) {
-        return courseMapper.toDto(courseRepository.save(course));
+
+        Course newCourse = courseRepository.save(course);
+        if (course.getCareers() != null && !course.getCareers().isEmpty()) {
+            List<Long> careerIds = course.getCareers().stream()
+                    .map(Career::getId)
+                    .toList();
+
+            List<Career> careers = careerRepository.findAllById(careerIds);
+
+            for (Career career : careers) {
+                career.addCourse(newCourse);
+            }
+            careerRepository.saveAll(careers);
+        }
+
+        return courseMapper.toDto(newCourse);
     }
 
     public List<CourseDTO> createMultiple(List<Course> courses) {
-        return courseMapper.toDtoList(
-                courseRepository.saveAll(courses)
-        );
+        List<CourseDTO> newCourses = new ArrayList<>();
+        for (Course course : courses) {
+             newCourses.add(create(course));
+        }
+        return newCourses;
     }
 
     public CourseDTO update(Long id, Course course) {

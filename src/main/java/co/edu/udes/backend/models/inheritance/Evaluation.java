@@ -3,7 +3,6 @@ package co.edu.udes.backend.models.inheritance;
 
 import co.edu.udes.backend.models.Group;
 import co.edu.udes.backend.models.Qualification;
-import co.edu.udes.backend.models.Question;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
