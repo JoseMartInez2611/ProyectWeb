@@ -3,7 +3,6 @@ package co.edu.udes.backend.mappers;
 import co.edu.udes.backend.dto.TeacherDTO;
 import co.edu.udes.backend.models.Career;
 import co.edu.udes.backend.models.Teacher;
-import co.edu.udes.backend.models.inheritance.ProfileU;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

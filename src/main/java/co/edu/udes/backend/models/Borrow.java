@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "borrow")
@@ -18,11 +19,11 @@ public class Borrow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "borrow_date", nullable = false, columnDefinition = "DATE")
-    private LocalDate borrowDate;
+    @Column(name = "borrow_date", nullable = false, columnDefinition = "TIMESTAMP")
+    private LocalDateTime borrowDate;
 
-    @Column(name = "return_date", nullable = false, columnDefinition = "DATE")
-    private LocalDate returnDate;
+    @Column(name = "return_date", nullable = false, columnDefinition = "TIMESTAMP")
+    private LocalDateTime returnDate;
 
     @Column(name = "duration", nullable = false, columnDefinition = "varchar(255)")
     private String duration;

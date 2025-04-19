@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -13,8 +13,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class BorrowDTO {
     private long id;
-    private LocalDate borrowDate;
-    private LocalDate returnDate;
+    private LocalDateTime borrowDate;
+    private LocalDateTime returnDate;
     private String duration;
     private long resourceId;
     private long petitionerId;
