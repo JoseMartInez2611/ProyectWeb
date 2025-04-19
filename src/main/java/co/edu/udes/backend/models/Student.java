@@ -44,6 +44,7 @@ public class Student extends ProfileU {
     )
     private Career career;
 
+    @ToString.Exclude
     @OneToMany(
             targetEntity = Attendance.class,
             fetch = FetchType.LAZY,
@@ -51,6 +52,7 @@ public class Student extends ProfileU {
     )
     private List<Attendance> attendance;
 
+    @ToString.Exclude
     @OneToMany(
             targetEntity = AcademicRegistration.class,
             fetch = FetchType.LAZY,

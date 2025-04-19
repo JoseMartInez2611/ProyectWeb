@@ -61,6 +61,7 @@ public class Course {
     @CollectionTable(name = "course_competences", joinColumns = @JoinColumn(name = "id_course"))
     private List<String> competences;
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
     private List<Career> careers;
 

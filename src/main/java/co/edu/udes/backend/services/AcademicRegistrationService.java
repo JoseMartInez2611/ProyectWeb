@@ -4,6 +4,7 @@ import co.edu.udes.backend.dto.AcademicRegistrationDTO;
 import co.edu.udes.backend.mappers.AcademicRegistrationMapper;
 import co.edu.udes.backend.models.*;
 import co.edu.udes.backend.repositories.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,7 @@ public class AcademicRegistrationService {
         validateSameCareer(academicRegistration.getStudent(), academicRegistration.getGroup());
         validatePrerequisites(academicRegistration.getStudent(), academicRegistration.getGroup());
         validateScheduleAvailability(academicRegistration.getStudent(), academicRegistration.getGroup());
+        validateGroupCapacity(academicRegistration.getGroup());
         return academicRegistrationMapper.toDto(academicRegistrationRepository.save(academicRegistration));
     }
 
@@ -66,18 +68,22 @@ public class AcademicRegistrationService {
         academicRegistrationRepository.deleteById(id);
     }
 
+    @Transactional
+    public void deleteByStudentIdAndGroupId(Long studentId, Long groupId) {
+        academicRegistrationRepository.findByStudentIdAndGroupId(studentId, groupId)
+                .orElseThrow(() -> new RuntimeException("Academic registration not found for student with id: " + studentId + " and group with id: " + groupId));
+        academicRegistrationRepository.deleteByStudentIdAndGroupId(studentId, groupId);
+    }
+
     private void validateScheduleAvailability(Student student, Group group){
         List<Lesson> lessons = lessonRepository.findByGroupId(group.getId());
-        System.out.println("Lessons: " + lessons);
 
         List<AcademicRegistration> currentRegistrations = academicRegistrationRepository.findByStudentId(student.getId());
-        System.out.println("Current Registrations: " + currentRegistrations);
 
         List<Long> currentGroupIds = currentRegistrations.stream()
                 .map(registration -> registration.getGroup().getId())
                 .toList();
         List<Lesson> currentLessons = lessonRepository.findByGroupIdIn(currentGroupIds);
-        System.out.println("Current Lessons: " + currentLessons);
 
         for (Lesson lesson : lessons) {
             Schedule schedule = lesson.getSchedule();
@@ -114,7 +120,7 @@ public class AcademicRegistrationService {
                 .orElseThrow(() -> new RuntimeException("Academic record not found for student with id: " + student.getId()));
 
         List<Long> approvedCourseIds = record.getFinalNotes().stream()
-                .filter(note -> note.getNote() >= 3.0)
+                .filter(note -> note.getTitle().equals("final") && note.getNote() >= 3.0)
                 .map(note -> note.getGroup().getCourse().getId())
                 .toList();
 
@@ -156,5 +162,24 @@ public class AcademicRegistrationService {
         if (!belongsToSameCareer) {
             throw new RuntimeException("The student does not belong to the same career as the group");
         }
+    }
+
+    private void validateGroupCapacity(Group group) {
+        List<Lesson> lessons = lessonRepository.findByGroupId(group.getId());
+
+        int minCapacity = lessons.stream()
+                .map(Lesson::getClassroom)
+                .mapToInt(Room::getCapacity)
+                .min()
+                .orElseThrow(
+                        () -> new RuntimeException("No classrooms found for lessons in group " + group.getId())
+                );
+
+        long currentRegistrations = academicRegistrationRepository.countByGroupId(group.getId());
+
+        if (currentRegistrations >= minCapacity) {
+            throw new RuntimeException("Group is full. Minimum classroom capacity reached: " + minCapacity);
+        }
+
     }
 }

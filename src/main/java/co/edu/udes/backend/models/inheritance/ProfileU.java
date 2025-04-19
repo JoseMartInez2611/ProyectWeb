@@ -42,6 +42,7 @@ public class ProfileU {
     @Column(name="password", columnDefinition = "VARCHAR(255)", nullable = false)
     private String password;
 
+    @ToString.Exclude
     @OneToMany(
             targetEntity = Message.class,
             fetch = FetchType.LAZY,
@@ -49,6 +50,7 @@ public class ProfileU {
     )
     private List<Message> message;
 
+    @ToString.Exclude
     @OneToMany(
             targetEntity = Report.class,
             fetch = FetchType.LAZY,
@@ -56,6 +58,7 @@ public class ProfileU {
     )
     private List<Report> report;
 
+    @ToString.Exclude
     @OneToMany(
             targetEntity = Borrow.class,
             fetch = FetchType.LAZY,
@@ -63,6 +66,7 @@ public class ProfileU {
     )
     private List<Borrow> borrow;
 
+    @ToString.Exclude
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "receivers")
     private List<Communication> communication;
 

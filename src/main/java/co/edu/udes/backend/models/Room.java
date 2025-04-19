@@ -30,6 +30,7 @@ public class Room {
     @Column(name = "building", nullable = false, columnDefinition = "char")
     private char building;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
     private List<AcademicResource> resources ;
 
