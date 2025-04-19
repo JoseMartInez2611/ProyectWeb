@@ -25,6 +25,7 @@ public class BorrowService {
     }
 
     public List<BorrowDTO> createMultiple(List<Borrow> list) {
+        getValidation(list);
         return borrowMapper.toDtoList(
                 borrowRepository.saveAll(list)
         );
@@ -50,5 +51,21 @@ public class BorrowService {
         borrowRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Borrow not found with id: " + id));
         borrowRepository.deleteById(id);
+    }
+
+    public void getValidation(List<Borrow> borrow){
+        for (int i = 0; i < borrow.size(); i++) {
+            available(borrow.get(i).getResource().getId());
+        }
+
+    }
+
+    public void available(Long id) {
+        Boolean available = borrowRepository.getAvailability(id);
+        String name= borrowRepository.getResouceName(id);
+        if (!available) {
+            throw new ResourceNotFoundException("The resouce "+name+" is not available ");
+        }
+
     }
 }

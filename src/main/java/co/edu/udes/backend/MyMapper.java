@@ -8,7 +8,4 @@ public interface MyMapper {
 
     MyMapper INSTANCE = Mappers.getMapper(MyMapper.class);
 
-    CarEntity toEntity(CarDTO carDTO);
-
-    CarDTO fromEntity(CarEntity entity);
 }
