@@ -55,7 +55,7 @@ public class AcademicResourceService {
 
     public void available(Long id) {
         Boolean available = academicResourceRepository.getAvailability(id);
-        String name= academicResourceRepository.getResouceName(id);
+        String name= academicResourceRepository.getResourceName(id);
         if (!available) {
             throw new ResourceNotFoundException("The resouce "+name+" is not available ");
         }
