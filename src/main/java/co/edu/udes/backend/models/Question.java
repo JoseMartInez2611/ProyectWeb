@@ -26,7 +26,8 @@ public class Question {
     private String answer;
 
     @ManyToOne(targetEntity = Exam.class)
-    @JoinColumn(name = "id_exam",
+    @JoinColumn(
+            name = "id_exam",
             nullable = false,
             columnDefinition = "BIGINT"
     )

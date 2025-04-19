@@ -27,4 +27,12 @@ public class Teacher extends ProfileU {
     )
     private List<Group> groups;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "teacher_career",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "career_id")
+    )
+    private List<Career> careers;
+
 }
