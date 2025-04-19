@@ -2,11 +2,8 @@ package co.edu.udes.backend.services;
 
 
 import co.edu.udes.backend.dto.BorrowDTO;
-import co.edu.udes.backend.dto.LessonDTO;
 import co.edu.udes.backend.mappers.BorrowMapper;
 import co.edu.udes.backend.models.Borrow;
-import co.edu.udes.backend.models.Lesson;
-import co.edu.udes.backend.models.Schedule;
 import co.edu.udes.backend.repositories.BorrowRepository;
 import co.edu.udes.backend.repositories.LessonRepository;
 import co.edu.udes.backend.repositories.ScheduleRepository;
