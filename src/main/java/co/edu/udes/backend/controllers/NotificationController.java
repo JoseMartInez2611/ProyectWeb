@@ -38,24 +38,22 @@ public class NotificationController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody List<NotificationDTO> dtos){
-        try{
-            List<Notification> entities = notificationMapper.toEntityList(dtos);
-            return ResponseEntity.ok(notificationService.createMultiple(entities));
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
+    public ResponseEntity<NotificationDTO> create(@RequestBody NotificationDTO notificationDTO) {
+        try {
+            NotificationDTO createdNotification = notificationService.create(notificationDTO);
+            return new ResponseEntity<>(createdNotification, HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null); // O un mensaje de error más específico
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody NotificationDTO dto) {
-        try{
-            Notification notification = notificationMapper.toEntity(dto);
-            return ResponseEntity.ok(notificationService.update(id, notification));
-        }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch(Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+    public ResponseEntity<NotificationDTO> update(@PathVariable Long id, @RequestBody NotificationDTO notificationDTO) {
+        try {
+            NotificationDTO updatedNotification = notificationService.update(id, notificationDTO);
+            return ResponseEntity.ok(updatedNotification);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // O badRequest si la data es inválida
         }
     }
 
@@ -66,6 +64,27 @@ public class NotificationController {
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    // modulos
+
+    // Endpoint para obtener las notificaciones recibidas por un usuario
+    /*
+     * Este endpoint permite obtener todas las notificaciones que han sido enviadas
+     * a un usuario específico, identificado por su ID.
+     *
+     * @param userId El ID del usuario del cual se quieren obtener las notificaciones recibidas.
+     * @return ResponseEntity con una lista de NotificationDTO si el usuario existe,
+     * o un estado NOT_FOUND (404) si el usuario no se encuentra.
+     */
+    @GetMapping("/received/user/{userId}")
+    public ResponseEntity<List<NotificationDTO>> getReceivedNotificationsByUser(@PathVariable Long userId) {
+        try {
+            List<NotificationDTO> receivedNotifications = notificationService.getReceivedByUserId(userId);
+            return ResponseEntity.ok(receivedNotifications);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // O un mensaje de error más específico
         }
     }
 }
