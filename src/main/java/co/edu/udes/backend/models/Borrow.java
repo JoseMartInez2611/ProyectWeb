@@ -19,7 +19,7 @@ public class Borrow {
     private Long id;
 
     @Column(name = "borrow_date", nullable = false, columnDefinition = "TIMESTAMP")
-    private LocalDateTime  borrowDate;
+    private LocalDateTime borrowDate;
 
     @Column(name = "return_date", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime returnDate;

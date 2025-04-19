@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class BorrowDTO {
     private long id;
     private LocalDateTime borrowDate;
-    private LocalDateTime  returnDate;
+    private LocalDateTime returnDate;
     private String duration;
     private long resourceId;
     private long petitionerId;
