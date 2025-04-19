@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,25 +30,61 @@ public class ScheduleService {
     }
 
     public ScheduleDTO create(Schedule schedule) {
+        validateUniqueSchedule(schedule, null);
+        validateDuration(schedule);
         return scheduleMapper.toDto(scheduleRepository.save(schedule));
     }
 
     public List<ScheduleDTO> createMultiple(List<Schedule> schedules) {
-        return scheduleMapper.toDtoList(
-                scheduleRepository.saveAll(schedules)
-        );
+        List<ScheduleDTO> newSchedules = new ArrayList<>();
+        for (Schedule schedule : schedules) {
+            newSchedules.add(create(schedule));
+        }
+        return newSchedules;
     }
 
     public ScheduleDTO update(Long id, Schedule schedule) {
-        scheduleRepository.findById(id)
+        Schedule existing = scheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Schedule not found with id: " + id));
-        schedule.setId(id);
-        return scheduleMapper.toDto(scheduleRepository.save(schedule));
+
+        validateUniqueSchedule(schedule, id);
+        validateDuration(schedule);
+
+        existing.setDayOfWeek(schedule.getDayOfWeek());
+        existing.setStartHour(schedule.getStartHour());
+        existing.setEndHour(schedule.getEndHour());
+
+        return scheduleMapper.toDto(scheduleRepository.save(existing));
     }
 
     public void delete(Long id) {
         scheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Schedule not found with id: " + id));
         scheduleRepository.deleteById(id);
+    }
+
+    private void validateDuration(Schedule schedule) {
+        if (schedule.getEndHour().isBefore(schedule.getStartHour().plusHours(2))) {
+            throw new RuntimeException("End hour must be at least 2 hours after start hour.");
+        }
+    }
+
+    private void validateUniqueSchedule(Schedule schedule, Long excludeId) {
+        List<Schedule> duplicates = scheduleRepository.findByDayOfWeekAndStartHourAndEndHour(
+                schedule.getDayOfWeek(),
+                schedule.getStartHour(),
+                schedule.getEndHour()
+        );
+
+        Schedule existingSchedule = duplicates.stream()
+                .filter(s -> excludeId == null || !s.getId().equals(excludeId))
+                .findFirst()
+                .orElse(null);
+
+        if (existingSchedule != null) {
+            throw new RuntimeException(
+                    "A schedule with the same day and hours already exists (ID: " + existingSchedule.getId() + ")."
+            );
+        }
     }
 }

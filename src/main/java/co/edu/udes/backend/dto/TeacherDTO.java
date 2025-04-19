@@ -17,5 +17,5 @@ public class TeacherDTO extends ProfileUDTO {
 
     private String speciality;
     private List<GroupDTO> groups;
-
+    private List<Long> careerIds;
 }

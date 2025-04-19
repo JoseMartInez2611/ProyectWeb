@@ -50,4 +50,6 @@ public class AcademicRecordService {
                 .orElseThrow(() -> new RuntimeException("Academic record not found with id: " + id));
         academicRecordRepository.deleteById(id);
     }
+
+
 }

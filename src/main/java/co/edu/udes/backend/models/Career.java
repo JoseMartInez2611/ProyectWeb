@@ -56,13 +56,16 @@ public class Career {
     )
     private String type;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Course.class)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "career_courses",
             joinColumns = @JoinColumn(name = "id_career"),
             inverseJoinColumns = @JoinColumn(name = "id_course")
     )
     private List<Course> courses;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "careers")
+    private List<Teacher> teachers;
 
     public void addCourse(Course course) {
         if (!courses.contains(course)) {
