@@ -4,7 +4,6 @@ import co.edu.udes.backend.models.inheritance.ProfileU;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
