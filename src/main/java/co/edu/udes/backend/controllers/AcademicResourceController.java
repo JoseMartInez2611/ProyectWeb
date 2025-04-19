@@ -38,6 +38,7 @@ public class AcademicResourceController {
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody List<AcademicResourceDTO> dtos){
+        System.out.println(dtos);
         try{
             List<AcademicResource> entities = academicResourceMapper.toEntityList(dtos);
             return ResponseEntity.ok(academicResourceService.createMultiple(entities));

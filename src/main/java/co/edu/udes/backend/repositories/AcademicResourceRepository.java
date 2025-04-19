@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AcademicResourceRepository extends JpaRepository<AcademicResource, Long> {
+
+    Boolean getAvailability(Long id);
+
+    String getResouceName(Long id);
 }

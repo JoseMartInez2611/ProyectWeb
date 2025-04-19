@@ -2,43 +2,64 @@ package co.edu.udes.backend.services;
 
 
 import co.edu.udes.backend.dto.BorrowDTO;
+import co.edu.udes.backend.dto.LessonDTO;
 import co.edu.udes.backend.mappers.BorrowMapper;
 import co.edu.udes.backend.models.Borrow;
+import co.edu.udes.backend.models.Lesson;
+import co.edu.udes.backend.models.Schedule;
 import co.edu.udes.backend.repositories.BorrowRepository;
+import co.edu.udes.backend.repositories.LessonRepository;
+import co.edu.udes.backend.repositories.ScheduleRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class BorrowService {
 
-    private final BorrowRepository borrowRepository;
     @Autowired
     private BorrowMapper borrowMapper;
+    private final ScheduleRepository scheduleRepository;
+    private final BorrowRepository borrowRepository;
+    private final LessonRepository lessonRepository;
 
     public List<BorrowDTO> getAll() {
         List<Borrow> borrows = borrowRepository.findAll();
         return borrowMapper.toDtoList(borrows);
     }
 
-    public List<BorrowDTO> createMultiple(List<Borrow> list) {
-        getValidation(list);
-        return borrowMapper.toDtoList(
-                borrowRepository.saveAll(list)
-        );
+
+    public BorrowDTO create(Borrow borrow) {
+        isBorrowed(borrow, null);
+        return borrowMapper.toDto(borrowRepository.save(borrow));
     }
+
+    public List<BorrowDTO> createMultiple(List<Borrow> borrows) {
+        List<BorrowDTO> newBorrow = new ArrayList<>();
+        for (Borrow borrow : borrows) {
+            newBorrow.add(create(borrow));
+        }
+        return newBorrow;
+    }
+
+
+//    public List<BorrowDTO> createMultiple(List<Borrow> list) {
+//        getValidation(list);
+//        return borrowMapper.toDtoList(
+//                borrowRepository.saveAll(list)
+//        );
+//    }
 
     public BorrowDTO getById(Long id) {
         return borrowMapper.toDto(borrowRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Borrow not found with id: " + id)));
     }
 
-    public BorrowDTO create(Borrow borrow) {
-        return borrowMapper.toDto(borrowRepository.save(borrow));
-    }
 
     public BorrowDTO update(Long id, Borrow borrow) {
         borrowRepository.findById(id)
@@ -53,19 +74,27 @@ public class BorrowService {
         borrowRepository.deleteById(id);
     }
 
-    public void getValidation(List<Borrow> borrow){
-        for (int i = 0; i < borrow.size(); i++) {
-            available(borrow.get(i).getResource().getId());
-        }
 
+    //Recive el objeto lesson y el ID para actualizar
+    public void isBorrowed(Borrow borrow, Long excludeId) {
+
+        List<Borrow> borrows = borrowRepository.findAllByResource_Id(borrow.getResource().getId());
+
+        for (Borrow existingBorrow : borrows) {
+            if (excludeId != null && existingBorrow.getId().equals(excludeId)) {
+                continue;
+            }
+
+
+            boolean startsBefore = borrow.getBorrowDate().isBefore(existingBorrow.getReturnDate());
+            boolean endsAfter = borrow.getReturnDate().isAfter(existingBorrow.getBorrowDate());
+
+            if (startsBefore && endsAfter) {
+                throw new RuntimeException(
+                        "The resource is already borrowed by another student."
+                );
+            }
+        }
     }
 
-    public void available(Long id) {
-        Boolean available = borrowRepository.getAvailability(id);
-        String name= borrowRepository.getResouceName(id);
-        if (!available) {
-            throw new ResourceNotFoundException("The resouce "+name+" is not available ");
-        }
-
-    }
 }

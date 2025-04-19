@@ -39,6 +39,7 @@ public class RoomController {
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody List<RoomDTO> dtos){
+
         try{
             List<Room> entities = roomMapper.toEntityList(dtos);
             return ResponseEntity.ok(roomService.createMultiple(entities));
