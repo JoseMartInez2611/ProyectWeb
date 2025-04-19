@@ -37,8 +37,6 @@ public class BorrowService {
 
 
     public BorrowDTO create(Borrow borrow) {
-        System.out.println("Service Create");
-        System.out.println(borrow);
         isBorrowed(borrow, null);
         return borrowMapper.toDto(borrowRepository.save(borrow));
     }
@@ -123,20 +121,14 @@ public class BorrowService {
 
 
 
-
     //Recive el objeto lesson y el ID para actualizar
     public void isBorrowed(Borrow borrow, Long excludeId) {
-        System.out.println("IsBorrowed");
-        System.out.println(borrow);
 
         List<Borrow> borrows = borrowRepository.findAllByResource_Id(borrow.getResource().getId());
 
         String dato = academicResourceRepository.getCategory(borrow.getResource().getId());
 
-        System.out.println(dato);
-
         if(dato.equals("Salon")){
-            System.out.println("Es salon?");
             validateRoomAvailability(borrow);
         }
 
