@@ -2,7 +2,6 @@ package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.MessageDTO;
 import co.edu.udes.backend.mappers.MessageMapper;
-import co.edu.udes.backend.models.Message;
 import co.edu.udes.backend.services.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,25 +37,22 @@ public class MessageController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody List<MessageDTO> dtos){
-        try{
-            System.out.println(dtos);
-            List<Message> entities = messageMapper.toEntityList(dtos);
-            return ResponseEntity.ok(messageService.createMultiple(entities));
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
+    public ResponseEntity<MessageDTO> create(@RequestBody MessageDTO messageDTO) {
+        try {
+            MessageDTO createdMessage = messageService.create(messageDTO);
+            return new ResponseEntity<>(createdMessage, HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null); // O un mensaje de error más específico
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody MessageDTO dto) {
-        try{
-            Message message = messageMapper.toEntity(dto);
-            return ResponseEntity.ok(messageService.update(id, message));
-        }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch(Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending");
+    public ResponseEntity<MessageDTO> update(@PathVariable Long id, @RequestBody MessageDTO messageDTO) {
+        try {
+            MessageDTO updatedMessage = messageService.update(id, messageDTO);
+            return ResponseEntity.ok(updatedMessage);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // O badRequest si la data es inválida
         }
     }
 
@@ -67,6 +63,46 @@ public class MessageController {
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    // modulos
+
+    // Endpoint para obtener los mensajes recibidos por un usuario
+    /*
+     * Este endpoint permite obtener todos los mensajes que han sido enviados
+     * a un usuario específico, identificado por su ID.
+     *
+     * @param userId El ID del usuario del cual se quieren obtener los mensajes recibidos.
+     * @return ResponseEntity con una lista de MessageDTO si el usuario existe,
+     * o un estado NOT_FOUND (404) si el usuario no se encuentra.
+     */
+    @GetMapping("/received/user/{userId}")
+    public ResponseEntity<List<MessageDTO>> getReceivedMessagesByUser(@PathVariable Long userId) {
+        try {
+            List<MessageDTO> receivedMessages = messageService.getReceivedByUserId(userId);
+            return ResponseEntity.ok(receivedMessages);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // O un mensaje de error más específico
+        }
+    }
+
+    // Endpoint para obtener los mensajes enviados por un usuario
+    /*
+     * Este endpoint permite obtener todos los mensajes que han sido enviados
+     * por un usuario específico, identificado por su ID.
+     *
+     * @param userId El ID del usuario del cual se quieren obtener los mensajes enviados.
+     * @return ResponseEntity con una lista de MessageDTO si el usuario existe,
+     * o un estado NOT_FOUND (404) si el usuario no se encuentra.
+     */
+    @GetMapping("/sent/user/{userId}")
+    public ResponseEntity<List<MessageDTO>> getSentMessagesByUser(@PathVariable Long userId) {
+        try {
+            List<MessageDTO> sentMessages = messageService.getSentByUserId(userId);
+            return ResponseEntity.ok(sentMessages);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // O un mensaje de error más específico
         }
     }
 }
