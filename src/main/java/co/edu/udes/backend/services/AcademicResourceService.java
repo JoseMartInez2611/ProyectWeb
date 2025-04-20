@@ -52,4 +52,13 @@ public class AcademicResourceService {
                 .orElseThrow(() -> new ResourceNotFoundException("Academic resource not found with id: " + id));
         academicResourceRepository.deleteById(id);
     }
+
+    public void available(Long id) {
+        Boolean available = academicResourceRepository.getAvailability(id);
+        String name= academicResourceRepository.getResourceName(id);
+        if (!available) {
+            throw new ResourceNotFoundException("The resouce "+name+" is not available ");
+        }
+    }
+
 }

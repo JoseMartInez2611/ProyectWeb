@@ -43,7 +43,7 @@ public class BorrowController {
             List<Borrow> entities = borrowMapper.toEntityList(dtos);
             return ResponseEntity.ok(borrowService.createMultiple(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
