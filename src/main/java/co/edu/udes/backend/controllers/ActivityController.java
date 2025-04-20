@@ -48,7 +48,6 @@ public class ActivityController {
         }
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ActivityDTO dto) {
         try{
@@ -71,5 +70,9 @@ public class ActivityController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    // modulos
+
+
 
 }
