@@ -55,7 +55,6 @@ public class AttendanceService {
                 .orElseThrow(() -> new ResourceNotFoundException("Attendance not found with id: " + id));
 
         verifyAttendanceUpdate(existing, attendance);
-        System.out.println("Attendance to update: " + attendance);
         attendance.setId(id);
         return attendanceMapper.toDto(attendanceRepository.save(attendance));
     }

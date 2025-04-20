@@ -2,13 +2,16 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.StudentDTO;
 import co.edu.udes.backend.mappers.StudentMapper;
+import co.edu.udes.backend.models.AcademicRecord;
 import co.edu.udes.backend.models.Student;
+import co.edu.udes.backend.repositories.AcademicRecordRepository;
 import co.edu.udes.backend.repositories.StudentRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,6 +19,7 @@ import java.util.List;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final AcademicRecordRepository academicRecordRepository;
     @Autowired
     private StudentMapper studentMapper;
 
@@ -30,15 +34,22 @@ public class StudentService {
     }
 
     public StudentDTO create(Student student) {
-        System.out.println(student);
-        return studentMapper.toDto(studentRepository.save(student));
+        Student newStudent = studentRepository.save(student);
 
+        AcademicRecord academicRecord = new AcademicRecord();
+        academicRecord.setStudent(newStudent);
+        academicRecord.setAcademicAverage(0);
+        academicRecordRepository.save(academicRecord);
+
+        return studentMapper.toDto(newStudent);
     }
 
     public List<StudentDTO> createMultiple(List<Student> users) {
-        return studentMapper.toDtoList(
-                studentRepository.saveAll(users)
-        );
+        List<StudentDTO> savedStudents = new ArrayList<>();
+        for (Student student : users) {
+            savedStudents.add(create(student));
+        }
+        return savedStudents;
     }
 
     public StudentDTO update(Long id, Student student) {
