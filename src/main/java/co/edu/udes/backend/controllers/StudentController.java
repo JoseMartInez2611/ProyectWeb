@@ -71,4 +71,13 @@ public class StudentController {
         }
     }
 
+    @GetMapping("/{id}/schedule")
+    public ResponseEntity<?> getSchedule(@PathVariable Long id) {
+        try{
+            return ResponseEntity.ok(studentService.getSchedule(id));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
 }
