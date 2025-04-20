@@ -16,6 +16,6 @@ public class AttendanceDTO {
     private long id;
     private long lessonId;
     private long studentId;
-    private boolean assistance;
+    private boolean attended;
     private LocalDate date;
 }

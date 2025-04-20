@@ -34,7 +34,7 @@ public class Attendance {
             nullable = false,
             columnDefinition = "BOOLEAN DEFAULT FALSE"
     )
-    private boolean assistance;
+    private boolean attended;
 
     @Column(name = "date",
             nullable = false,

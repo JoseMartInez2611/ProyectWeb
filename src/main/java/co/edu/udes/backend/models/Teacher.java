@@ -20,6 +20,7 @@ public class Teacher extends ProfileU {
     @Column(name = "speciality", columnDefinition = "VARCHAR(255)", nullable = false)
     private String speciality;
 
+    @ToString.Exclude
     @OneToMany(
             targetEntity = Group.class,
             fetch = FetchType.LAZY,
@@ -27,6 +28,7 @@ public class Teacher extends ProfileU {
     )
     private List<Group> groups;
 
+    @ToString.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "teacher_career",

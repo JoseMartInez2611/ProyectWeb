@@ -1,14 +1,20 @@
 package co.edu.udes.backend.services;
 
+import co.edu.udes.backend.dto.ScheduleInfoDTO;
 import co.edu.udes.backend.dto.StudentDTO;
 import co.edu.udes.backend.mappers.StudentMapper;
-import co.edu.udes.backend.models.Student;
+import co.edu.udes.backend.models.*;
+import co.edu.udes.backend.repositories.AcademicRecordRepository;
+import co.edu.udes.backend.repositories.AcademicRegistrationRepository;
+import co.edu.udes.backend.repositories.LessonRepository;
 import co.edu.udes.backend.repositories.StudentRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -16,8 +22,14 @@ import java.util.List;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final AcademicRecordRepository academicRecordRepository;
+    private final AcademicRegistrationRepository academicRegistrationRepository;
+    private final LessonRepository lessonRepository;
     @Autowired
     private StudentMapper studentMapper;
+    private static final List<String> DAY_ORDER = List.of(
+            "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"
+    );
 
     public List<StudentDTO> getAll() {
         List<Student> students = studentRepository.findAll();
@@ -30,15 +42,22 @@ public class StudentService {
     }
 
     public StudentDTO create(Student student) {
-        System.out.println(student);
-        return studentMapper.toDto(studentRepository.save(student));
+        Student newStudent = studentRepository.save(student);
 
+        AcademicRecord academicRecord = new AcademicRecord();
+        academicRecord.setStudent(newStudent);
+        academicRecord.setAcademicAverage(0);
+        academicRecordRepository.save(academicRecord);
+
+        return studentMapper.toDto(newStudent);
     }
 
     public List<StudentDTO> createMultiple(List<Student> users) {
-        return studentMapper.toDtoList(
-                studentRepository.saveAll(users)
-        );
+        List<StudentDTO> savedStudents = new ArrayList<>();
+        for (Student student : users) {
+            savedStudents.add(create(student));
+        }
+        return savedStudents;
     }
 
     public StudentDTO update(Long id, Student student) {
@@ -53,5 +72,40 @@ public class StudentService {
         studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
         studentRepository.deleteById(id);
+    }
+
+    public List<ScheduleInfoDTO> getSchedule(Long id) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
+
+        List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findByStudentId(id);
+        List<ScheduleInfoDTO> scheduleInfoDTOList = new ArrayList<>();
+
+        for (AcademicRegistration academicRegistration : academicRegistrations) {
+            Group group = academicRegistration.getGroup();
+            Course course = group.getCourse();
+            List<Lesson> lessons = lessonRepository.findByGroupId(group.getId());
+
+            for (Lesson lesson : lessons) {
+                Schedule schedule = lesson.getSchedule();
+                Room room = lesson.getClassroom();
+
+                ScheduleInfoDTO scheduleInfoDTO = new ScheduleInfoDTO();
+                scheduleInfoDTO.setCourseName(course.getName());
+                scheduleInfoDTO.setRoomCode(room.getBuilding() + "-" + room.getFloor() + room.getNumber());
+                scheduleInfoDTO.setDay(schedule.getDayOfWeek().getDay());
+                scheduleInfoDTO.setStartTime(schedule.getStartHour());
+                scheduleInfoDTO.setEndTime(schedule.getEndHour());
+
+                scheduleInfoDTOList.add(scheduleInfoDTO);
+            }
+        }
+
+        scheduleInfoDTOList.sort(Comparator
+                .comparing((ScheduleInfoDTO dto) -> DAY_ORDER.indexOf(dto.getDay()))
+                .thenComparing(ScheduleInfoDTO::getStartTime)
+        );
+
+        return scheduleInfoDTOList;
     }
 }
