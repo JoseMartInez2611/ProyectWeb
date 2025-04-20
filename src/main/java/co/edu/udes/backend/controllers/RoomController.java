@@ -37,8 +37,19 @@ public class RoomController {
         }
     }
 
+    //get room schedule by Room Id
+    @GetMapping("/roomSchedule/{id}")
+    public ResponseEntity<?> getRoomSchedule(@PathVariable Long id) {
+        try{
+            return ResponseEntity.ok().body(roomService.getAllRoomSchedule(id));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> create(@RequestBody List<RoomDTO> dtos){
+
         try{
             List<Room> entities = roomMapper.toEntityList(dtos);
             return ResponseEntity.ok(roomService.createMultiple(entities));

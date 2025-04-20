@@ -48,6 +48,7 @@ public class FinalNoteController {
         }
     }
 
+    //Get the group performance by group id
     @GetMapping("/group-average/{id}")
     public ResponseEntity<?> getGroupPerformance(@PathVariable Long id) {
         try{
