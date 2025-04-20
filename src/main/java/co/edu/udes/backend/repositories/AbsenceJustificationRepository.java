@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AbsenceJustificationRepository extends JpaRepository<AbsenceJustification, Long> {
-    // Define any custom query methods if needed
+    boolean existsByAttendanceId(Long attendanceId);
 }

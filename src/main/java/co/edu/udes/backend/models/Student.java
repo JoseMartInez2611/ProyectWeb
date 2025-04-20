@@ -59,4 +59,8 @@ public class Student extends ProfileU {
             mappedBy = "student"
     )
     private List<AcademicRegistration> academicRegistration;
+
+    public String getFullName() {
+        return this.getFirstName() + " " + this.getLastName();
+    }
 }
