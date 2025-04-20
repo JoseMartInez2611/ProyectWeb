@@ -5,10 +5,12 @@ import co.edu.udes.backend.dto.inheritanceDTO.EvaluationDTO;
 import co.edu.udes.backend.mappers.EvaluationMapper;
 import co.edu.udes.backend.mappers.TeacherMapper;
 import co.edu.udes.backend.models.Group;
+import co.edu.udes.backend.models.Lesson;
 import co.edu.udes.backend.models.Teacher;
 import co.edu.udes.backend.models.inheritance.Evaluation;
 import co.edu.udes.backend.repositories.EvaluationRepository;
 import co.edu.udes.backend.repositories.GroupRepository;
+import co.edu.udes.backend.repositories.LessonRepository;
 import co.edu.udes.backend.repositories.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ public class TeacherService {
     private final TeacherRepository teacherRepository; // Repositorio para acceder a los datos de los docentes
     private final GroupRepository groupRepository; // Repositorio para acceder a los datos de los grupos
     private final EvaluationRepository evaluationRepository; // Repositorio para acceder a los datos de las evaluaciones
+    private final LessonRepository lessonRepository;
     @Autowired
     private TeacherMapper teacherMapper; // Mapper para convertir entre la entidad Teacher y el DTO TeacherDTO
     @Autowired
@@ -103,83 +106,119 @@ public class TeacherService {
     // moduló de Asignación de cursos
 
     /**
-     * Asigna un grupo (curso) a un docente.
-     *
-     * @param teacherId El ID del docente al que se asignará el grupo.
-     * @param groupId   El ID del grupo (curso) a asignar.
-     * @return El TeacherDTO del docente actualizado con la asignación.
-     * @throws RuntimeException Si no se encuentra el docente o el grupo con los IDs proporcionados.
+     * Asigna un grupo a un docente, verificando la carrera y el horario.
+     * @param teacherId ID del docente.
+     * @param groupId ID del grupo.
+     * @return TeacherDTO del docente actualizado.
+     * @throws RuntimeException Si no se encuentra el docente o el grupo,
+     * si la carrera del docente no es adecuada o si hay conflicto de horario.
      */
-    @Transactional // Asegura que la operación sea atómica
+    @Transactional
     public TeacherDTO assignGroup(Long teacherId, Long groupId) {
         Teacher teacher = teacherRepository.findById(teacherId)
-                .orElseThrow(() -> new RuntimeException("Teacher not found with id: " + teacherId));
+                .orElseThrow(() -> new RuntimeException("Docente no encontrado con el ID: " + teacherId));
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new RuntimeException("Group not found with id: " + groupId));
+                .orElseThrow(() -> new RuntimeException("Grupo no encontrado con el ID: " + groupId));
+
+        // Verificar que la carrera del profesor sea adecuada para el grupo
+        if (group.getCourse() != null && teacher.getCareers() != null) {
+            boolean careerMatch = teacher.getCareers().stream()
+                    .anyMatch(career -> group.getCourse().getCareers().contains(career));
+            if (!careerMatch) {
+                throw new RuntimeException("La carrera del docente no es adecuada para este grupo.");
+            }
+        }
+
+        // Verificar que el horario del docente no se solape con el horario del grupo
+        if (isScheduleConflict(teacher, group)) {
+            throw new RuntimeException("El horario del docente se solapa con el horario del grupo.");
+        }
 
         // Asignar el grupo al docente
         group.setTeacher(teacher);
         groupRepository.save(group);
 
-        // Recargar el docente para reflejar los cambios en la lista de grupos (si la necesitas actualizada inmediatamente)
-        Teacher updatedTeacher = teacherRepository.findById(teacherId).orElseThrow(() -> new RuntimeException("Error reloading teacher"));
-        return teacherMapper.toDto(updatedTeacher);
+        return teacherMapper.toDto(teacher);
     }
 
     /**
-     * Desasigna un grupo (curso) de un docente.
+     * Verifica si existe un conflicto de horario entre un docente y un grupo,
+     * comparando las lecciones del grupo a asignar con las lecciones de los grupos ya asignados al docente.
      *
-     * @param teacherId El ID del docente del que se desasignará el grupo.
-     * @param groupId   El ID del grupo (curso) a desasignar.
-     * @return El TeacherDTO del docente actualizado con la desasignación.
-     * @throws RuntimeException Si no se encuentra el docente o el grupo con los IDs proporcionados,
-     *                          o si el grupo no está asignado al docente.
+     * @param teacher El docente al que se intenta asignar el grupo.
+     * @param group   El grupo que se intenta asignar al docente.
+     * @return true si hay conflicto de horario, false de lo contrario.
+     */
+    private boolean isScheduleConflict(Teacher teacher, Group group) {
+        List<Lesson> newGroupLessons = lessonRepository.findByGroupId(group.getId());
+
+        if (teacher.getGroups() == null || teacher.getGroups().isEmpty() || newGroupLessons.isEmpty()) {
+            return false; // El profesor no tiene grupos asignados o el nuevo grupo no tiene lecciones
+        }
+
+        for (Group existingGroup : teacher.getGroups()) {
+            List<Lesson> existingGroupLessons = lessonRepository.findByGroupId(existingGroup.getId());
+            for (Lesson existingLesson : existingGroupLessons) {
+                for (Lesson newLesson : newGroupLessons) {
+                    if (existingLesson.getSchedule() != null && newLesson.getSchedule() != null) {
+                        if (existingLesson.getSchedule().getDayOfWeek().getId()
+                                .equals(newLesson.getSchedule().getDayOfWeek().getId())) {
+                            // Verificar si los intervalos de tiempo se solapan
+                            if (existingLesson.getSchedule().getStartHour()
+                                    .isBefore(newLesson.getSchedule().getEndHour()) &&
+                                    newLesson.getSchedule().getStartHour()
+                                            .isBefore(existingLesson.getSchedule().getEndHour())) {
+                                return true; // Solapamiento encontrado
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false; // No hay solapamiento de horarios
+    }
+
+    /**
+     * Desasigna un grupo de un docente.
+     * @param teacherId ID del docente.
+     * @param groupId ID del grupo.
+     * @return TeacherDTO del docente actualizado.
+     * @throws RuntimeException Si no se encuentra el docente o el grupo,
+     * o si el grupo no está asignado al docente.
      */
     @Transactional
     public TeacherDTO unassignGroup(Long teacherId, Long groupId) {
         Teacher teacherToUnassignFrom = teacherRepository.findById(teacherId)
-                .orElseThrow(() -> new RuntimeException("Teacher not found with id: " + teacherId));
+                .orElseThrow(() -> new RuntimeException("Docente no encontrado con el ID: " + teacherId));
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new RuntimeException("Group not found with id: " + groupId));
+                .orElseThrow(() -> new RuntimeException("Grupo no encontrado con el ID: " + groupId));
 
         if (group.getTeacher() != null && group.getTeacher().getId() == teacherId) {
-            // Buscar el teacher con ID 101 para la desasignación
             Teacher defaultTeacher = teacherRepository.findById(101L)
-                    .orElseThrow(() -> new RuntimeException("Default teacher with id: 101 not found. Cannot unassign."));
-
-            // Asignar el grupo al teacher por defecto
+                    .orElseThrow(() -> new RuntimeException("Docente por defecto con ID: 101 no encontrado. No se puede desasignar."));
             group.setTeacher(defaultTeacher);
             groupRepository.save(group);
-
-            // Recargar el docente original para reflejar los cambios (si es necesario inmediatamente)
-            Teacher updatedTeacher = teacherRepository.findById(teacherId).orElseThrow(() -> new RuntimeException("Error reloading teacher"));
-            return teacherMapper.toDto(updatedTeacher);
+            return teacherMapper.toDto(teacherToUnassignFrom);
         } else {
-            throw new RuntimeException("Group with id: " + groupId + " is not assigned to teacher with id: " + teacherId);
+            throw new RuntimeException("El grupo con ID: " + groupId + " no está asignado al docente con ID: " + teacherId);
         }
     }
 
     /**
-     * Obtiene todas las evaluaciones asociadas a los grupos de un docente.
-     *
-     * @param teacherId El ID del docente del que se quieren obtener las evaluaciones.
-     * @return Una lista de EvaluationDTO con las evaluaciones de los grupos del docente.
-     * @throws RuntimeException Si no se encuentra el docente con el ID proporcionado.
+     * Obtiene las evaluaciones de los grupos de un docente.
+     * @param teacherId ID del docente.
+     * @return Lista de EvaluationDTO.
+     * @throws RuntimeException Si no se encuentra el docente.
      */
     public List<EvaluationDTO> getTeacherEvaluations(Long teacherId) {
         Teacher teacher = teacherRepository.findById(teacherId)
-                .orElseThrow(() -> new RuntimeException("Teacher not found with id: " + teacherId));
-
-        List<Group> groups = teacher.getGroups(); // Obtiene los grupos asociados al docente
+                .orElseThrow(() -> new RuntimeException("Docente no encontrado con el ID: " + teacherId));
+        List<Group> groups = teacher.getGroups();
         List<Evaluation> evaluations = new ArrayList<>();
-
         for (Group group : groups) {
-            // Busca las evaluaciones asociadas a cada grupo
             List<Evaluation> groupEvaluations = evaluationRepository.findByGroup(group);
             evaluations.addAll(groupEvaluations);
         }
-
         return evaluationMapper.toDtoList(evaluations);
     }
-
 }

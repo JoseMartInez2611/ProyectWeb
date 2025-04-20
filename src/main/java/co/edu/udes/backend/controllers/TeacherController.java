@@ -109,6 +109,7 @@ public class TeacherController {
      * @param teacherId El ID del docente al que se asignará el grupo (viene en la ruta).
      * @param groupId   El ID del grupo (curso) a asignar (viene en la ruta).
      * @return ResponseEntity con el TeacherDTO actualizado y estado OK (200) si la asignación fue exitosa,
+     * o estado BAD_REQUEST (400) si ocurre un error durante la asignación (ej: carrera no adecuada, solapamiento de horario),
      * o estado NOT_FOUND (404) si no se encuentra el docente o el grupo.
      */
     @PostMapping("/{teacherId}/groups/{groupId}")
@@ -116,7 +117,8 @@ public class TeacherController {
         try {
             return ResponseEntity.ok(teacherService.assignGroup(teacherId, groupId));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            // Capturamos la excepción lanzada por el servicio (carrera no adecuada o solapamiento de horario)
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -126,15 +128,15 @@ public class TeacherController {
      * @param teacherId El ID del docente del que se desasignará el grupo (viene en la ruta).
      * @param groupId   El ID del grupo (curso) a desasignar (viene en la ruta).
      * @return ResponseEntity con el TeacherDTO actualizado y estado OK (200) si la desasignación fue exitosa,
-     * o estado NOT_FOUND (404) si no se encuentra el docente o el grupo,
-     * o si el grupo no está asignado al docente.
+     * o estado BAD_REQUEST (400) si el grupo no está asignado al docente,
+     * o estado NOT_FOUND (404) si no se encuentra el docente o el grupo.
      */
     @DeleteMapping("/{teacherId}/groups/{groupId}")
     public ResponseEntity<?> unassignGroup(@PathVariable Long teacherId, @PathVariable Long groupId) {
         try {
             return ResponseEntity.ok(teacherService.unassignGroup(teacherId, groupId));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
