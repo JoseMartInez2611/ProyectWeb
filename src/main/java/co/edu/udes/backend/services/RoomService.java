@@ -5,6 +5,7 @@ import co.edu.udes.backend.dto.RoomDTO;
 import co.edu.udes.backend.mappers.RoomMapper;
 import co.edu.udes.backend.models.AcademicResource;
 import co.edu.udes.backend.models.Room;
+import co.edu.udes.backend.repositories.LessonRepository;
 import co.edu.udes.backend.repositories.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class RoomService {
 
 
     private final AcademicResourceService academicResourceService;
-
+    private final LessonRepository lessonRepository;
     private final RoomRepository roomRepository;
     @Autowired
     private RoomMapper roomMapper;
@@ -65,6 +66,9 @@ public class RoomService {
         roomRepository.deleteById(id);
     }
 
+    public List<String> getAllRoomSchedule(long id){
+        return lessonRepository.getSchedulesByRoomIdFromLesson(id);
+    }
 
     public void roomToResource(Room room){
 

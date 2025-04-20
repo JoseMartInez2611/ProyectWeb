@@ -17,4 +17,11 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     @Query("SELECT l FROM Lesson l WHERE l.classroom = :room")
     List<Lesson> findByClassroom(@Param("room") Room room);
+
+    @Query("""
+        SELECT CONCAT(l.schedule.startHour, ' - ', l.schedule.endHour)
+        FROM Lesson l
+        WHERE l.classroom.id = :id
+        """)
+    List<String> getSchedulesByRoomIdFromLesson(@Param("id") Long id);
 }
