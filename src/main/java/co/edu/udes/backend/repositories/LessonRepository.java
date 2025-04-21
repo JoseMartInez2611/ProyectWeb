@@ -3,6 +3,7 @@ package co.edu.udes.backend.repositories;
 import co.edu.udes.backend.models.DayOfWeek;
 import co.edu.udes.backend.models.Lesson;
 import co.edu.udes.backend.models.Room;
+import co.edu.udes.backend.models.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,4 +24,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     @Query("SELECT l.schedule.id FROM Lesson l WHERE l.group.id = :groupId")
     List<Long> findScheduleIdsByGroupId(@Param("groupId") Long groupId);
 
+    @Query("SELECT DISTINCT l.schedule FROM Lesson l WHERE l.group.teacher.id = :teacherId")
+    List<Schedule> findSchedulesByTeacherId(@Param("teacherId") Long teacherId);
 }

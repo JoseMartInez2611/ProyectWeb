@@ -1,5 +1,6 @@
 package co.edu.udes.backend.controllers;
 
+import co.edu.udes.backend.dto.ScheduleDTO;
 import co.edu.udes.backend.dto.TeacherDTO;
 import co.edu.udes.backend.mappers.TeacherMapper;
 import co.edu.udes.backend.models.Teacher;
@@ -154,6 +155,12 @@ public class TeacherController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/{teacherId}/schedules")
+    public ResponseEntity<List<ScheduleDTO>> getTeacherSchedules(@PathVariable Long teacherId) {
+        List<ScheduleDTO> schedules = teacherService.getTeacherSchedules(teacherId);
+        return ResponseEntity.ok(schedules);
     }
 
 }

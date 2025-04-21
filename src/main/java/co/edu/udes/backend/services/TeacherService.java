@@ -1,11 +1,14 @@
 package co.edu.udes.backend.services;
 
+import co.edu.udes.backend.dto.ScheduleDTO;
 import co.edu.udes.backend.dto.TeacherDTO;
 import co.edu.udes.backend.dto.inheritanceDTO.EvaluationDTO;
 import co.edu.udes.backend.mappers.EvaluationMapper;
+import co.edu.udes.backend.mappers.ScheduleMapper;
 import co.edu.udes.backend.mappers.TeacherMapper;
 import co.edu.udes.backend.models.Group;
 import co.edu.udes.backend.models.Lesson;
+import co.edu.udes.backend.models.Schedule;
 import co.edu.udes.backend.models.Teacher;
 import co.edu.udes.backend.models.inheritance.Evaluation;
 import co.edu.udes.backend.repositories.EvaluationRepository;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +36,8 @@ public class TeacherService {
     private TeacherMapper teacherMapper; // Mapper para convertir entre la entidad Teacher y el DTO TeacherDTO
     @Autowired
     private final EvaluationMapper evaluationMapper; // Mapper para convertir entre la entidad Evaluation y el DTO EvaluationDTO
-
+    @Autowired
+    private final ScheduleMapper scheduleMapper;
 
     /**
      * Obtiene todos los docentes.
@@ -220,5 +225,15 @@ public class TeacherService {
             evaluations.addAll(groupEvaluations);
         }
         return evaluationMapper.toDtoList(evaluations);
+    }
+
+    public List<ScheduleDTO> getTeacherSchedules(Long teacherId) {
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new RuntimeException("Docente no encontrado con el ID: " + teacherId));
+
+        List<Schedule> schedules = lessonRepository.findSchedulesByTeacherId(teacherId);
+        return schedules.stream()
+                .map(scheduleMapper::toDto)
+                .collect(Collectors.toList());
     }
 }
