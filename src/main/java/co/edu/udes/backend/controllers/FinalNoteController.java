@@ -72,7 +72,7 @@ public class FinalNoteController {
 
     // get final note by id
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(Long id) {
+    public ResponseEntity<?> getById(@PathVariable Long id) {
         try{
             return ResponseEntity.ok().body(finalNoteService.getById(id));
         }catch (RuntimeException e){
@@ -82,7 +82,7 @@ public class FinalNoteController {
 
     // update final note
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(Long id, FinalNoteDTO dto) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody FinalNoteDTO dto) {
         try{
             FinalNote finalNote = finalNoteMapper.toEntity(dto);
             return ResponseEntity.ok(finalNoteService.update(id, finalNote));
@@ -95,7 +95,7 @@ public class FinalNoteController {
 
     // delete final note
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         try{
             finalNoteService.delete(id);
             return ResponseEntity.noContent().build();

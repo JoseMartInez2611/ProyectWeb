@@ -17,6 +17,9 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     List<Lesson> findBySchedule_DayOfWeekAndClassroom(DayOfWeek dayOfWeek, Room classroom);
 
 
+    List<Lesson> findByGroupId(Long groupId);
+    List<Lesson> findByGroupIdIn(List<Long> groupIds);
+
     @Query("SELECT l FROM Lesson l WHERE l.group.id = :groupId")
     List<Lesson> findByGroupId(@Param("groupId") Long groupId);
 

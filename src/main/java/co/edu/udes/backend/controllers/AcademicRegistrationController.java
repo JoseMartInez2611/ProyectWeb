@@ -72,4 +72,15 @@ public class AcademicRegistrationController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    // delete academic registration by studentId and groupId rest api
+    @DeleteMapping("/student/{studentId}/group/{groupId}")
+    public ResponseEntity<?> deleteByStudentIdAndCourseId(@PathVariable Long studentId, @PathVariable Long groupId) {
+        try {
+            academicRegistrationService.deleteByStudentIdAndGroupId(studentId, groupId);
+            return ResponseEntity.noContent().build();
+        }catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }
