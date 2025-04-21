@@ -2,14 +2,19 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.LessonDTO;
 import co.edu.udes.backend.mappers.LessonMapper;
+import co.edu.udes.backend.models.AcademicRegistration;
 import co.edu.udes.backend.models.Lesson;
+import co.edu.udes.backend.models.Room;
 import co.edu.udes.backend.models.Schedule;
+import co.edu.udes.backend.repositories.AcademicRegistrationRepository;
 import co.edu.udes.backend.repositories.LessonRepository;
+import co.edu.udes.backend.repositories.RoomRepository;
 import co.edu.udes.backend.repositories.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +24,8 @@ public class LessonService {
 
     private final LessonRepository lessonRepository;
     private final ScheduleRepository scheduleRepository;
+    private final RoomRepository roomRepository;
+    private final AcademicRegistrationRepository academicRegistrationRepository;
     @Autowired
     private LessonMapper lessonMapper;
 
@@ -50,6 +57,7 @@ public class LessonService {
                 .orElseThrow(() -> new RuntimeException("Lesson not found with id: " + id));
 
         isScheduleConflict(lesson, id);
+        roomCapacityCheck(lesson);
 
         existing.setGroup(lesson.getGroup());
         existing.setClassroom(lesson.getClassroom());
@@ -64,7 +72,7 @@ public class LessonService {
         lessonRepository.deleteById(id);
     }
 
-    public void isScheduleConflict(Lesson lesson, Long excludeId) {
+    private void isScheduleConflict(Lesson lesson, Long excludeId) {
         Schedule schedule = scheduleRepository.findById(lesson.getSchedule().getId())
                 .orElseThrow(() -> new RuntimeException("Schedule not found with id: " + lesson.getSchedule().getId()));
 
@@ -89,6 +97,31 @@ public class LessonService {
                         " Please change one of them."
                 );
             }
+        }
+    }
+
+    private void roomCapacityCheck(Lesson lesson) {
+        Room newRoom = roomRepository.findById(lesson.getClassroom().getId())
+                .orElseThrow( () -> new RuntimeException("Room not found with id: " + lesson.getClassroom().getId()));
+
+        LocalDate referenceDate = LocalDate.now();
+        int year = referenceDate.getYear();
+
+        LocalDate startDate;
+        LocalDate endDate;
+
+        if (referenceDate.isBefore(LocalDate.of(year, 6, 1))) {
+            startDate = LocalDate.of(year - 1, 12, 1);
+            endDate = LocalDate.of(year, 6, 1);
+        } else {
+            startDate = LocalDate.of(year, 6, 1);
+            endDate = LocalDate.of(year, 12, 1);
+        }
+
+        List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findByGroupIdAndDateBetween(lesson.getGroup().getId(), startDate, endDate);
+
+        if (academicRegistrations.size() > newRoom.getCapacity()) {
+            throw new RuntimeException("The room capacity is not enough for the number of students in the group.");
         }
     }
 }
