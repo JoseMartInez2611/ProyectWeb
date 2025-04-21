@@ -20,8 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -227,13 +229,21 @@ public class TeacherService {
         return evaluationMapper.toDtoList(evaluations);
     }
 
-    public List<ScheduleDTO> getTeacherSchedules(Long teacherId) {
+    public List<Map<String, String>> getTeacherLessonsFormattedInfo(Long teacherId) {
         Teacher teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new RuntimeException("Docente no encontrado con el ID: " + teacherId));
 
-        List<Schedule> schedules = lessonRepository.findSchedulesByTeacherId(teacherId);
-        return schedules.stream()
-                .map(scheduleMapper::toDto)
+        List<Object[]> lessonsCustomDetails = lessonRepository.findCustomLessonsDetailsByTeacherId(teacherId);
+
+        return lessonsCustomDetails.stream()
+                .map(result -> Map.of(
+                        "Clase", (String) result[8], // courseName
+                        "Salon",  result[5] + " " + result[6], // building + floor
+                        "Hora", ((LocalTime) result[1]).toString() + " - " + ((LocalTime) result[2]).toString(), // startHour + endHour
+                        "Dia", (String) result[3], // day
+                        "Curso", result[7].toString() // ID del grupo
+                ))
                 .collect(Collectors.toList());
     }
+
 }

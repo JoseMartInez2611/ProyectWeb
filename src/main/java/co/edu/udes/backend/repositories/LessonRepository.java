@@ -16,8 +16,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     List<Lesson> findBySchedule_DayOfWeekAndClassroom(DayOfWeek dayOfWeek, Room classroom);
 
-
-    List<Lesson> findByGroupId(Long groupId);
     List<Lesson> findByGroupIdIn(List<Long> groupIds);
 
     @Query("SELECT l FROM Lesson l WHERE l.group.id = :groupId")
@@ -41,5 +39,18 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     @Query("SELECT DISTINCT l.schedule FROM Lesson l WHERE l.group.teacher.id = :teacherId")
     List<Schedule> findSchedulesByTeacherId(@Param("teacherId") Long teacherId);
+
+    @Query("SELECT l.id, " +
+            "       s.startHour, s.endHour, dw.day, " + // Traemos el atributo 'day' de DayOfWeek
+            "       r.number, r.building, r.floor, " +
+            "       g.id, c.name " +
+            "FROM Lesson l " +
+            "JOIN l.schedule s " +
+            "JOIN s.dayOfWeek dw " + // Unimos con la entidad DayOfWeek para obtener el atributo 'day'
+            "JOIN l.classroom r " +
+            "JOIN l.group g " +
+            "JOIN g.course c " +
+            "WHERE g.teacher.id = :teacherId")
+    List<Object[]> findCustomLessonsDetailsByTeacherId(@Param("teacherId") Long teacherId);
 
 }
