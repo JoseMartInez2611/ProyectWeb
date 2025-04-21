@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -18,7 +18,7 @@ public class EvaluationDTO {
     private long id;
     private String evaluationName;
     private String evaluationRubric;
-    private LocalDate date;
+    private LocalDateTime date;
     private long groupId;
     private List<Qualification> qualification;
 

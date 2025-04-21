@@ -13,7 +13,9 @@ import java.util.List;
 
 @Repository
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
+
     List<Lesson> findBySchedule_DayOfWeekAndClassroom(DayOfWeek dayOfWeek, Room classroom);
+
 
     @Query("SELECT l FROM Lesson l WHERE l.group.id = :groupId")
     List<Lesson> findByGroupId(@Param("groupId") Long groupId);
@@ -24,6 +26,17 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     @Query("SELECT l.schedule.id FROM Lesson l WHERE l.group.id = :groupId")
     List<Long> findScheduleIdsByGroupId(@Param("groupId") Long groupId);
 
+    @Query("SELECT l FROM Lesson l WHERE l.classroom = :room")
+    List<Lesson> findByClassroom(@Param("room") Room room);
+
+    @Query("""
+        SELECT CONCAT(l.schedule.startHour, ' - ', l.schedule.endHour)
+        FROM Lesson l
+        WHERE l.classroom.id = :id
+        """)
+    List<String> getSchedulesByRoomIdFromLesson(@Param("id") Long id);
+
     @Query("SELECT DISTINCT l.schedule FROM Lesson l WHERE l.group.teacher.id = :teacherId")
     List<Schedule> findSchedulesByTeacherId(@Param("teacherId") Long teacherId);
+
 }
