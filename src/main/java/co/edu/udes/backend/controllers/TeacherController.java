@@ -1,5 +1,6 @@
 package co.edu.udes.backend.controllers;
 
+import co.edu.udes.backend.dto.ScheduleDTO;
 import co.edu.udes.backend.dto.TeacherDTO;
 import co.edu.udes.backend.mappers.TeacherMapper;
 import co.edu.udes.backend.models.Teacher;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/teachers")
@@ -154,6 +156,12 @@ public class TeacherController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/{teacherId}/lessons-formatted-info")
+    public ResponseEntity<List<Map<String, String>>> getTeacherLessonsFormattedInfo(@PathVariable Long teacherId) {
+        List<Map<String, String>> lessonsInfo = teacherService.getTeacherLessonsFormattedInfo(teacherId);
+        return ResponseEntity.ok(lessonsInfo);
     }
 
 }

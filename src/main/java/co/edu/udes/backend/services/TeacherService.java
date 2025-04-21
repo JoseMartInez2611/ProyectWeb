@@ -1,11 +1,14 @@
 package co.edu.udes.backend.services;
 
+import co.edu.udes.backend.dto.ScheduleDTO;
 import co.edu.udes.backend.dto.TeacherDTO;
 import co.edu.udes.backend.dto.inheritanceDTO.EvaluationDTO;
 import co.edu.udes.backend.mappers.EvaluationMapper;
+import co.edu.udes.backend.mappers.ScheduleMapper;
 import co.edu.udes.backend.mappers.TeacherMapper;
 import co.edu.udes.backend.models.Group;
 import co.edu.udes.backend.models.Lesson;
+import co.edu.udes.backend.models.Schedule;
 import co.edu.udes.backend.models.Teacher;
 import co.edu.udes.backend.models.inheritance.Evaluation;
 import co.edu.udes.backend.repositories.EvaluationRepository;
@@ -17,8 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +38,8 @@ public class TeacherService {
     private TeacherMapper teacherMapper; // Mapper para convertir entre la entidad Teacher y el DTO TeacherDTO
     @Autowired
     private final EvaluationMapper evaluationMapper; // Mapper para convertir entre la entidad Evaluation y el DTO EvaluationDTO
-
+    @Autowired
+    private final ScheduleMapper scheduleMapper;
 
     /**
      * Obtiene todos los docentes.
@@ -221,4 +228,22 @@ public class TeacherService {
         }
         return evaluationMapper.toDtoList(evaluations);
     }
+
+    public List<Map<String, String>> getTeacherLessonsFormattedInfo(Long teacherId) {
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new RuntimeException("Docente no encontrado con el ID: " + teacherId));
+
+        List<Object[]> lessonsCustomDetails = lessonRepository.findCustomLessonsDetailsByTeacherId(teacherId);
+
+        return lessonsCustomDetails.stream()
+                .map(result -> Map.of(
+                        "Clase", (String) result[8], // courseName
+                        "Salon",  result[5] + " " + result[6], // building + floor
+                        "Hora", ((LocalTime) result[1]).toString() + " - " + ((LocalTime) result[2]).toString(), // startHour + endHour
+                        "Dia", (String) result[3], // day
+                        "Curso", result[7].toString() // ID del grupo
+                ))
+                .collect(Collectors.toList());
+    }
+
 }
