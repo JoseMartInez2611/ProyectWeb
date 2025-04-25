@@ -118,7 +118,7 @@ public class LessonService {
             endDate = LocalDate.of(year, 12, 1);
         }
 
-        List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findByGroupIdAndDateBetween(lesson.getGroup().getId(), startDate, endDate);
+        List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findByGroupIdAndRegistrationDateBetween(lesson.getGroup().getId(), startDate, endDate);
 
         if (academicRegistrations.size() > newRoom.getCapacity()) {
             throw new RuntimeException("The room capacity is not enough for the number of students in the group.");
