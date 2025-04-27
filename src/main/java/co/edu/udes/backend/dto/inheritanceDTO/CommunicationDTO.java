@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -15,7 +15,7 @@ import java.util.List;
 public class CommunicationDTO {
     private long id;
     private List<Long> receiverIds;
-    private LocalDate sentDate;
+    private LocalDateTime sentDate;
     private String content;
     private boolean read;
 }
