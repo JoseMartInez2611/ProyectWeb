@@ -70,4 +70,15 @@ public class ProfileU {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "receivers")
     private List<Communication> communication;
 
+    @Column(name="is_enable")
+    private boolean isEnable;
+
+    @Column(name="account_non_expired")
+    private boolean accountNonExpired;
+
+    @Column(name="account_non_locked")
+    private boolean accountNonLocked;
+
+    @Column(name="credentials_non_expired")
+    private boolean credentialsNonExpired;
 }
