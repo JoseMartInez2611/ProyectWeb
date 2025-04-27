@@ -22,6 +22,7 @@ public class AcademicRegistrationService {
     private final StudentRepository studentRepository;
     private final GroupRepository groupRepository;
     private final CourseRepository courseRepository;
+    private final FinalNoteRepository finalNoteRepository;
     @Autowired
     private AcademicRegistrationMapper academicRegistrationMapper;
 
@@ -41,7 +42,38 @@ public class AcademicRegistrationService {
         validatePrerequisites(academicRegistration.getStudent(), academicRegistration.getGroup());
         validateScheduleAvailability(academicRegistration.getStudent(), academicRegistration.getGroup());
         validateGroupCapacity(academicRegistration.getGroup());
-        return academicRegistrationMapper.toDto(academicRegistrationRepository.save(academicRegistration));
+
+        AcademicRegistration savedAcademicRegistration = academicRegistrationRepository.save(academicRegistration);
+
+        AcademicRecord academicRecord = academicRecordRepository.findByStudentId(academicRegistration.getStudent().getId())
+                .orElseThrow(() -> new RuntimeException("Academic record not found for student with id: " + academicRegistration.getStudent().getId()));
+
+        for (int i = 0; i < 4; i++) {
+            FinalNote finalNote = createFinalNotes(academicRegistration, i, academicRecord);
+            finalNoteRepository.save(finalNote);
+        }
+
+        return academicRegistrationMapper.toDto(savedAcademicRegistration);
+    }
+
+    private static FinalNote createFinalNotes(AcademicRegistration academicRegistration, int i, AcademicRecord academicRecord) {
+        FinalNote finalNote = new FinalNote();
+        if(i < 3) {
+            finalNote.setTitle("P" + (i + 1));
+            if (i <2){
+                finalNote.setPercentage(30);
+            } else {
+                finalNote.setPercentage(40);
+            }
+        }
+        else {
+            finalNote.setTitle("final");
+            finalNote.setPercentage(100);
+        }
+        finalNote.setNote(0);
+        finalNote.setAcademicRecord(academicRecord);
+        finalNote.setGroup(academicRegistration.getGroup());
+        return finalNote;
     }
 
     public List<AcademicRegistrationDTO> createMultiple(List<AcademicRegistration> academicRegistrations) {
