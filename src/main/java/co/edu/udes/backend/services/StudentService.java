@@ -11,6 +11,7 @@ import co.edu.udes.backend.repositories.StudentRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class StudentService {
     }
 
     public List<StudentDTO> createMultiple(List<Student> users) {
+        users = encriptPassword(users);
         List<StudentDTO> savedStudents = new ArrayList<>();
         for (Student student : users) {
             savedStudents.add(create(student));
@@ -72,6 +74,13 @@ public class StudentService {
         studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
         studentRepository.deleteById(id);
+    }
+
+    public List<Student> encriptPassword(List<Student> students) {
+        for (Student student : students) {
+            student.setPassword(new BCryptPasswordEncoder().encode(student.getPassword()));
+        }
+        return students;
     }
 
     public List<ScheduleInfoDTO> getSchedule(Long id) {

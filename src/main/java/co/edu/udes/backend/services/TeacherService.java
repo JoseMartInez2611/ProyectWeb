@@ -1,15 +1,12 @@
 package co.edu.udes.backend.services;
 
-import co.edu.udes.backend.dto.ScheduleDTO;
+import co.edu.udes.backend.dto.ScheduleInfoDTO;
 import co.edu.udes.backend.dto.TeacherDTO;
 import co.edu.udes.backend.dto.inheritanceDTO.EvaluationDTO;
 import co.edu.udes.backend.mappers.EvaluationMapper;
 import co.edu.udes.backend.mappers.ScheduleMapper;
 import co.edu.udes.backend.mappers.TeacherMapper;
-import co.edu.udes.backend.models.Group;
-import co.edu.udes.backend.models.Lesson;
-import co.edu.udes.backend.models.Schedule;
-import co.edu.udes.backend.models.Teacher;
+import co.edu.udes.backend.models.*;
 import co.edu.udes.backend.models.inheritance.Evaluation;
 import co.edu.udes.backend.repositories.EvaluationRepository;
 import co.edu.udes.backend.repositories.GroupRepository;
@@ -17,14 +14,13 @@ import co.edu.udes.backend.repositories.LessonRepository;
 import co.edu.udes.backend.repositories.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,8 +34,9 @@ public class TeacherService {
     private TeacherMapper teacherMapper; // Mapper para convertir entre la entidad Teacher y el DTO TeacherDTO
     @Autowired
     private final EvaluationMapper evaluationMapper; // Mapper para convertir entre la entidad Evaluation y el DTO EvaluationDTO
-    @Autowired
-    private final ScheduleMapper scheduleMapper;
+    private static final List<String> DAY_ORDER = List.of(
+            "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"
+    );
 
     /**
      * Obtiene todos los docentes.
@@ -65,6 +62,7 @@ public class TeacherService {
 
     /**
      * Crea un nuevo docente.
+     *
      * @param teacher La entidad Teacher a guardar.
      * @return El TeacherDTO del docente creado.
      */
@@ -74,10 +72,12 @@ public class TeacherService {
 
     /**
      * Crea múltiples docentes.
+     *
      * @param data Una lista de entidades Teacher a guardar.
      * @return Una lista de TeacherDTO de los docentes creados.
      */
     public List<TeacherDTO> createMultiple(List<Teacher> data) {
+        data = encriptPassword(data);
         return teacherMapper.toDtoList(
                 teacherRepository.saveAll(data)
         );
@@ -85,7 +85,8 @@ public class TeacherService {
 
     /**
      * Actualiza la información de un docente existente.
-     * @param id El ID del docente a actualizar.
+     *
+     * @param id      El ID del docente a actualizar.
      * @param teacher La entidad Teacher con la información actualizada.
      * @return El TeacherDTO del docente actualizado.
      * @throws RuntimeException Si no se encuentra el docente con el ID proporcionado.
@@ -99,6 +100,7 @@ public class TeacherService {
 
     /**
      * Elimina un docente por su ID.
+     *
      * @param id El ID del docente a eliminar.
      * @throws RuntimeException Si no se encuentra el docente con el ID proporcionado.
      */
@@ -108,6 +110,12 @@ public class TeacherService {
         teacherRepository.deleteById(id);
     }
 
+    public List<Teacher> encriptPassword(List<Teacher> teachers) {
+        for (Teacher teacher : teachers) {
+            teacher.setPassword(new BCryptPasswordEncoder().encode(teacher.getPassword()));
+        }
+        return teachers;
+    }
 
     // modulos
     // moduló de Asignación de cursos
@@ -229,21 +237,38 @@ public class TeacherService {
         return evaluationMapper.toDtoList(evaluations);
     }
 
-    public List<Map<String, String>> getTeacherLessonsFormattedInfo(Long teacherId) {
+    public List<ScheduleInfoDTO> getTeacherSchedule(Long teacherId) {
         Teacher teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new RuntimeException("Docente no encontrado con el ID: " + teacherId));
 
-        List<Object[]> lessonsCustomDetails = lessonRepository.findCustomLessonsDetailsByTeacherId(teacherId);
+        List<Group> groups = teacher.getGroups();
+        List<Lesson> lessons = lessonRepository.findByGroupIdIn(
+                groups.stream().map(Group::getId).toList()
+        );
 
-        return lessonsCustomDetails.stream()
-                .map(result -> Map.of(
-                        "Clase", (String) result[8], // courseName
-                        "Salon",  result[5] + " " + result[6], // building + floor
-                        "Hora", ((LocalTime) result[1]).toString() + " - " + ((LocalTime) result[2]).toString(), // startHour + endHour
-                        "Dia", (String) result[3], // day
-                        "Curso", result[7].toString() // ID del grupo
-                ))
-                .collect(Collectors.toList());
+        List<ScheduleInfoDTO> scheduleInfoDTOList = new ArrayList<>();
+
+        for (Lesson lesson : lessons) {
+            Course course = lesson.getGroup().getCourse();
+            Schedule schedule = lesson.getSchedule();
+            Room room = lesson.getClassroom();
+
+            ScheduleInfoDTO scheduleInfoDTO = new ScheduleInfoDTO();
+            scheduleInfoDTO.setCourseName(course.getName());
+            scheduleInfoDTO.setRoomCode(room.getBuilding() + "-" + room.getFloor() + room.getNumber());
+            scheduleInfoDTO.setDay(schedule.getDayOfWeek().getDay());
+            scheduleInfoDTO.setStartTime(schedule.getStartHour());
+            scheduleInfoDTO.setEndTime(schedule.getEndHour());
+
+            scheduleInfoDTOList.add(scheduleInfoDTO);
+        }
+
+        scheduleInfoDTOList.sort(Comparator
+                .comparing((ScheduleInfoDTO dto) -> DAY_ORDER.indexOf(dto.getDay()))
+                .thenComparing(ScheduleInfoDTO::getStartTime)
+        );
+
+        return scheduleInfoDTOList;
     }
 
 }

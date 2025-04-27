@@ -4,9 +4,11 @@ package co.edu.udes.backend.services;
 import co.edu.udes.backend.dto.EmployeeDTO;
 import co.edu.udes.backend.mappers.EmployeeMapper;
 import co.edu.udes.backend.models.Employee;
+import co.edu.udes.backend.models.Teacher;
 import co.edu.udes.backend.repositories.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +27,7 @@ public class EmployeeService {
     }
 
     public List<Employee> createMultiple(List<Employee> employees) {
+        employees = encriptPassword(employees);
         return employeeRepository.saveAll(employees);
     }
 
@@ -49,5 +52,12 @@ public class EmployeeService {
         employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
         employeeRepository.deleteById(id);
+    }
+
+    public List<Employee> encriptPassword(List<Employee> employees) {
+        for (Employee employee : employees) {
+            employee.setPassword(new BCryptPasswordEncoder().encode(employee.getPassword()));
+        }
+        return employees;
     }
 }
