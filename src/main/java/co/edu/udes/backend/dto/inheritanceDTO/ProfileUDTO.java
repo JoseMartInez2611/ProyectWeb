@@ -1,5 +1,6 @@
 package co.edu.udes.backend.dto.inheritanceDTO;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,4 +19,9 @@ public class ProfileUDTO {
     private String email;
     private String userName;
     private String password;
+    private boolean isEnable;
+    private boolean accountNonExpired;
+    private boolean accountNonLocked;
+    private boolean credentialsNonExpired;
+
 }

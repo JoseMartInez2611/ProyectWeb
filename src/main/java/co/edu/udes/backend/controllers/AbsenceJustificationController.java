@@ -16,7 +16,6 @@ import java.util.List;
 //@CrossOrigin(origin = "http://localhost")
 @RestController
 @RequestMapping("/api/v1/absence-justifications")
-@PreAuthorize("permitAll()")
 public class AbsenceJustificationController {
 
     @Autowired

@@ -3,11 +3,14 @@ package co.edu.udes.backend.models.inheritance;
 import co.edu.udes.backend.models.Borrow;
 import co.edu.udes.backend.models.Message;
 import co.edu.udes.backend.models.Report;
+import co.edu.udes.backend.models.RoleEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Data
@@ -81,4 +84,12 @@ public class ProfileU {
 
     @Column(name="credentials_non_expired")
     private boolean credentialsNonExpired;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "profileU_roles",
+            joinColumns = @JoinColumn(name = "profileU_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<RoleEntity> roles = new HashSet<>();
 }
