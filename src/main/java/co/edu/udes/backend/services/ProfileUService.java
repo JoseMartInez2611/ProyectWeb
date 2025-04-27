@@ -59,20 +59,4 @@ public class ProfileUService {
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         userRepository.deleteById(id);
     }
-
-    public List<MessageDTO> getConversation(Long senderID, Long receiverID) {
-        ProfileU sender = userRepository.findById(senderID)
-                .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + senderID));
-        ProfileU receiver = userRepository.findById(receiverID)
-                .orElseThrow(() -> new ResourceNotFoundException("Receiver not found with id: " + receiverID));
-
-        List<Message> sentMessages = messageRepository.findBySenderIdAndReceiverId(senderID, receiverID);
-        List<Message> receivedMessages = messageRepository.findBySenderIdAndReceiverId(receiverID, senderID);
-        sentMessages.addAll(receivedMessages);
-
-        sentMessages.sort(Comparator.comparing(Message::getSentDate));
-
-        return messageMapper.toDtoList(sentMessages);
-    }
-
 }

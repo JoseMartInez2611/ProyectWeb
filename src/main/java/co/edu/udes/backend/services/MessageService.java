@@ -6,10 +6,12 @@ import co.edu.udes.backend.models.Message;
 import co.edu.udes.backend.models.inheritance.ProfileU;
 import co.edu.udes.backend.repositories.MessageRepository;
 import co.edu.udes.backend.repositories.ProfileURepository;
+import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -138,5 +140,31 @@ public class MessageService {
         ProfileU user = profileURepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
         return messageMapper.toDtoList(user.getMessage());
+    }
+
+    /**
+     * Obtiene la conversación entre dos usuarios específicos.
+     *
+     * Este método busca los mensajes enviados y recibidos entre dos usuarios
+     * identificados por sus IDs. Los mensajes se combinan y ordenan por fecha de envío.
+     *
+     * @param senderID   El ID del usuario que envió los mensajes.
+     * @param receiverID El ID del usuario que recibió los mensajes.
+     * @return Una lista de MessageDTO que representan la conversación entre los dos usuarios.
+     * @throws ResourceNotFoundException Si no se encuentra uno de los usuarios con el ID proporcionado.
+     */
+    public List<MessageDTO> getConversation(Long senderID, Long receiverID) {
+        ProfileU sender = profileURepository.findById(senderID)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + senderID));
+        ProfileU receiver = profileURepository.findById(receiverID)
+                .orElseThrow(() -> new ResourceNotFoundException("Receiver not found with id: " + receiverID));
+
+        List<Message> sentMessages = messageRepository.findBySenderIdAndReceiverId(senderID, receiverID);
+        List<Message> receivedMessages = messageRepository.findBySenderIdAndReceiverId(receiverID, senderID);
+        sentMessages.addAll(receivedMessages);
+
+        sentMessages.sort(Comparator.comparing(Message::getSentDate));
+
+        return messageMapper.toDtoList(sentMessages);
     }
 }

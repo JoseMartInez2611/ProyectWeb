@@ -71,13 +71,4 @@ public class ProfileUController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
-    @GetMapping("/{id}/{recieverId}/messages")
-    public ResponseEntity<?> getConversation(@PathVariable Long id, @PathVariable Long recieverId) {
-        try{
-            return ResponseEntity.ok(profileUService.getConversation(id, recieverId));
-        }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
 }
