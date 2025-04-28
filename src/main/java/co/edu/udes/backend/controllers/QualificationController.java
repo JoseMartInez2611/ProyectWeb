@@ -37,10 +37,9 @@ public class QualificationController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
+    //Get a student average with id
     @GetMapping("average/{id}")
     public ResponseEntity<?> getAverageById(@PathVariable Long id) {
-        System.out.println("Controller GertAverageById");
         try{
             return ResponseEntity.ok().body(qualificationService.getAverage(id));
         }catch (RuntimeException e){
