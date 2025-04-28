@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -30,7 +30,7 @@ public class Communication {
     private List<ProfileU> receivers;
 
     @Column(name = "sent_date", nullable = false, columnDefinition = "DATE")
-    private LocalDate sentDate;
+    private LocalDateTime sentDate;
 
     @Column(name = "content", nullable = false, columnDefinition = "varchar(255)")
     private String content;

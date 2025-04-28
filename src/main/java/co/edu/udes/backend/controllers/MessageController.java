@@ -105,4 +105,14 @@ public class MessageController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // O un mensaje de error más específico
         }
     }
+
+    // Endpoint para obtener la conversación entre dos usuarios
+    @GetMapping("sender/{id}/receiver/{receiverId}")
+    public ResponseEntity<?> getConversation(@PathVariable Long id, @PathVariable Long receiverId) {
+        try{
+            return ResponseEntity.ok(messageService.getConversation(id, receiverId));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

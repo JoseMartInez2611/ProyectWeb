@@ -14,7 +14,6 @@ import co.edu.udes.backend.repositories.LessonRepository;
 import co.edu.udes.backend.repositories.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +36,6 @@ public class TeacherService {
     private static final List<String> DAY_ORDER = List.of(
             "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"
     );
-
     /**
      * Obtiene todos los docentes.
      *
@@ -62,7 +60,6 @@ public class TeacherService {
 
     /**
      * Crea un nuevo docente.
-     *
      * @param teacher La entidad Teacher a guardar.
      * @return El TeacherDTO del docente creado.
      */
@@ -72,12 +69,10 @@ public class TeacherService {
 
     /**
      * Crea múltiples docentes.
-     *
      * @param data Una lista de entidades Teacher a guardar.
      * @return Una lista de TeacherDTO de los docentes creados.
      */
     public List<TeacherDTO> createMultiple(List<Teacher> data) {
-        data = encriptPassword(data);
         return teacherMapper.toDtoList(
                 teacherRepository.saveAll(data)
         );
@@ -85,8 +80,7 @@ public class TeacherService {
 
     /**
      * Actualiza la información de un docente existente.
-     *
-     * @param id      El ID del docente a actualizar.
+     * @param id El ID del docente a actualizar.
      * @param teacher La entidad Teacher con la información actualizada.
      * @return El TeacherDTO del docente actualizado.
      * @throws RuntimeException Si no se encuentra el docente con el ID proporcionado.
@@ -100,7 +94,6 @@ public class TeacherService {
 
     /**
      * Elimina un docente por su ID.
-     *
      * @param id El ID del docente a eliminar.
      * @throws RuntimeException Si no se encuentra el docente con el ID proporcionado.
      */
@@ -110,12 +103,6 @@ public class TeacherService {
         teacherRepository.deleteById(id);
     }
 
-    public List<Teacher> encriptPassword(List<Teacher> teachers) {
-        for (Teacher teacher : teachers) {
-            teacher.setPassword(new BCryptPasswordEncoder().encode(teacher.getPassword()));
-        }
-        return teachers;
-    }
 
     // modulos
     // moduló de Asignación de cursos

@@ -1,6 +1,6 @@
 package co.edu.udes.backend.controllers;
 
-import co.edu.udes.backend.dto.ScheduleDTO;
+import co.edu.udes.backend.dto.ScheduleInfoDTO;
 import co.edu.udes.backend.dto.TeacherDTO;
 import co.edu.udes.backend.mappers.TeacherMapper;
 import co.edu.udes.backend.models.Teacher;
@@ -158,9 +158,9 @@ public class TeacherController {
         }
     }
 
-    @GetMapping("/{teacherId}/lessons-formatted-info")
-    public ResponseEntity<List<Map<String, String>>> getTeacherLessonsFormattedInfo(@PathVariable Long teacherId) {
-        List<Map<String, String>> lessonsInfo = teacherService.getTeacherLessonsFormattedInfo(teacherId);
+    @GetMapping("/{teacherId}/schedule")
+    public ResponseEntity<?> getTeacherLessonsFormattedInfo(@PathVariable Long teacherId) {
+        List<ScheduleInfoDTO> lessonsInfo = teacherService.getTeacherSchedule(teacherId);
         return ResponseEntity.ok(lessonsInfo);
     }
 
