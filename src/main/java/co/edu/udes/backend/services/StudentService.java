@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -78,7 +79,21 @@ public class StudentService {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
 
-        List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findByStudentId(id);
+        LocalDate referenceDate = LocalDate.now();
+        int year = referenceDate.getYear();
+
+        LocalDate startDate;
+        LocalDate endDate;
+
+        if (referenceDate.isBefore(LocalDate.of(year, 6, 1))) {
+            startDate = LocalDate.of(year - 1, 12, 1);
+            endDate = LocalDate.of(year, 6, 1);
+        } else {
+            startDate = LocalDate.of(year, 6, 1);
+            endDate = LocalDate.of(year, 12, 1);
+        }
+
+        List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findByStudentIdAndRegistrationDateBetween(id, startDate, endDate);
         List<ScheduleInfoDTO> scheduleInfoDTOList = new ArrayList<>();
 
         for (AcademicRegistration academicRegistration : academicRegistrations) {
