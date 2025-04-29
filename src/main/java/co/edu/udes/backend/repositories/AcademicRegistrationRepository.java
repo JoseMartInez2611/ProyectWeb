@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface AcademicRegistrationRepository extends JpaRepository<AcademicRegistration, Long> {
     List<AcademicRegistration> findByStudentId(Long studentId);
     List<AcademicRegistration> findByGroupIdAndRegistrationDateBetween(Long groupId, LocalDate startDate, LocalDate endDate);
+    List<AcademicRegistration> findByStudentIdAndRegistrationDateBetween(Long studentId, LocalDate startDate, LocalDate endDate);
     boolean existsByStudentIdAndGroupId(Long studentId, Long groupId);
     void deleteByStudentIdAndGroupId(Long studentId, Long groupId);
     Optional<AcademicRegistration> findByStudentIdAndGroupId(Long studentId, Long groupId);
