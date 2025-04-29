@@ -39,8 +39,6 @@ public interface FinalNoteRepository extends JpaRepository<FinalNote, Long> {
 
     //List<FinalNote> findByAcademicRecordIdAndGroupId(Long academicRecordId, Long groupId);
 
-    @Query("SELECT fn.course.id FROM FinalNote fn WHERE fn.id = :finalNoteId")
-    Long getCourseIdByFinalNoteId(Long finalNoteId);
 
     List<FinalNote> findByAcademicRecordIdAndGroupId(Long academicRecordId, Long groupId);
 }

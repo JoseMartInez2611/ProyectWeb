@@ -119,7 +119,7 @@ public class FinalNoteService {
         return "The Student Doesn't have a final note";
     }
 
-     public String getLessonFinalNote(long idStudent, long idGroup) {
+    public String getLessonFinalNote(long idStudent, long idGroup) {
 
         Student student  = studentRepository.findById(idStudent)
                 .orElseThrow(() -> new RuntimeException("Student not found with id: " + idStudent));
@@ -131,9 +131,10 @@ public class FinalNoteService {
                 .orElseThrow(() -> new RuntimeException("Academic record not found for student with id: " + idStudent));
 
 
-        List<FinalNote> finalNotes = finalNoteRepository.findByAcademicRecordIdAndGroupId(idStudent, idGroup);
+        List<FinalNote> finalNotes = finalNoteRepository.findByAcademicRecordIdAndGroupId(academicRecord.getId(), idGroup);
 
         for (FinalNote note : finalNotes) {
+            System.out.println("Notes: "+note.getTitle()+" "+note.getNote());
             if(note.getTitle().equals("final")) {
                 return "The Student "+student.getFullName()+" int the Course " + group.getCourse().getName()+" has a final note: "+note.getNote();
             }
