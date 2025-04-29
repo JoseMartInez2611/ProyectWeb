@@ -23,23 +23,19 @@ public class ProfileUDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        ProfileU profileU = profileURepository.findUserByUsername(username)
+        ProfileU profileU = profileURepository.findByUserName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
 
-        profileU.getRoles()
-                .forEach(
-                        roleEntity -> authorityList.add(
-                                new SimpleGrantedAuthority("ROLE_".concat(roleEntity.getRoleEnum().name()))
-                        )
-                );
+        authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(profileU.getRole().getRoleEnum().name())));
 
-        profileU.getRoles().stream()
-                .flatMap(roleEntity -> roleEntity.getPermissionList().stream())
-                .forEach(permissionEntity -> authorityList.add(
-                        new SimpleGrantedAuthority(permissionEntity.getName())
-                ));
+
+
+        profileU.getRole().getPermissionList().forEach(permissionEntity ->
+                authorityList.add(new SimpleGrantedAuthority(permissionEntity.getName()))
+        );
+
 
         return new User(
                 profileU.getUserName(),

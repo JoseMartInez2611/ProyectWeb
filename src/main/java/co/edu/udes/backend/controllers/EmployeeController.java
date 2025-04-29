@@ -41,8 +41,8 @@ public class EmployeeController {
     public ResponseEntity<?> create(@RequestBody List<EmployeeDTO> dtoList) {
         try {
             List<Employee> profileUList = employeeMapper.toEntityList(dtoList);
-            List<Employee> createdUsers = employeeService.createMultiple(profileUList); // Modifica el servicio
-            return ResponseEntity.ok(employeeMapper.toDtoList(createdUsers)); // Devuelve DTOs
+            List<EmployeeDTO> createdUsers = employeeService.createMultiple(profileUList); // Modifica el servicio
+            return ResponseEntity.ok(createdUsers); // Devuelve DTOs
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Please check the data you are sending: " + e.getMessage()); // Incluye el mensaje de error
         }

@@ -26,16 +26,12 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity,  AuthenticationProvider authenticationProvider) throws Exception {
         return httpSecurity
-                .csrf(csrf-> csrf.disable())
+                .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(http->{
-
-
-
-
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(http -> {
 
                     //Endpoint Privados
 
@@ -65,76 +61,76 @@ public class SecurityConfig {
                     http.requestMatchers(HttpMethod.GET, "/api/v1/student/{id}/schedule").hasAnyRole("ADMIN", "STUDENT");
                     http.requestMatchers(HttpMethod.GET, "/api/v1/teachers/**").hasAnyRole("ADMIN", "EMPLOYEE");
                     http.requestMatchers(HttpMethod.GET, "/api/v1/teachers/{teacherId}/evaluations").hasAnyRole("ADMIN", "TEACHER");
-                    http.requestMatchers(HttpMethod.GET, "/api/v1/teachers/{teacherId}/lessons-formatted-info").hasAnyRole("ADMIN", "TEACHER");
+                    http.requestMatchers(HttpMethod.GET, "/api/v1/teachers/{teacherId}/schedule").hasAnyRole("ADMIN", "TEACHER");
 
 
                     //POST
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/absence-justifications").hasAnyRole("STUDENT", "ADMIN");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/academic-registrations").hasAnyRole("STUDENT", "ADMIN");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/academic-resource").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/activity").hasAnyRole("ADMIN", "TEACHER");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/answer-document").hasAnyRole("ADMIN", "STUDENT");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/attendance").hasAnyRole("ADMIN", "TEACHER");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/borrow").hasAnyRole("ADMIN", "EMPLOYEE", "STUDENT", "TEACHER");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/career").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/courses").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/employee").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/exam").hasAnyRole("ADMIN", "TEACHER");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/groups").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/lessons").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/message").hasAnyRole("ADMIN", "EMPLOYEE", "STUDENT", "TEACHER");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/notification").hasAnyRole("ADMIN", "EMPLOYEE", "TEACHER");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/qualification").hasAnyRole("ADMIN", "TEACHER");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/question").hasAnyRole("ADMIN", "TEACHER");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/report").hasAnyRole("ADMIN", "EMPLOYEE", "STUDENT", "TEACHER");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/room").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/schedules").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/student").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.POST, "/api/v1/teachers").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/absence-justifications/**").hasAnyRole("STUDENT", "ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/academic-registrations/**").hasAnyRole("STUDENT", "ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/academic-resource/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/activity/**").hasAnyRole("ADMIN", "TEACHER");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/answer-document/**").hasAnyRole("ADMIN", "STUDENT");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/attendance/**").hasAnyRole("ADMIN", "TEACHER");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/borrow/**").hasAnyRole("ADMIN", "EMPLOYEE", "STUDENT", "TEACHER");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/career/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/courses/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/employee/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/exam/**").hasAnyRole("ADMIN", "TEACHER");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/groups/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/lessons/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/message/**").hasAnyRole("ADMIN", "EMPLOYEE", "STUDENT", "TEACHER");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/notification/**").hasAnyRole("ADMIN", "EMPLOYEE", "TEACHER");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/qualification/**").hasAnyRole("ADMIN", "TEACHER");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/question/**").hasAnyRole("ADMIN", "TEACHER");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/report/**").hasAnyRole("ADMIN", "EMPLOYEE", "STUDENT", "TEACHER");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/room/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/schedules/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/student/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/v1/teachers/**").hasAnyRole("ADMIN");
 
                     //PUT
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/absence-justifications").hasAnyRole("STUDENT", "ADMIN");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/academic-registrations").hasAnyRole("STUDENT", "ADMIN");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/academic-resource").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/activity").hasAnyRole("ADMIN", "TEACHER");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/answer-document").hasAnyRole("ADMIN", "STUDENT");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/attendance").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/borrow").hasAnyRole("ADMIN", "EMPLOYEE", "TEACHER");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/career").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/courses").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/employee").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/exam").hasAnyRole("ADMIN", "TEACHER");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/groups").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/lessons").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/qualification").hasAnyRole("ADMIN", "TEACHER");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/question").hasAnyRole("ADMIN", "TEACHER");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/room").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/schedules").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/student").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.PUT, "/api/v1/teachers").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/absence-justifications/**").hasAnyRole("STUDENT", "ADMIN");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/academic-registrations/**").hasAnyRole("STUDENT", "ADMIN");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/academic-resource/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/activity/**").hasAnyRole("ADMIN", "TEACHER");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/answer-document/**").hasAnyRole("ADMIN", "STUDENT");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/attendance/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/borrow/**").hasAnyRole("ADMIN", "EMPLOYEE", "TEACHER");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/career/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/courses/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/employee/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/exam/**").hasAnyRole("ADMIN", "TEACHER");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/groups/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/lessons/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/qualification/**").hasAnyRole("ADMIN", "TEACHER");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/question/**").hasAnyRole("ADMIN", "TEACHER");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/room/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/schedules/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/student/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.PUT, "/api/v1/teachers/**").hasAnyRole("ADMIN");
 
                     //DELETE
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/absence-justifications").hasAnyRole("STUDENT", "ADMIN");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/academic-registrations").hasAnyRole("STUDENT", "ADMIN");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/academic-resource").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/activity").hasAnyRole("ADMIN", "TEACHER");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/answer-document").hasAnyRole("ADMIN", "STUDENT");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/attendance").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/borrow").hasAnyRole("ADMIN", "EMPLOYEE", "STUDENT", "TEACHER");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/career").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/courses").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/employee").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/exam").hasAnyRole("ADMIN", "TEACHER");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/groups").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/lessons").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/question").hasAnyRole("ADMIN", "TEACHER");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/room").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/schedules").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/student").hasAnyRole("ADMIN");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/teachers").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/absence-justifications/**").hasAnyRole("STUDENT", "ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/academic-registrations/**").hasAnyRole("STUDENT", "ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/academic-resource/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/activity/**").hasAnyRole("ADMIN", "TEACHER");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/answer-document/**").hasAnyRole("ADMIN", "STUDENT");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/attendance/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/borrow/**").hasAnyRole("ADMIN", "EMPLOYEE", "STUDENT", "TEACHER");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/career/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/courses/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/employee/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/exam/**").hasAnyRole("ADMIN", "TEACHER");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/groups/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/lessons/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/question/**").hasAnyRole("ADMIN", "TEACHER");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/room/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/schedules/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/student/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/api/v1/teachers/**").hasAnyRole("ADMIN");
 
                 })
-
+                .authenticationProvider(authenticationProvider)
                 .build();
     }
 
@@ -152,7 +148,6 @@ public class SecurityConfig {
     }
 
 
-    //Cambiar a BCrypt
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();

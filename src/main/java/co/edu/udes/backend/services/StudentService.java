@@ -4,10 +4,7 @@ import co.edu.udes.backend.dto.ScheduleInfoDTO;
 import co.edu.udes.backend.dto.StudentDTO;
 import co.edu.udes.backend.mappers.StudentMapper;
 import co.edu.udes.backend.models.*;
-import co.edu.udes.backend.repositories.AcademicRecordRepository;
-import co.edu.udes.backend.repositories.AcademicRegistrationRepository;
-import co.edu.udes.backend.repositories.LessonRepository;
-import co.edu.udes.backend.repositories.StudentRepository;
+import co.edu.udes.backend.repositories.*;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +23,7 @@ public class StudentService {
     private final AcademicRecordRepository academicRecordRepository;
     private final AcademicRegistrationRepository academicRegistrationRepository;
     private final LessonRepository lessonRepository;
+    private final RoleRepository roleRepository;
     @Autowired
     private StudentMapper studentMapper;
     private static final List<String> DAY_ORDER = List.of(
@@ -43,6 +41,9 @@ public class StudentService {
     }
 
     public StudentDTO create(Student student) {
+        student.setRole(roleRepository.findById(3L)
+                .orElseThrow(() -> new RuntimeException("Role not found")));
+        System.out.println("Service Create "+student);
         Student newStudent = studentRepository.save(student);
 
         AcademicRecord academicRecord = new AcademicRecord();

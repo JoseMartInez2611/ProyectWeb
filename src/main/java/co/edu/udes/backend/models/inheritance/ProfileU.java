@@ -85,11 +85,15 @@ public class ProfileU {
     @Column(name="credentials_non_expired")
     private boolean credentialsNonExpired;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "profileU_roles",
-            joinColumns = @JoinColumn(name = "profileU_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+    @ManyToOne(
+            targetEntity = RoleEntity.class,
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL
     )
-    private Set<RoleEntity> roles = new HashSet<>();
+    @JoinColumn(
+            name = "id_Role",
+            columnDefinition = "BIGINT"
+    )
+    private RoleEntity role;
+
 }
