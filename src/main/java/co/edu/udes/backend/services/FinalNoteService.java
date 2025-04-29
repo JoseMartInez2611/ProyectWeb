@@ -65,6 +65,9 @@ public class FinalNoteService {
         double performance=0.0;
 
         for (int i = 0; i < percentage.size(); i++) {
+            if(percentage.get(i)==100.0){
+                continue;
+            }
             performance += (note.get(i) * (percentage.get(i) / 100));
         }
         return performance;
@@ -79,6 +82,9 @@ public class FinalNoteService {
 
 
         for (int i = 0; i < percentage.size(); i++) {
+            if (percentage.get(i) == 100.0) {
+                continue;
+            }
             value += (note.get(i) * (percentage.get(i) / 100));
         }
 
@@ -87,7 +93,7 @@ public class FinalNoteService {
 
         if (remainingPercentage <= 0) {
             if (value >= minimum) {
-                return "You already passed the lesson! You're doing great!";
+                return "You already passed the lesson! You're doing great! ";
             } else {
                 return "You have completed all the evaluations and didn't reach the minimum grade.";
             }
@@ -108,6 +114,7 @@ public class FinalNoteService {
     public String getReport(long id){
 
         double average=getPerformance(id);
+        System.out.println("nota: "+average);
         String name= finalNoteRepository.findStudentFullNameByAcademicRecordId(id);
         if (average <= 3.5 ) {
             return "The Student "+name+" has a low academic performance. Performance: "+average;
