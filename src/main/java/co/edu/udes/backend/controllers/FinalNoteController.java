@@ -58,6 +58,16 @@ public class FinalNoteController {
         }
     }
 
+    //Get the Course final note by stundent and group id
+    @GetMapping("/definitive/{idStudent}/{idGroup}")
+    public ResponseEntity<?> getCourseFinalNote(@PathVariable Long idStudent, @PathVariable Long idGroup) {
+        try{
+            return ResponseEntity.ok().body(finalNoteService.getLessonFinalNote(idStudent, idGroup));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
     // create final note
     @PostMapping
     public ResponseEntity<?> create(@RequestBody List<FinalNoteDTO> dtos){

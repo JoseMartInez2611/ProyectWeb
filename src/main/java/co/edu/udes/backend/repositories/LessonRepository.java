@@ -53,4 +53,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
             "WHERE g.teacher.id = :teacherId")
     List<Object[]> findCustomLessonsDetailsByTeacherId(@Param("teacherId") Long teacherId);
 
+    @Query("SELECT c.name FROM Course c WHERE c.id = :id")
+    String getNameByIdCourse(@Param("id") Long id);
+
 }

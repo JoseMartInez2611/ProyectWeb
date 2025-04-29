@@ -2,8 +2,11 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.FinalNoteDTO;
 import co.edu.udes.backend.mappers.FinalNoteMapper;
+import co.edu.udes.backend.models.AcademicRecord;
 import co.edu.udes.backend.models.FinalNote;
-import co.edu.udes.backend.repositories.FinalNoteRepository;
+import co.edu.udes.backend.models.Group;
+import co.edu.udes.backend.models.Student;
+import co.edu.udes.backend.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,10 @@ import java.util.List;
 public class FinalNoteService {
 
     private final FinalNoteRepository finalNoteRepository;
+    private final LessonRepository lessonRepository;
+    private final StudentRepository studentRepository;
+    private final GroupRepository groupRepository;
+    private final AcademicRecordRepository academicRecordRepository;
     @Autowired
     private FinalNoteMapper finalNoteMapper;
 
@@ -102,7 +109,6 @@ public class FinalNoteService {
 
         double average=getPerformance(id);
         String name= finalNoteRepository.findStudentFullNameByAcademicRecordId(id);
-
         if (average <= 3.5 ) {
             return "The Student "+name+" has a low academic performance. Performance: "+average;
         }else if (average > 3.5 && average <= 4.5) {
@@ -110,6 +116,29 @@ public class FinalNoteService {
         }else if (average > 4.5 && average <= 5.0) {
             return "The Student "+name+" has a good academic performance. Performance: "+average;
         }
+        return "The Student Doesn't have a final note";
+    }
+
+     public String getLessonFinalNote(long idStudent, long idGroup) {
+
+        Student student  = studentRepository.findById(idStudent)
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + idStudent));
+
+        Group group = groupRepository.findById(idGroup)
+                .orElseThrow(() -> new RuntimeException("Group not found with id: " + idGroup));
+
+        AcademicRecord academicRecord = academicRecordRepository.findByStudentId(idStudent)
+                .orElseThrow(() -> new RuntimeException("Academic record not found for student with id: " + idStudent));
+
+
+        List<FinalNote> finalNotes = finalNoteRepository.findByAcademicRecordIdAndGroupId(idStudent, idGroup);
+
+        for (FinalNote note : finalNotes) {
+            if(note.getTitle().equals("final")) {
+                return "The Student "+student.getFullName()+" int the Course " + group.getCourse().getName()+" has a final note: "+note.getNote();
+            }
+        }
+
         return "The Student Doesn't have a final note";
     }
 
