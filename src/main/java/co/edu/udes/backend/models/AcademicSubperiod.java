@@ -28,5 +28,5 @@ public class AcademicSubperiod {
             nullable = false,
             columnDefinition = "INTEGER"
     )
-    private int porcentage;
+    private int percentage;
 }
