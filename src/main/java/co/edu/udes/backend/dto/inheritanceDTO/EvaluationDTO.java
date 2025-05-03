@@ -19,7 +19,7 @@ public class EvaluationDTO {
     private String evaluationName;
     private String evaluationRubric;
     private LocalDateTime date;
-    private long groupId;
+    private long qualificationCategoryId;
     private List<Qualification> qualification;
 
 }

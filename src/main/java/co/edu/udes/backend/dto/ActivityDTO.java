@@ -18,6 +18,4 @@ public class ActivityDTO extends EvaluationDTO {
 
     private String description;
     private String answerText;
-    private List<AnswerDocumentDTO> answerDocument;
-
 }

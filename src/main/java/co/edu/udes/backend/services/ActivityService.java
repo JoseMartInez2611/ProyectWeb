@@ -4,8 +4,10 @@ import co.edu.udes.backend.dto.ActivityDTO;
 import co.edu.udes.backend.mappers.ActivityMapper;
 import co.edu.udes.backend.models.Activity;
 import co.edu.udes.backend.models.Group;
+import co.edu.udes.backend.models.QualificationCategory;
 import co.edu.udes.backend.repositories.ActivityRepository;
 import co.edu.udes.backend.repositories.GroupRepository;
+import co.edu.udes.backend.repositories.QualificationCategoryRepository;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ public class ActivityService {
 
     private final ActivityRepository activityRepository;
     private final GroupRepository groupRepository;
+    private final QualificationCategoryRepository qualificationCategoryRepository;
     @Autowired
     private ActivityMapper activityMapper;
 
@@ -66,12 +69,12 @@ public class ActivityService {
      * @throws ResourceNotFoundException Si no se encuentra el grupo con el ID proporcionado en la actividad.
      */
     public ActivityDTO createActivity(Activity activity) {
-        // Buscar el grupo asociado por el ID
-        Group group = groupRepository.findById(activity.getGroup().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Group not found with id: " + activity.getGroup().getId()));
+        // Buscar la categoría asociada por el ID
+        QualificationCategory qualificationCategory = qualificationCategoryRepository.findById(activity.getQualificationCategory().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Qualification category not found with id: " + activity.getQualificationCategory().getId()));
 
         // Establecer la relación entre la actividad y el grupo
-        activity.setGroup(group);
+        activity.setQualificationCategory(qualificationCategory);
 
         // Guardar la nueva actividad
         Activity savedActivity = activityRepository.save(activity);

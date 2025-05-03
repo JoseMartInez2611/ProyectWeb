@@ -60,19 +60,11 @@ public class FinalNoteService {
 
 
     public double getPerformance(long id){
-        List<Double> percentage= finalNoteRepository.getPercentagesByAcademicRecordId(id);
-        List<Double> note = finalNoteRepository.getNotesByAcademicRecordId(id);
-        double performance=0.0;
-
-        for (int i = 0; i < percentage.size(); i++) {
-            if(percentage.get(i)==100.0){
-                continue;
-            }
-            performance += (note.get(i) * (percentage.get(i) / 100));
-        }
-        return performance;
+        Double note = finalNoteRepository.getNoteByAcademicRecordId(id);
+        return note;
     }
 
+    /*
     public String getProyectNote(long id) {
         double value = 0.0;
         double minimum = 3.0;
@@ -109,7 +101,7 @@ public class FinalNoteService {
             return String.format("You may need %.2f to pass the lesson", necessaryNote);
         }
     }
-
+*/
 
     public String getReport(long id){
 
@@ -126,7 +118,7 @@ public class FinalNoteService {
         return "The Student Doesn't have a final note";
     }
 
-    public String getLessonFinalNote(long idStudent, long idGroup) {
+    public float getLessonFinalNote(long idStudent, long idGroup) {
 
         Student student  = studentRepository.findById(idStudent)
                 .orElseThrow(() -> new RuntimeException("Student not found with id: " + idStudent));
@@ -138,16 +130,8 @@ public class FinalNoteService {
                 .orElseThrow(() -> new RuntimeException("Academic record not found for student with id: " + idStudent));
 
 
-        List<FinalNote> finalNotes = finalNoteRepository.findByAcademicRecordIdAndGroupId(academicRecord.getId(), idGroup);
-
-        for (FinalNote note : finalNotes) {
-            System.out.println("Notes: "+note.getTitle()+" "+note.getNote());
-            if(note.getTitle().equals("final")) {
-                return "The Student "+student.getFullName()+" int the Course " + group.getCourse().getName()+" has a final note: "+note.getNote();
-            }
-        }
-
-        return "The Student Doesn't have a final note";
+        FinalNote finalNote = finalNoteRepository.findByAcademicRecordIdAndGroupId(academicRecord.getId(), idGroup);
+        return finalNote.getNote();
     }
 
 

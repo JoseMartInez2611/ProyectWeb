@@ -13,5 +13,5 @@ public class GroupDTO {
     private long id;
     private long courseId;
     private long teacherId;
-    private String academicPeriod;
+    private long academicPeriodId;
 }

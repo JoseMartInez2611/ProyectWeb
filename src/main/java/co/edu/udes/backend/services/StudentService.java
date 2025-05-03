@@ -4,10 +4,7 @@ import co.edu.udes.backend.dto.ScheduleInfoDTO;
 import co.edu.udes.backend.dto.StudentDTO;
 import co.edu.udes.backend.mappers.StudentMapper;
 import co.edu.udes.backend.models.*;
-import co.edu.udes.backend.repositories.AcademicRecordRepository;
-import co.edu.udes.backend.repositories.AcademicRegistrationRepository;
-import co.edu.udes.backend.repositories.LessonRepository;
-import co.edu.udes.backend.repositories.StudentRepository;
+import co.edu.udes.backend.repositories.*;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +23,7 @@ public class StudentService {
     private final AcademicRecordRepository academicRecordRepository;
     private final AcademicRegistrationRepository academicRegistrationRepository;
     private final LessonRepository lessonRepository;
+    private final AcademicPeriodRepository academicPeriodRepository;
     @Autowired
     private StudentMapper studentMapper;
     private static final List<String> DAY_ORDER = List.of(
@@ -81,19 +79,15 @@ public class StudentService {
 
         LocalDate referenceDate = LocalDate.now();
         int year = referenceDate.getYear();
-
-        LocalDate startDate;
-        LocalDate endDate;
+        AcademicPeriod academicPeriod = null;
 
         if (referenceDate.isBefore(LocalDate.of(year, 6, 1))) {
-            startDate = LocalDate.of(year - 1, 12, 1);
-            endDate = LocalDate.of(year, 6, 1);
+            academicPeriod = academicPeriodRepository.findByAcademicYearAndPeriod(year, 'A');
         } else {
-            startDate = LocalDate.of(year, 6, 1);
-            endDate = LocalDate.of(year, 12, 1);
+            academicPeriod = academicPeriodRepository.findByAcademicYearAndPeriod(year, 'B');
         }
 
-        List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findByStudentIdAndRegistrationDateBetween(id, startDate, endDate);
+        List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findByGroupIdAndAcademicPeriodId(id, academicPeriod.getId());
         List<ScheduleInfoDTO> scheduleInfoDTOList = new ArrayList<>();
 
         for (AcademicRegistration academicRegistration : academicRegistrations) {

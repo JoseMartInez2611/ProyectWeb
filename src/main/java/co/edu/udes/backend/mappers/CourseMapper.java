@@ -16,11 +16,13 @@ public interface CourseMapper {
     CourseMapper INSTANCE = Mappers.getMapper(CourseMapper.class);
 
     @Mapping(source = "prerequisiteIds", target = "prerequisites", qualifiedByName = "mapIdsToCourses")
-    @Mapping(source = "careerIds", target = "careers", qualifiedByName = "mapIdsToCareers")
+    @Mapping(source = "equivalencesIds", target = "equivalences", qualifiedByName = "mapIdsToCourses")
+    @Mapping(source = "careerId", target = "career.id")
     Course toEntity(CourseDTO dto);
 
     @Mapping(source = "prerequisites", target = "prerequisiteIds", qualifiedByName = "mapCoursesToIds")
-    @Mapping(source = "careers", target = "careerIds", qualifiedByName = "mapCareersToIds")
+    @Mapping(source = "equivalences", target = "equivalencesIds", qualifiedByName = "mapCoursesToIds")
+    @Mapping(source = "career.id", target = "careerId")
     CourseDTO toDto(Course course);
 
     List<Course> toEntityList(List<CourseDTO> dtoList);
@@ -34,14 +36,6 @@ public interface CourseMapper {
                 .toList();
     }
 
-    @Named("mapCareersToIds")
-    static List<Long> mapCareersToIds(List<Career> careers) {
-        if (careers == null) return null;
-        return careers.stream()
-                .map(Career::getId)
-                .toList();
-    }
-
     @Named("mapIdsToCourses")
     static List<Course> mapIdsToCourses(List<Long> ids) {
         if (ids == null) return null;
@@ -52,17 +46,5 @@ public interface CourseMapper {
             courses.add(course);
         }
         return courses;
-    }
-
-    @Named("mapIdsToCareers")
-    static List<Career> mapIdsToCareers(List<Long> ids) {
-        if (ids == null) return null;
-        List<Career> careers = new ArrayList<>();
-        for  ( Long id : ids ) {
-            Career career = new Career();
-            career.setId(id);
-            careers.add(career);
-        }
-        return careers;
     }
 }

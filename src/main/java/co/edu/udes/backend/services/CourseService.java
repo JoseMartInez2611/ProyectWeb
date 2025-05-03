@@ -33,22 +33,7 @@ public class CourseService {
     }
 
     public CourseDTO create(Course course) {
-
-        Course newCourse = courseRepository.save(course);
-        if (course.getCareers() != null && !course.getCareers().isEmpty()) {
-            List<Long> careerIds = course.getCareers().stream()
-                    .map(Career::getId)
-                    .toList();
-
-            List<Career> careers = careerRepository.findAllById(careerIds);
-
-            for (Career career : careers) {
-                career.addCourse(newCourse);
-            }
-            careerRepository.saveAll(careers);
-        }
-
-        return courseMapper.toDto(newCourse);
+        return courseMapper.toDto(courseRepository.save(course));
     }
 
     public List<CourseDTO> createMultiple(List<Course> courses) {

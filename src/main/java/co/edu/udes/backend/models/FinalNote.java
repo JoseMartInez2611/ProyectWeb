@@ -34,16 +34,4 @@ public class FinalNote {
             columnDefinition = "REAL"
     )
     private float note;
-
-    @Column(name = "title",
-            nullable = false,
-            columnDefinition = "VARCHAR(255)"
-    )
-    private String title;
-
-    @Column(name = "percentage",
-            nullable = false,
-            columnDefinition = "INTEGER"
-    )
-    private int percentage;
 }

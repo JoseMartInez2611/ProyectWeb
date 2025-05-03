@@ -4,14 +4,10 @@ import co.edu.udes.backend.dto.ScheduleInfoDTO;
 import co.edu.udes.backend.dto.TeacherDTO;
 import co.edu.udes.backend.dto.inheritanceDTO.EvaluationDTO;
 import co.edu.udes.backend.mappers.EvaluationMapper;
-import co.edu.udes.backend.mappers.ScheduleMapper;
 import co.edu.udes.backend.mappers.TeacherMapper;
 import co.edu.udes.backend.models.*;
 import co.edu.udes.backend.models.inheritance.Evaluation;
-import co.edu.udes.backend.repositories.EvaluationRepository;
-import co.edu.udes.backend.repositories.GroupRepository;
-import co.edu.udes.backend.repositories.LessonRepository;
-import co.edu.udes.backend.repositories.TeacherRepository;
+import co.edu.udes.backend.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +25,7 @@ public class TeacherService {
     private final GroupRepository groupRepository; // Repositorio para acceder a los datos de los grupos
     private final EvaluationRepository evaluationRepository; // Repositorio para acceder a los datos de las evaluaciones
     private final LessonRepository lessonRepository;
+    private final QualificationCategoryRepository qualificationCategoryRepository;
     @Autowired
     private TeacherMapper teacherMapper; // Mapper para convertir entre la entidad Teacher y el DTO TeacherDTO
     @Autowired
@@ -125,7 +122,7 @@ public class TeacherService {
         // Verificar que la carrera del profesor sea adecuada para el grupo
         if (group.getCourse() != null && teacher.getCareers() != null) {
             boolean careerMatch = teacher.getCareers().stream()
-                    .anyMatch(career -> group.getCourse().getCareers().contains(career));
+                    .anyMatch(career -> group.getCourse().getCareer().equals(career));
             if (!careerMatch) {
                 throw new RuntimeException("La carrera del docente no es adecuada para este grupo.");
             }
@@ -218,8 +215,12 @@ public class TeacherService {
         List<Group> groups = teacher.getGroups();
         List<Evaluation> evaluations = new ArrayList<>();
         for (Group group : groups) {
-            List<Evaluation> groupEvaluations = evaluationRepository.findByGroup(group);
-            evaluations.addAll(groupEvaluations);
+            List<QualificationCategory> qualificationCategories = qualificationCategoryRepository.findByGroupId(group.getId());
+            for (QualificationCategory qualificationCategory : qualificationCategories) {
+                List<Evaluation> groupEvaluations = evaluationRepository.findByQualificationCategory(qualificationCategory);
+                evaluations.addAll(groupEvaluations);
+            }
+
         }
         return evaluationMapper.toDtoList(evaluations);
     }

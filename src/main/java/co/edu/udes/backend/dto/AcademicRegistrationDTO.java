@@ -16,5 +16,5 @@ public class AcademicRegistrationDTO {
     private long id;
     private long studentId;
     public long groupId;
-    private LocalDate registrationDate;
+    private long academicPeriodId;
 }
