@@ -42,8 +42,10 @@ public class EmployeeService {
     }
 
     public EmployeeDTO create(Employee employee) {
+
         employee.setRole(roleRepository.findById(4L)
                 .orElseThrow(() -> new RuntimeException("Role not found")));
+
         return employeeMapper.toDto(employeeRepository.save(employee));
     }
 

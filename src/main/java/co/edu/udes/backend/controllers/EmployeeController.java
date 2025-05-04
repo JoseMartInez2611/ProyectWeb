@@ -25,6 +25,7 @@ public class EmployeeController {
 
     @GetMapping
     public ResponseEntity<List<EmployeeDTO>> getAll() {
+
         return ResponseEntity.ok(employeeService.getAll());
     }
 
@@ -40,8 +41,11 @@ public class EmployeeController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody List<EmployeeDTO> dtoList) {
         try {
+
             List<Employee> profileUList = employeeMapper.toEntityList(dtoList);
+
             List<EmployeeDTO> createdUsers = employeeService.createMultiple(profileUList); // Modifica el servicio
+
             return ResponseEntity.ok(createdUsers); // Devuelve DTOs
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Please check the data you are sending: " + e.getMessage()); // Incluye el mensaje de error

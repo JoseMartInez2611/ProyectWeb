@@ -74,7 +74,7 @@ public class ProfileU {
     private List<Communication> communication;
 
     @Column(name="is_enable")
-    private boolean isEnable;
+    private boolean enable;
 
     @Column(name="account_non_expired")
     private boolean accountNonExpired;

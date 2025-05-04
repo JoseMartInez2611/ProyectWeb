@@ -28,9 +28,7 @@ public class ProfileUDetailServiceImpl implements UserDetailsService {
 
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
 
-        authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(profileU.getRole().getRoleEnum().name())));
-
-
+        authorityList.add(new SimpleGrantedAuthority("ROLE_" + profileU.getRole().getRoleEnum().name()));
 
         profileU.getRole().getPermissionList().forEach(permissionEntity ->
                 authorityList.add(new SimpleGrantedAuthority(permissionEntity.getName()))

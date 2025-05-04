@@ -43,6 +43,7 @@ public class ProfileUService {
     }
 
     public ProfileUDTO create(ProfileU user) {
+        user.setEnable(true);
         return profileUMapper.toDto(userRepository.save(user));
 
     }
