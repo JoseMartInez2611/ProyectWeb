@@ -17,4 +17,5 @@ public interface AcademicResourceRepository extends JpaRepository<AcademicResour
 
     @Query("SELECT ar.category FROM AcademicResource ar WHERE ar.id = :id")
     String getCategory(@Param("id") Long id);
+
 }

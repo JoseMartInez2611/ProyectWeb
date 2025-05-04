@@ -80,7 +80,6 @@ public class QualificationService {
         String name= qualificationRepository.findFullNameByStudentId(id);
         Double average=qualificationRepository.findAverageScoreByStudentId(id);
         return "The to "+name+" average is : "+ (average != null ? average.floatValue() : 0.0);
-
     }
 
 

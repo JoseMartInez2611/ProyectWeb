@@ -18,4 +18,9 @@ public class ProfileUDTO {
     private String email;
     private String userName;
     private String password;
+    private boolean enable;
+    private boolean accountNonExpired;
+    private boolean accountNonLocked;
+    private boolean credentialsNonExpired;
+
 }

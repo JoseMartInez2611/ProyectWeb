@@ -8,18 +8,18 @@ import co.edu.udes.backend.mappers.ScheduleMapper;
 import co.edu.udes.backend.mappers.TeacherMapper;
 import co.edu.udes.backend.models.*;
 import co.edu.udes.backend.models.inheritance.Evaluation;
-import co.edu.udes.backend.repositories.EvaluationRepository;
-import co.edu.udes.backend.repositories.GroupRepository;
-import co.edu.udes.backend.repositories.LessonRepository;
-import co.edu.udes.backend.repositories.TeacherRepository;
+import co.edu.udes.backend.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +33,7 @@ public class TeacherService {
     private TeacherMapper teacherMapper; // Mapper para convertir entre la entidad Teacher y el DTO TeacherDTO
     @Autowired
     private final EvaluationMapper evaluationMapper; // Mapper para convertir entre la entidad Evaluation y el DTO EvaluationDTO
+    private final RoleRepository roleRepository;
     private static final List<String> DAY_ORDER = List.of(
             "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"
     );
@@ -64,6 +65,14 @@ public class TeacherService {
      * @return El TeacherDTO del docente creado.
      */
     public TeacherDTO create(Teacher teacher) {
+        teacher.setRole(roleRepository.findById(2L)
+                .orElseThrow(() -> new RuntimeException("Role not found")));
+
+        teacher.setEnable(true);
+        teacher.setAccountNonExpired(true);
+        teacher.setAccountNonLocked(true);
+        teacher.setCredentialsNonExpired(true);
+
         return teacherMapper.toDto(teacherRepository.save(teacher));
     }
 
@@ -73,9 +82,12 @@ public class TeacherService {
      * @return Una lista de TeacherDTO de los docentes creados.
      */
     public List<TeacherDTO> createMultiple(List<Teacher> data) {
-        return teacherMapper.toDtoList(
-                teacherRepository.saveAll(data)
-        );
+        data=encriptPassword(data);
+        List<TeacherDTO> teachers = new ArrayList<TeacherDTO>();
+        for (Teacher teacher : data) {
+            teachers.add(create(teacher));
+        }
+        return teachers;
     }
 
     /**
@@ -103,6 +115,14 @@ public class TeacherService {
         teacherRepository.deleteById(id);
     }
 
+    public List<Teacher> encriptPassword(List<Teacher> teachers) {
+        for (Teacher teacher : teachers) {
+            teacher.setPassword(new BCryptPasswordEncoder().encode(teacher.getPassword()));
+            System.out.println(teacher.getPassword());
+            System.out.println(new BCryptPasswordEncoder().encode(teacher.getPassword()));
+        }
+        return teachers;
+    }
 
     // modulos
     // moduló de Asignación de cursos
