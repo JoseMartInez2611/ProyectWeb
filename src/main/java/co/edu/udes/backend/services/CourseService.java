@@ -2,7 +2,6 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.CourseDTO;
 import co.edu.udes.backend.mappers.CourseMapper;
-import co.edu.udes.backend.models.Career;
 import co.edu.udes.backend.models.Course;
 import co.edu.udes.backend.repositories.CareerRepository;
 import co.edu.udes.backend.repositories.CourseRepository;
@@ -33,7 +32,16 @@ public class CourseService {
     }
 
     public CourseDTO create(Course course) {
-        return courseMapper.toDto(courseRepository.save(course));
+        Course newCourse = courseRepository.save(course);
+
+        for (Course equivalence : newCourse.getEquivalences()){
+            Course courseEquivalence = courseRepository.findById(equivalence.getId())
+                    .orElseThrow(() -> new RuntimeException("Course not found with id: " + equivalence.getId()));
+            courseEquivalence.getEquivalences().add(newCourse);
+            courseRepository.save(courseEquivalence);
+        }
+
+        return courseMapper.toDto(newCourse);
     }
 
     public List<CourseDTO> createMultiple(List<Course> courses) {
