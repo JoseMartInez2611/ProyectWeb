@@ -3,6 +3,7 @@ package co.edu.udes.backend.models.inheritance;
 import co.edu.udes.backend.models.Borrow;
 import co.edu.udes.backend.models.Message;
 import co.edu.udes.backend.models.Report;
+import co.edu.udes.backend.models.RoleEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -69,5 +70,28 @@ public class ProfileU {
     @ToString.Exclude
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "receivers")
     private List<Communication> communication;
+
+    @Column(name="is_enable")
+    private boolean enable;
+
+    @Column(name="account_non_expired")
+    private boolean accountNonExpired;
+
+    @Column(name="account_non_locked")
+    private boolean accountNonLocked;
+
+    @Column(name="credentials_non_expired")
+    private boolean credentialsNonExpired;
+
+    @ManyToOne(
+            targetEntity = RoleEntity.class,
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(
+            name = "id_Role",
+            columnDefinition = "BIGINT"
+    )
+    private RoleEntity role;
 
 }

@@ -8,6 +8,7 @@ import co.edu.udes.backend.repositories.*;
 import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,7 +24,10 @@ public class StudentService {
     private final AcademicRecordRepository academicRecordRepository;
     private final AcademicRegistrationRepository academicRegistrationRepository;
     private final LessonRepository lessonRepository;
+
     private final AcademicPeriodRepository academicPeriodRepository;
+    private final RoleRepository roleRepository;
+
     @Autowired
     private StudentMapper studentMapper;
     private static final List<String> DAY_ORDER = List.of(
@@ -41,6 +45,13 @@ public class StudentService {
     }
 
     public StudentDTO create(Student student) {
+        student.setRole(roleRepository.findById(3L)
+                .orElseThrow(() -> new RuntimeException("Role not found")));
+        student.setEnable(true);
+        student.setAccountNonExpired(true);
+        student.setAccountNonLocked(true);
+        student.setCredentialsNonExpired(true);
+
         Student newStudent = studentRepository.save(student);
 
         AcademicRecord academicRecord = new AcademicRecord();
@@ -52,6 +63,7 @@ public class StudentService {
     }
 
     public List<StudentDTO> createMultiple(List<Student> users) {
+        users = encriptPassword(users);
         List<StudentDTO> savedStudents = new ArrayList<>();
         for (Student student : users) {
             savedStudents.add(create(student));
@@ -71,6 +83,13 @@ public class StudentService {
         studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
         studentRepository.deleteById(id);
+    }
+
+    public List<Student> encriptPassword(List<Student> students) {
+        for (Student student : students) {
+            student.setPassword(new BCryptPasswordEncoder().encode(student.getPassword()));
+        }
+        return students;
     }
 
     public List<ScheduleInfoDTO> getSchedule(Long id) {
