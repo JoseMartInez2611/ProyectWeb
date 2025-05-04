@@ -43,7 +43,11 @@ public class StudentService {
     public StudentDTO create(Student student) {
         student.setRole(roleRepository.findById(3L)
                 .orElseThrow(() -> new RuntimeException("Role not found")));
-        System.out.println("Service Create "+student);
+        student.setEnable(true);
+        student.setAccountNonExpired(true);
+        student.setAccountNonLocked(true);
+        student.setCredentialsNonExpired(true);
+
         Student newStudent = studentRepository.save(student);
 
         AcademicRecord academicRecord = new AcademicRecord();

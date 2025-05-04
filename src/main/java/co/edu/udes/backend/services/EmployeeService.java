@@ -42,7 +42,10 @@ public class EmployeeService {
 
         employee.setRole(roleRepository.findById(4L)
                 .orElseThrow(() -> new RuntimeException("Role not found")));
-
+        employee.setEnable(true);
+        employee.setAccountNonExpired(true);
+        employee.setAccountNonLocked(true);
+        employee.setCredentialsNonExpired(true);
         return employeeMapper.toDto(employeeRepository.save(employee));
     }
 

@@ -67,6 +67,12 @@ public class TeacherService {
     public TeacherDTO create(Teacher teacher) {
         teacher.setRole(roleRepository.findById(2L)
                 .orElseThrow(() -> new RuntimeException("Role not found")));
+
+        teacher.setEnable(true);
+        teacher.setAccountNonExpired(true);
+        teacher.setAccountNonLocked(true);
+        teacher.setCredentialsNonExpired(true);
+
         return teacherMapper.toDto(teacherRepository.save(teacher));
     }
 
