@@ -3,16 +3,12 @@ package co.edu.udes.backend;
 import co.edu.udes.backend.models.*;
 import co.edu.udes.backend.models.inheritance.ProfileU;
 import co.edu.udes.backend.repositories.*;
-import co.edu.udes.backend.services.EmployeeService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 

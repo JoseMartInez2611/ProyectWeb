@@ -1,19 +1,15 @@
 package co.edu.udes.backend.services;
 
-import co.edu.udes.backend.dto.MessageDTO;
 import co.edu.udes.backend.dto.inheritanceDTO.ProfileUDTO;
 import co.edu.udes.backend.mappers.MessageMapper;
 import co.edu.udes.backend.mappers.ProfileUMapper;
-import co.edu.udes.backend.models.Message;
 import co.edu.udes.backend.models.inheritance.ProfileU;
 import co.edu.udes.backend.repositories.MessageRepository;
 import co.edu.udes.backend.repositories.ProfileURepository;
-import co.edu.udes.backend.utils.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Service

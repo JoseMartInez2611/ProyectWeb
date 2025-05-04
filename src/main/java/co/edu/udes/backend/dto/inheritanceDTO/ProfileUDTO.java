@@ -1,6 +1,5 @@
 package co.edu.udes.backend.dto.inheritanceDTO;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
