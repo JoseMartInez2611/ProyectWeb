@@ -85,9 +85,12 @@ public class AcademicRegistrationService {
     }
 
     private void validateScheduleAvailability(Student student, Group group){
-        List<Lesson> lessons = lessonRepository.findByGroupId(group.getId());
+        Group groupComplete = groupRepository.findById(group.getId())
+                .orElseThrow(() -> new RuntimeException("Group not found with id: " + group.getId()));
 
-        List<AcademicRegistration> currentRegistrations = academicRegistrationRepository.findByStudentId(student.getId());
+        List<Lesson> lessons = lessonRepository.findByGroupId(group.getId());
+        AcademicPeriod academicPeriod = groupComplete.getAcademicPeriod();
+        List<AcademicRegistration> currentRegistrations = academicRegistrationRepository.findByStudentIdAndAcademicPeriodId(student.getId(), academicPeriod.getId());
 
         List<Long> currentGroupIds = currentRegistrations.stream()
                 .map(registration -> registration.getGroup().getId())
@@ -114,7 +117,6 @@ public class AcademicRegistrationService {
     }
 
     private void validatePrerequisites(Student student, Group group) {
-
         Group groupComplete = groupRepository.findById(group.getId())
                 .orElseThrow(() -> new RuntimeException("Group not found with id: " + group.getId()));
 
@@ -134,7 +136,16 @@ public class AcademicRegistrationService {
                 .toList();
 
         List<String> missing = prerequisites.stream()
-                .filter(prereq -> !approvedCourseIds.contains(prereq.getId()))
+                .filter(prereq -> {
+                    boolean prereqApproved = approvedCourseIds.contains(prereq.getId());
+
+                    boolean equivalentApproved = prereq.getEquivalences() != null &&
+                            prereq.getEquivalences().stream()
+                                    .map(Course::getId)
+                                    .anyMatch(approvedCourseIds::contains);
+
+                    return !prereqApproved && !equivalentApproved;
+                })
                 .map(Course::getName)
                 .toList();
 
