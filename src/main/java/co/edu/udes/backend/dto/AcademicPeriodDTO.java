@@ -1,4 +1,5 @@
 package co.edu.udes.backend.dto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,10 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GroupDTO {
-
+public class AcademicPeriodDTO {
     private long id;
-    private long courseId;
-    private long teacherId;
-    private long academicPeriodId;
+    private int academicYear;
+    private char period;
 }

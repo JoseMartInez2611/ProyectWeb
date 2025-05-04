@@ -56,12 +56,7 @@ public class Career {
     )
     private String type;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "career_courses",
-            joinColumns = @JoinColumn(name = "id_career"),
-            inverseJoinColumns = @JoinColumn(name = "id_course")
-    )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "career")
     private List<Course> courses;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "careers")
@@ -71,13 +66,9 @@ public class Career {
         if (!courses.contains(course)) {
             courses.add(course);
         }
-        if (!course.getCareers().contains(this)) {
-            course.getCareers().add(this);
-        }
     }
 
     public void removeCourse(Course course) {
         courses.remove(course);
-        course.getCareers().remove(this);
     }
 }

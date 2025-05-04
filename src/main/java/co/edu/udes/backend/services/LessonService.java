@@ -2,14 +2,8 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.LessonDTO;
 import co.edu.udes.backend.mappers.LessonMapper;
-import co.edu.udes.backend.models.AcademicRegistration;
-import co.edu.udes.backend.models.Lesson;
-import co.edu.udes.backend.models.Room;
-import co.edu.udes.backend.models.Schedule;
-import co.edu.udes.backend.repositories.AcademicRegistrationRepository;
-import co.edu.udes.backend.repositories.LessonRepository;
-import co.edu.udes.backend.repositories.RoomRepository;
-import co.edu.udes.backend.repositories.ScheduleRepository;
+import co.edu.udes.backend.models.*;
+import co.edu.udes.backend.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +20,7 @@ public class LessonService {
     private final ScheduleRepository scheduleRepository;
     private final RoomRepository roomRepository;
     private final AcademicRegistrationRepository academicRegistrationRepository;
+    private final AcademicPeriodRepository academicPeriodRepository;
     @Autowired
     private LessonMapper lessonMapper;
 
@@ -106,19 +101,15 @@ public class LessonService {
 
         LocalDate referenceDate = LocalDate.now();
         int year = referenceDate.getYear();
-
-        LocalDate startDate;
-        LocalDate endDate;
+        AcademicPeriod academicPeriod = null;
 
         if (referenceDate.isBefore(LocalDate.of(year, 6, 1))) {
-            startDate = LocalDate.of(year - 1, 12, 1);
-            endDate = LocalDate.of(year, 6, 1);
+            academicPeriod = academicPeriodRepository.findByAcademicYearAndPeriod(year, 'A');
         } else {
-            startDate = LocalDate.of(year, 6, 1);
-            endDate = LocalDate.of(year, 12, 1);
+            academicPeriod = academicPeriodRepository.findByAcademicYearAndPeriod(year, 'B');
         }
 
-        List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findByGroupIdAndRegistrationDateBetween(lesson.getGroup().getId(), startDate, endDate);
+        List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findByGroupIdAndAcademicPeriodId(lesson.getGroup().getId(), academicPeriod.getId());
 
         if (academicRegistrations.size() > newRoom.getCapacity()) {
             throw new RuntimeException("The room capacity is not enough for the number of students in the group.");

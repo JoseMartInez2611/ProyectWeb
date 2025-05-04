@@ -37,8 +37,7 @@ public class FinalNoteController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
-    //Get the proyection to pass by academic record id
+/*    //Get the proyection to pass by academic record id
     @GetMapping("/report/{id}")
     public ResponseEntity<?> getReport(@PathVariable Long id) {
         try{
@@ -47,7 +46,7 @@ public class FinalNoteController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
+*/
     //Get the group performance by group id
     @GetMapping("/group-average/{id}")
     public ResponseEntity<?> getGroupPerformance(@PathVariable Long id) {

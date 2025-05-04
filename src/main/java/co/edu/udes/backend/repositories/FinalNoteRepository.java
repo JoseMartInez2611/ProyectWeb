@@ -11,11 +11,8 @@ import java.util.List;
 @Repository
 public interface FinalNoteRepository extends JpaRepository<FinalNote, Long> {
 
-    @Query("SELECT fn.percentage FROM FinalNote fn WHERE fn.academicRecord.id = :idAcademicRecord")
-    List<Double> getPercentagesByAcademicRecordId(@Param("idAcademicRecord") Long idAcademicRecord);
-
     @Query("SELECT fn.note FROM FinalNote fn WHERE fn.academicRecord.id = :idAcademicRecord")
-    List<Double> getNotesByAcademicRecordId(@Param("idAcademicRecord") Long idAcademicRecord);
+    Double getNoteByAcademicRecordId(@Param("idAcademicRecord") Long idAcademicRecord);
 
     @Query("""
         SELECT DISTINCT CONCAT(p.firstName, ' ', p.lastName)
@@ -37,8 +34,5 @@ public interface FinalNoteRepository extends JpaRepository<FinalNote, Long> {
             "WHERE g.id = :groupId")
     String findCourseNameByGroupId(@Param("groupId") Long groupId);
 
-    //List<FinalNote> findByAcademicRecordIdAndGroupId(Long academicRecordId, Long groupId);
-
-
-    List<FinalNote> findByAcademicRecordIdAndGroupId(Long academicRecordId, Long groupId);
+    FinalNote findByAcademicRecordIdAndGroupId(Long academicRecordId, Long groupId);
 }

@@ -22,5 +22,6 @@ public class CourseDTO {
     private List<String> objectives;
     private List<String> content;
     private List<String> competences;
-    private List<Long> careerIds;
+    private long careerId;
+    private List<Long> equivalencesIds;
 }

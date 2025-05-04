@@ -12,11 +12,11 @@ import java.util.List;
 public interface ActivityMapper {
     ActivityMapper INSTANCE = Mappers.getMapper(ActivityMapper.class);
 
-    @Mapping(source = "groupId", target = "group.id")
+    @Mapping(source = "qualificationCategoryId", target = "qualificationCategory.id")
     Activity toEntity(ActivityDTO activity);
     List<Activity> toEntityList(List<ActivityDTO> activities);
 
-    @Mapping(source = "group.id", target = "groupId")
+    @Mapping(source = "qualificationCategory.id", target = "qualificationCategoryId")
     ActivityDTO toDto(Activity activity);
     List<ActivityDTO> toDtoList(List<Activity> activities);
 }

@@ -62,20 +62,17 @@ public class Course {
     private List<String> competences;
 
     @ToString.Exclude
-    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
-    private List<Career> careers;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_career", nullable = false)
+    private Career career;
 
-    public void addCareer(Career career) {
-        if (!careers.contains(career)) {
-            careers.add(career);
-        }
-        if (!career.getCourses().contains(this)) {
-            career.getCourses().add(this);
-        }
-    }
+    @ToString.Exclude
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "course_equivalences",
+            joinColumns = @JoinColumn(name = "id_course"),
+            inverseJoinColumns = @JoinColumn(name = "id_equivalence")
+    )
+    private List<Course> equivalences;
 
-    public void removeCareer(Career career) {
-        careers.remove(career);
-        career.getCourses().remove(this);
-    }
 }

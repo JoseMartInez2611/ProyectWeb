@@ -1,4 +1,5 @@
 package co.edu.udes.backend.dto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,10 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GroupDTO {
-
+public class QualificationCategoryDTO {
     private long id;
-    private long courseId;
-    private long teacherId;
-    private long academicPeriodId;
+    private String name;
+    private int percentage;
+    private long groupId;
+    private long academicSubperiodId;
 }

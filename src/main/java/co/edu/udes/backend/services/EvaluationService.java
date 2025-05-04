@@ -3,9 +3,11 @@ package co.edu.udes.backend.services;
 import co.edu.udes.backend.dto.inheritanceDTO.EvaluationDTO;
 import co.edu.udes.backend.mappers.EvaluationMapper;
 import co.edu.udes.backend.models.Group;
+import co.edu.udes.backend.models.QualificationCategory;
 import co.edu.udes.backend.models.inheritance.Evaluation;
 import co.edu.udes.backend.repositories.EvaluationRepository;
 import co.edu.udes.backend.repositories.GroupRepository;
+import co.edu.udes.backend.repositories.QualificationCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EvaluationService {
     private final EvaluationRepository evaluationRepository;
-    private final GroupRepository groupRepository;
+    private final QualificationCategoryRepository qualificationCategoryRepository;
     @Autowired
     private EvaluationMapper evaluationMapper;
 
@@ -65,12 +67,12 @@ public class EvaluationService {
      * @throws RuntimeException Si no se encuentra el grupo asociado al ID proporcionado en la evaluación.
      */
     public EvaluationDTO createEvaluation(Evaluation evaluation) {
-        // Buscar el grupo asociado por el ID que viene en la entidad Evaluation
-        Group group = groupRepository.findById(evaluation.getGroup().getId())
-                .orElseThrow(() -> new RuntimeException("Group not found with id: " + evaluation.getGroup().getId()));
+        // Buscar la categoría asociada por el ID que viene en la entidad Evaluation
+        QualificationCategory qualificationCategory = qualificationCategoryRepository.findById(evaluation.getQualificationCategory().getId())
+                .orElseThrow(() -> new RuntimeException("Qualification category not found with id: " + evaluation.getQualificationCategory().getId()));
 
         // Establecer la relación entre la evaluación y el grupo encontrado
-        evaluation.setGroup(group);
+        evaluation.setQualificationCategory(qualificationCategory);
 
         // Guardar la nueva evaluación en la base de datos
         Evaluation savedEvaluation = evaluationRepository.save(evaluation);

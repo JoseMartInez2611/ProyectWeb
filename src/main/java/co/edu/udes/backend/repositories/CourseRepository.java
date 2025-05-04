@@ -10,6 +10,4 @@ import java.util.Optional;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
-    @Query("SELECT c FROM Course c LEFT JOIN FETCH c.careers WHERE c.id = :id")
-    Optional<Course> findByIdWithCareers(@Param("id") Long id);
 }

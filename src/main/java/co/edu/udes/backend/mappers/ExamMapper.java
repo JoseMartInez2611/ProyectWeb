@@ -12,11 +12,11 @@ import java.util.List;
 public interface ExamMapper {
     ExamMapper INSTANCE = Mappers.getMapper(ExamMapper.class);
 
-    @Mapping(source = "groupId", target = "group.id")
+    @Mapping(source = "qualificationCategoryId", target = "qualificationCategory.id")
     Exam toEntity(ExamDTO exam);
     List<Exam> toEntityList(List<ExamDTO> exams);
 
-    @Mapping(source = "group.id", target = "groupId")
+    @Mapping(source = "qualificationCategory.id", target = "qualificationCategoryId")
     ExamDTO toDto(Exam exam);
     List<ExamDTO> toDtoList(List<Exam> exams);
 }

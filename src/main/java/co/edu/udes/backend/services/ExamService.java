@@ -4,8 +4,10 @@ import co.edu.udes.backend.dto.ExamDTO;
 import co.edu.udes.backend.mappers.ExamMapper;
 import co.edu.udes.backend.models.Exam;
 import co.edu.udes.backend.models.Group;
+import co.edu.udes.backend.models.QualificationCategory;
 import co.edu.udes.backend.repositories.ExamRepository;
 import co.edu.udes.backend.repositories.GroupRepository;
+import co.edu.udes.backend.repositories.QualificationCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,7 @@ import java.util.List;
 public class ExamService {
 
     private final ExamRepository examRepository;
-    private final GroupRepository groupRepository;
+    private final QualificationCategoryRepository qualificationCategoryRepository;
     @Autowired
     private ExamMapper examMapper;
 
@@ -66,12 +68,12 @@ public class ExamService {
      * @throws RuntimeException Si no se encuentra el grupo con el ID proporcionado en el examen.
      */
     public ExamDTO createExam(Exam exam) {
-        // Buscar el grupo asociado por el ID
-        Group group = groupRepository.findById(exam.getGroup().getId())
-                .orElseThrow(() -> new RuntimeException("Group not found with id: " + exam.getGroup().getId()));
+        // Buscar la categoría asociada por el ID
+        QualificationCategory qualificationCategory = qualificationCategoryRepository.findById(exam.getQualificationCategory().getId())
+                .orElseThrow(() -> new RuntimeException("Qualification category not found with id: " + exam.getQualificationCategory().getId()));
 
         // Establecer la relación entre el examen y el grupo
-        exam.setGroup(group);
+        exam.setQualificationCategory(qualificationCategory);
 
         // Guardar el nuevo examen
         Exam savedExam = examRepository.save(exam);

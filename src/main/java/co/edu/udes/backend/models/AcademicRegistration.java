@@ -30,9 +30,10 @@ public class  AcademicRegistration {
     )
     public Group group;
 
-    @Column (name = "registration_date",
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "academic_period_id",
             nullable = false,
-            columnDefinition = "DATE"
+            columnDefinition = "BIGINT"
     )
-    private LocalDate registrationDate;
+    private AcademicPeriod academicPeriod;
 }

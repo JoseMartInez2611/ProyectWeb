@@ -31,9 +31,10 @@ public class Group {
     @Lazy
     private Teacher teacher;
 
-    @Column(name = "academic_period",
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "academic_period_id",
             nullable = false,
-            columnDefinition = "VARCHAR(5)"
+            columnDefinition = "BIGINT"
     )
-    private String academicPeriod;
+    private AcademicPeriod academicPeriod;
 }

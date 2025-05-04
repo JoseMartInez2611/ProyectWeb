@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 public class FinalNoteDTO {
 
     private long id;
-    private String title;
-    private int percentage;
     private float note;
     private long academicRecordId;
     private long groupId;

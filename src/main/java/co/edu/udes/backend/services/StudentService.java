@@ -24,7 +24,10 @@ public class StudentService {
     private final AcademicRecordRepository academicRecordRepository;
     private final AcademicRegistrationRepository academicRegistrationRepository;
     private final LessonRepository lessonRepository;
+
+    private final AcademicPeriodRepository academicPeriodRepository;
     private final RoleRepository roleRepository;
+
     @Autowired
     private StudentMapper studentMapper;
     private static final List<String> DAY_ORDER = List.of(
@@ -95,19 +98,15 @@ public class StudentService {
 
         LocalDate referenceDate = LocalDate.now();
         int year = referenceDate.getYear();
-
-        LocalDate startDate;
-        LocalDate endDate;
+        AcademicPeriod academicPeriod = null;
 
         if (referenceDate.isBefore(LocalDate.of(year, 6, 1))) {
-            startDate = LocalDate.of(year - 1, 12, 1);
-            endDate = LocalDate.of(year, 6, 1);
+            academicPeriod = academicPeriodRepository.findByAcademicYearAndPeriod(year, 'A');
         } else {
-            startDate = LocalDate.of(year, 6, 1);
-            endDate = LocalDate.of(year, 12, 1);
+            academicPeriod = academicPeriodRepository.findByAcademicYearAndPeriod(year, 'B');
         }
 
-        List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findByStudentIdAndRegistrationDateBetween(id, startDate, endDate);
+        List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findByGroupIdAndAcademicPeriodId(id, academicPeriod.getId());
         List<ScheduleInfoDTO> scheduleInfoDTOList = new ArrayList<>();
 
         for (AcademicRegistration academicRegistration : academicRegistrations) {

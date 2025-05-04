@@ -15,12 +15,14 @@ public interface AcademicRegistrationMapper {
 
     @Mapping(source = "studentId", target = "student.id")
     @Mapping(source = "groupId", target = "group.id")
+    @Mapping(source = "academicPeriodId", target = "academicPeriod.id")
     AcademicRegistration toEntity(AcademicRegistrationDTO academicRegistration);
     List<AcademicRegistration> toEntityList(List<AcademicRegistrationDTO> academicRegistrations);
 
 
     @Mapping(source = "student.id", target = "studentId")
     @Mapping(source = "group.id", target = "groupId")
+    @Mapping(source = "academicPeriod.id", target = "academicPeriodId")
     AcademicRegistrationDTO toDto(AcademicRegistration academicRegistration);
     List<AcademicRegistrationDTO> toDtoList(List<AcademicRegistration> academicRegistrations);
 }

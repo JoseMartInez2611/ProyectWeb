@@ -12,11 +12,11 @@ import java.util.List;
 public interface EvaluationMapper {
     EvaluationMapper INSTANCE = Mappers.getMapper(EvaluationMapper.class);
 
-    @Mapping(source = "groupId", target = "group.id")
+    @Mapping(source = "qualificationCategoryId", target = "qualificationCategory.id")
     Evaluation toEntity(EvaluationDTO evaluation);
     List<Evaluation> toEntityList(List<EvaluationDTO> evaluations);
 
-    @Mapping(source = "group.id", target = "groupId")
+    @Mapping(source = "qualificationCategory.id", target = "qualificationCategoryId")
     EvaluationDTO toDto(Evaluation evaluation);
     List<EvaluationDTO> toDtoList(List<Evaluation> evaluations);
 }

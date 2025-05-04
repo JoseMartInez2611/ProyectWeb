@@ -14,11 +14,13 @@ public interface GroupMapper {
 
     @Mapping(source = "courseId", target = "course.id")
     @Mapping(source = "teacherId", target = "teacher.id")
+    @Mapping(source = "academicPeriodId", target = "academicPeriod.id")
     Group toEntity(GroupDTO group);
     List<Group> toEntityList(List<GroupDTO> groups);
 
     @Mapping(source = "course.id", target = "courseId")
     @Mapping(source = "teacher.id", target = "teacherId")
+    @Mapping(source = "academicPeriod.id", target = "academicPeriodId")
     GroupDTO toDto(Group group);
     List<GroupDTO> toDtoList(List<Group> groups);
 }

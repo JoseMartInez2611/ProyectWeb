@@ -1,8 +1,10 @@
 package co.edu.udes.backend.models.inheritance;
 
 
+import co.edu.udes.backend.models.AcademicSubperiod;
 import co.edu.udes.backend.models.Group;
 import co.edu.udes.backend.models.Qualification;
+import co.edu.udes.backend.models.QualificationCategory;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -33,10 +35,6 @@ public class Evaluation {
     @Column(name="date", columnDefinition = "DATE", nullable = false)
     private LocalDateTime date;
 
-    @ManyToOne(targetEntity = Group.class)
-    private Group group;
-
-
     @OneToMany(
             targetEntity = Qualification.class,
             fetch = FetchType.LAZY,
@@ -45,5 +43,10 @@ public class Evaluation {
     )
     private List<Qualification> qualification;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id",
+            nullable = false,
+            columnDefinition = "BIGINT"
+    )
+    private QualificationCategory qualificationCategory;
 }

@@ -2,7 +2,6 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.CourseDTO;
 import co.edu.udes.backend.mappers.CourseMapper;
-import co.edu.udes.backend.models.Career;
 import co.edu.udes.backend.models.Course;
 import co.edu.udes.backend.repositories.CareerRepository;
 import co.edu.udes.backend.repositories.CourseRepository;
@@ -33,19 +32,13 @@ public class CourseService {
     }
 
     public CourseDTO create(Course course) {
-
         Course newCourse = courseRepository.save(course);
-        if (course.getCareers() != null && !course.getCareers().isEmpty()) {
-            List<Long> careerIds = course.getCareers().stream()
-                    .map(Career::getId)
-                    .toList();
 
-            List<Career> careers = careerRepository.findAllById(careerIds);
-
-            for (Career career : careers) {
-                career.addCourse(newCourse);
-            }
-            careerRepository.saveAll(careers);
+        for (Course equivalence : newCourse.getEquivalences()){
+            Course courseEquivalence = courseRepository.findById(equivalence.getId())
+                    .orElseThrow(() -> new RuntimeException("Course not found with id: " + equivalence.getId()));
+            courseEquivalence.getEquivalences().add(newCourse);
+            courseRepository.save(courseEquivalence);
         }
 
         return courseMapper.toDto(newCourse);
