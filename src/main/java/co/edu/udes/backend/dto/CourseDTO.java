@@ -24,4 +24,5 @@ public class CourseDTO {
     private List<String> competences;
     private long careerId;
     private List<Long> equivalencesIds;
+    private int semester;
 }

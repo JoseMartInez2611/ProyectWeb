@@ -48,6 +48,12 @@ public class AcademicRegistrationService {
         AcademicRecord academicRecord = academicRecordRepository.findByStudentId(academicRegistration.getStudent().getId())
                 .orElseThrow(() -> new RuntimeException("Academic record not found for student with id: " + academicRegistration.getStudent().getId()));
 
+        FinalNote finalNote = new FinalNote();
+        finalNote.setAcademicRecord(academicRecord);
+        finalNote.setGroup(academicRegistration.getGroup());
+        finalNote.setNote(0.0f);
+        finalNoteRepository.save(finalNote);
+
         return academicRegistrationMapper.toDto(savedAcademicRegistration);
     }
 
@@ -72,6 +78,17 @@ public class AcademicRegistrationService {
     public void delete(Long id) {
         AcademicRegistration academicRegistration = academicRegistrationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Academic registration not found with id: " + id));
+
+        AcademicRecord academicRecord = academicRecordRepository.findByStudentId(academicRegistration.getStudent().getId())
+                .orElseThrow(() -> new RuntimeException("Academic record not found for student with id: " + academicRegistration.getStudent().getId()));
+
+
+        FinalNote finalNote = finalNoteRepository.findByAcademicRecordIdAndGroupId(
+                academicRecord.getId(),
+                academicRegistration.getGroup().getId()
+        );
+
+        finalNoteRepository.deleteById(finalNote.getId());
 
         academicRegistrationRepository.deleteById(id);
     }

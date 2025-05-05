@@ -2,15 +2,17 @@ package co.edu.udes.backend.services;
 
 import co.edu.udes.backend.dto.QualificationDTO;
 import co.edu.udes.backend.mappers.QualificationMapper;
+import co.edu.udes.backend.models.AcademicSubperiod;
+import co.edu.udes.backend.models.FinalNote;
 import co.edu.udes.backend.models.Qualification;
-import co.edu.udes.backend.repositories.EvaluationRepository;
-import co.edu.udes.backend.repositories.QualificationRepository;
-import co.edu.udes.backend.repositories.StudentRepository;
+import co.edu.udes.backend.models.QualificationCategory;
+import co.edu.udes.backend.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,6 +24,9 @@ public class QualificationService {
     private QualificationMapper qualificationMapper;
     private final StudentRepository studentRepository;
     private final EvaluationRepository evaluationRepository;
+    private final QualificationCategoryRepository  qualificationCategoryRepository;
+    private final FinalNoteRepository  finalNoteRepository;
+    private final AcademicSubperiodRepository academicSubperiodRepository;
 
     public List<QualificationDTO> getAll() {
         List<Qualification> qualifications =   qualificationRepository.findAll();
@@ -34,7 +39,9 @@ public class QualificationService {
     }
 
     public QualificationDTO create(Qualification qualification) {
-        return qualificationMapper.toDto(qualificationRepository.save(qualification));
+        Qualification qualificationSave = qualificationRepository.save(qualification);
+        setFinalNote(qualification.getStudent().getId(), qualification.getEvaluation().getQualificationCategory().getGroup().getId());
+        return qualificationMapper.toDto(qualificationSave);
     }
 
     public List<QualificationDTO> createMultiple(List<Qualification> data) {
@@ -75,12 +82,115 @@ public class QualificationService {
 
     }
 
-    public String getAverage(long id){
-        System.out.println("Service GetAverage");
-        String name= qualificationRepository.findFullNameByStudentId(id);
-        Double average=qualificationRepository.findAverageScoreByStudentId(id);
-        return "The to "+name+" average is : "+ (average != null ? average.floatValue() : 0.0);
+    public void setFinalNote(Long idStudent, Long idGroup) {
+        float zero=0;
+        FinalNote finalNotes = finalNoteRepository.finByStundentAndGroup(idStudent, idGroup);
+        List<QualificationCategory> categories = qualificationCategoryRepository.findByGroupId(idGroup);
+        List<AcademicSubperiod> academicSubperiods = new ArrayList<>();
+
+        for (QualificationCategory category : categories) {
+            if (!academicSubperiods.contains(category.getAcademicSubperiod())) {
+                academicSubperiods.add(category.getAcademicSubperiod());
+            }
+        }
+
+        for (AcademicSubperiod academicSubperiod : academicSubperiods) {
+            float cutAverage = getCutAverage(idStudent, idGroup, academicSubperiod.getId());
+            zero += cutAverage*(academicSubperiod.getPercentage()/100);
+        }
+
+        finalNotes.setNote(zero);
+        finalNoteRepository.save(finalNotes);
     }
 
+    public float getCutAverage(Long idStudent, Long idGroup, Long idAcademicSubperiod) {
+        float average=0;
+        float sum=0;
+
+        List<Qualification> qualifications =   qualificationRepository.findAllByStudentAndGroupIdAndCut(idStudent, idGroup, idAcademicSubperiod);
+        List<QualificationCategory> categories = qualificationCategoryRepository.getAllByAcademicSubperiodIdAndGroupId(idAcademicSubperiod, idGroup);
+
+
+        for (int i = 0; i < categories.size(); i++) {
+            int cont = 0;
+            for (int j = 0; j < qualifications.size(); j++) {
+                if(qualifications.get(i).getEvaluation().getQualificationCategory().getId() == categories.get(i).getId()) {
+                    sum += qualifications.get(i).getQualification();
+                    cont++;
+                }
+            }
+            sum=sum/cont;
+            average+= sum*(categories.get(i).getPercentage()/100);
+            sum=0;
+        }
+
+        return average;
+    }
+
+
+    public float getStudentAverageOfLesson(Long idStudent, Long idGroup) {
+        float average = 0;
+        List<Qualification> qualifications =   qualificationRepository.findAllByStudentAndGroupId(idStudent, idGroup);
+
+        for(int i = 0; i < qualifications.size(); i++) {
+            average+= qualifications.get(i).getQualification();
+        }
+        average=average/qualifications.size();
+
+        return average;
+    }
+
+
+    public float getAverage(Long idStudent){
+        List<Qualification> qualifications =   qualificationRepository.findAllByStudentId(idStudent);
+
+        float average=0;
+
+        for(int i = 0; i < qualifications.size(); i++) {
+            average+= qualifications.get(i).getQualification();
+        }
+        average=average/qualifications.size();
+
+        return average;
+    }
+
+
+    public float getGroupAverage(Long idGroup){
+
+        List<FinalNote> qualifications =  finalNoteRepository.findAllByGroupId(idGroup);
+
+        float average=0;
+
+        for(int i = 0; i < qualifications.size(); i++) {
+            average+= qualifications.get(i).getNote();
+        }
+        average=average/qualifications.size();
+
+
+        return average;
+    }
+
+    public float getProyectNote2(Long idAcademicRecord, Long idStudent, Long idGroup) {
+        float average = 0;
+
+
+        return average;
+    }
+
+
+    public double getProyectNote(Long idStudent, Long idGroup, Long idAcademicSubperiod) {
+        double minimum = 3.0;
+
+        double value = getCutAverage(idStudent, idGroup, idAcademicSubperiod);
+
+        double usedPercentage = qualificationCategoryRepository.getPercentagesUsed(
+                idStudent, idGroup, idAcademicSubperiod
+        );
+
+        double remainingPercentage = 100.0 - usedPercentage;
+        double necessaryNote = (minimum - value) * 100 / remainingPercentage;
+
+        return necessaryNote;
+    }
 
 }

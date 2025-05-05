@@ -15,14 +15,11 @@ public interface FinalNoteRepository extends JpaRepository<FinalNote, Long> {
     Double getNoteByAcademicRecordId(@Param("idAcademicRecord") Long idAcademicRecord);
 
     @Query("""
-        SELECT DISTINCT CONCAT(p.firstName, ' ', p.lastName)
-        FROM FinalNote fn
-        JOIN fn.academicRecord ar
-        JOIN ar.student s
-        JOIN ProfileU p ON s.id = p.id
-        WHERE ar.id = :academicRecordId
+        SELECT fn FROM FinalNote fn
+        WHERE fn.academicRecord.student.id = :studentId
+        AND fn.group.id = :groupId
     """)
-    String findStudentFullNameByAcademicRecordId(@Param("academicRecordId") Long academicRecordId);
+    FinalNote finByStundentAndGroup(@Param("studentId") Long studentId, @Param("groupId") Long groupId);
 
     @Query("SELECT AVG(fn.note) FROM FinalNote fn WHERE fn.group.id = :groupId")
     Double getGroupAverage(@Param("groupId") Long groupId);
@@ -35,4 +32,8 @@ public interface FinalNoteRepository extends JpaRepository<FinalNote, Long> {
     String findCourseNameByGroupId(@Param("groupId") Long groupId);
 
     FinalNote findByAcademicRecordIdAndGroupId(Long academicRecordId, Long groupId);
+
+    @Query("SELECT fn FROM FinalNote fn WHERE fn.group.id = :groupId")
+    List<FinalNote> findAllByGroupId(Long idGroup);
+
 }
