@@ -14,20 +14,25 @@ public interface QualificationRepository extends JpaRepository<Qualification, Lo
     @Query("SELECT q FROM Qualification q WHERE q.student.id = :studentId")
     List<Qualification> findAllByStudentId(@Param("studentId") Long studentId);
 
-    @Query("SELECT q FROM Qualification q " +
-            "JOIN q.evaluation e " +
-            "JOIN e.qualificationCategories qc " +
-            "WHERE q.student.id = :studentId AND qc.group.id = :groupId")
-    List<Qualification> findAllByStudentAndGroupId(@Param("studentId") Long studentId, @Param("groupId") Long groupId);
+    List<Qualification>
+    findByStudentIdAndEvaluationQualificationCategoryGroupId(
+            Long studentId,
+            Long groupId
+    );
 
-    @Query("SELECT q FROM Qualification q " +
-            "JOIN q.evaluation e " +
-            "JOIN e.qualificationCategories qc " +
-            "WHERE q.student.id = :studentId AND qc.group.id = :groupId AND qc.academicSubperiod.id = :idAcademicSubperiod")
+    @Query("""
+        SELECT q
+        FROM Qualification q
+        JOIN q.evaluation e
+        JOIN e.qualificationCategory qc
+        WHERE q.student.id = :studentId
+          AND qc.group.id = :groupId
+          AND qc.academicSubperiod.id = :subPeriodId
+    """)
     List<Qualification> findAllByStudentAndGroupIdAndCut(
             @Param("studentId") Long studentId,
             @Param("groupId") Long groupId,
-            @Param("idAcademicSubperiod") Long idAcademicSubperiod
+            @Param("subPeriodId") Long subPeriodId
     );
 
 
@@ -41,8 +46,32 @@ public interface QualificationRepository extends JpaRepository<Qualification, Lo
             "WHERE s.id = :studentId\n")
     String findFullNameByStudentId(@Param("studentId") Long studentId);
 
-    @Query("SELECT q FROM Qualification q WHERE q.group.id = :idGroup")
-    List<Qualification> findAllByGroupId(Long idGroup);
+    @Query("""
+        SELECT q
+        FROM Qualification q
+        JOIN q.evaluation e
+        JOIN e.qualificationCategory qc
+        WHERE qc.group.id = :groupId
+    """)
+    List<Qualification> findAllByGroupId(@Param("groupId") Long groupId);
+
+
+
+    @Query("""
+        SELECT COALESCE(SUM(qc.percentage), 0.0)
+        FROM QualificationCategory qc
+        JOIN Evaluation e ON e.qualificationCategory = qc
+        JOIN Qualification q ON q.evaluation = e
+        WHERE q.student.id = :studentId
+          AND qc.group.id = :groupId
+          AND qc.academicSubperiod.id = :subPeriodId
+    """)
+    double getPercentagesUsed(
+            @Param("studentId") Long studentId,
+            @Param("groupId") Long groupId,
+            @Param("subPeriodId") Long subPeriodId
+    );
+
 }
 
 

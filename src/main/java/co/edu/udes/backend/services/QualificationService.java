@@ -130,7 +130,7 @@ public class QualificationService {
 
     public float getStudentAverageOfLesson(Long idStudent, Long idGroup) {
         float average = 0;
-        List<Qualification> qualifications =   qualificationRepository.findAllByStudentAndGroupId(idStudent, idGroup);
+        List<Qualification> qualifications =   qualificationRepository.findByStudentIdAndEvaluationQualificationCategoryGroupId(idStudent, idGroup);
 
         for(int i = 0; i < qualifications.size(); i++) {
             average+= qualifications.get(i).getQualification();
@@ -181,9 +181,11 @@ public class QualificationService {
     public double getProyectNote(Long idStudent, Long idGroup, Long idAcademicSubperiod) {
         double minimum = 3.0;
 
+        // Promedio actual acumulado del corte
         double value = getCutAverage(idStudent, idGroup, idAcademicSubperiod);
 
-        double usedPercentage = qualificationCategoryRepository.getPercentagesUsed(
+        // Porcentaje de evaluaciones ya realizadas en el corte
+        double usedPercentage = qualificationRepository.getPercentagesUsed(
                 idStudent, idGroup, idAcademicSubperiod
         );
 
@@ -192,5 +194,6 @@ public class QualificationService {
 
         return necessaryNote;
     }
+
 
 }
