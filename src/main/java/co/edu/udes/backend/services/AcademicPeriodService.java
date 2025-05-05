@@ -28,15 +28,7 @@ public class AcademicPeriodService {
                 .orElseThrow(() -> new RuntimeException("Academic period not found with id: " + id)));
     }
 
-    public AcademicPeriodDTO create() {
-        AcademicPeriod academicPeriod = new AcademicPeriod();
-        LocalDate now = LocalDate.now();
-        academicPeriod.setAcademicYear(now.getYear());
-        if(now.getMonthValue() < 6) {
-            academicPeriod.setPeriod('A');
-        } else {
-            academicPeriod.setPeriod('B');
-        }
+    public AcademicPeriodDTO create(AcademicPeriod academicPeriod) {
         return academicPeriodMapper.toDto(academicPeriodRepository.save(academicPeriod));
     }
 }
