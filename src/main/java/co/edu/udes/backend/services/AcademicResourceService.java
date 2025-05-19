@@ -61,4 +61,9 @@ public class AcademicResourceService {
         }
     }
 
+    public List<AcademicResourceDTO> getAllRooms(){
+        List<AcademicResource> academicResources = academicResourceRepository.findAllByCategory("Salon");
+        return academicResourceMapper.toDtoList(academicResources);
+    }
+
 }

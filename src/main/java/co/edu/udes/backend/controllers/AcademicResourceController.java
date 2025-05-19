@@ -36,6 +36,11 @@ public class AcademicResourceController {
         }
     }
 
+    @GetMapping("/rooms")
+    public ResponseEntity<List<AcademicResourceDTO>> getAllRooms() {
+        return ResponseEntity.ok(academicResourceService.getAllRooms());
+    }
+
     @PostMapping
     public ResponseEntity<?> create(@RequestBody List<AcademicResourceDTO> dtos){
         System.out.println(dtos);
