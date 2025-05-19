@@ -75,4 +75,10 @@ public class Course {
     )
     private List<Course> equivalences;
 
+    @Column(name = "semester",
+            nullable = false,
+            columnDefinition = "INT"
+    )
+    private int semester;
+
 }

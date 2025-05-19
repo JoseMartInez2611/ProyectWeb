@@ -2,6 +2,7 @@ package co.edu.udes.backend.controllers;
 
 import co.edu.udes.backend.dto.AcademicPeriodDTO;
 import co.edu.udes.backend.mappers.AcademicPeriodMapper;
+import co.edu.udes.backend.models.AcademicPeriod;
 import co.edu.udes.backend.services.AcademicPeriodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,9 +28,10 @@ public class AcademicPeriodController {
 
     // create the actual academic period rest api
     @PostMapping
-    public ResponseEntity<?> create(){
+    public ResponseEntity<?> create(@RequestBody AcademicPeriodDTO academicPeriodDTO) {
         try{
-            return ResponseEntity.ok(academicPeriodService.create());
+            AcademicPeriod academicPeriod = academicPeriodMapper.toEntity(academicPeriodDTO);
+            return ResponseEntity.ok(academicPeriodService.create(academicPeriod));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Error creating academic period: " + e.getMessage());
         }

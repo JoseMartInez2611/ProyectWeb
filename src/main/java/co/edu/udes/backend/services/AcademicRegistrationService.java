@@ -42,11 +42,18 @@ public class AcademicRegistrationService {
         validatePrerequisites(academicRegistration.getStudent(), academicRegistration.getGroup());
         validateScheduleAvailability(academicRegistration.getStudent(), academicRegistration.getGroup());
         validateGroupCapacity(academicRegistration.getGroup());
+        validateEnoughCredits(academicRegistration.getStudent(), academicRegistration.getGroup());
 
         AcademicRegistration savedAcademicRegistration = academicRegistrationRepository.save(academicRegistration);
 
         AcademicRecord academicRecord = academicRecordRepository.findByStudentId(academicRegistration.getStudent().getId())
                 .orElseThrow(() -> new RuntimeException("Academic record not found for student with id: " + academicRegistration.getStudent().getId()));
+
+        FinalNote finalNote = new FinalNote();
+        finalNote.setAcademicRecord(academicRecord);
+        finalNote.setGroup(academicRegistration.getGroup());
+        finalNote.setNote(0.0f);
+        finalNoteRepository.save(finalNote);
 
         return academicRegistrationMapper.toDto(savedAcademicRegistration);
     }
@@ -73,15 +80,26 @@ public class AcademicRegistrationService {
         AcademicRegistration academicRegistration = academicRegistrationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Academic registration not found with id: " + id));
 
+        AcademicRecord academicRecord = academicRecordRepository.findByStudentId(academicRegistration.getStudent().getId())
+                .orElseThrow(() -> new RuntimeException("Academic record not found for student with id: " + academicRegistration.getStudent().getId()));
+
+
+        FinalNote finalNote = finalNoteRepository.findByAcademicRecordIdAndGroupId(
+                academicRecord.getId(),
+                academicRegistration.getGroup().getId()
+        );
+
+        finalNoteRepository.deleteById(finalNote.getId());
+
         academicRegistrationRepository.deleteById(id);
     }
 
     @Transactional
     public void deleteByStudentIdAndGroupId(Long studentId, Long groupId) {
-        academicRegistrationRepository.findByStudentIdAndGroupId(studentId, groupId)
+        AcademicRegistration academicRegistration = academicRegistrationRepository.findByStudentIdAndGroupId(studentId, groupId)
                 .orElseThrow(() -> new RuntimeException("Academic registration not found for student with id: " + studentId + " and group with id: " + groupId));
 
-        academicRegistrationRepository.deleteByStudentIdAndGroupId(studentId, groupId);
+        delete(academicRegistration.getId());
     }
 
     private void validateScheduleAvailability(Student student, Group group){
@@ -177,10 +195,20 @@ public class AcademicRegistrationService {
                 .orElseThrow(() -> new RuntimeException("Course not found with id: " + groupComplete.getCourse().getId()));
 
         boolean belongsToSameCareer = courseWithCareer.getCareer().equals(studentComplete.getCareer());
+        boolean isEquivalentToCareer = false;
 
-        if (!belongsToSameCareer) {
-            throw new RuntimeException("The student does not belong to the same career as the group");
+        for (Course equivalence :courseWithCareer.getEquivalences()){
+            if (equivalence.getCareer().equals(studentComplete.getCareer())){
+                isEquivalentToCareer = true;
+                break;
+            }
         }
+
+        if (belongsToSameCareer || isEquivalentToCareer) {
+            return;
+        }
+
+        throw new RuntimeException("The student does not belong to the same career as the group");
     }
 
     private void validateGroupCapacity(Group group) {
@@ -199,5 +227,22 @@ public class AcademicRegistrationService {
         if (currentRegistrations >= minCapacity) {
             throw new RuntimeException("Group is full. Minimum classroom capacity reached: " + minCapacity);
         }
+    }
+
+    private void validateEnoughCredits(Student student, Group group){
+        Student studentComplete = studentRepository.findById(student.getId())
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + student.getId()));
+
+        Group groupComplete = groupRepository.findById(group.getId())
+                .orElseThrow(() -> new RuntimeException("Group not found with id: " + group.getId()));
+
+        int credits = studentComplete.getAvailableCredits();
+        if (credits < groupComplete.getCourse().getCredits()){
+            throw new RuntimeException("Insufficient credits to enroll in this course");
+        }
+
+        credits -= groupComplete.getCourse().getCredits();
+        studentComplete.setAvailableCredits(credits);
+        studentRepository.save(studentComplete);
     }
 }

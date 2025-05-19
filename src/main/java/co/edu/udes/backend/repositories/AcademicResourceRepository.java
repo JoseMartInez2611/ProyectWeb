@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AcademicResourceRepository extends JpaRepository<AcademicResource, Long> {
 
@@ -18,4 +20,8 @@ public interface AcademicResourceRepository extends JpaRepository<AcademicResour
     @Query("SELECT ar.category FROM AcademicResource ar WHERE ar.id = :id")
     String getCategory(@Param("id") Long id);
 
+    @Query("SELECT ar FROM AcademicResource ar WHERE ar.category = 'Salon'")
+    List<AcademicResource> getAllRooms();
+
+    List<AcademicResource> findAllByCategory(String category);
 }

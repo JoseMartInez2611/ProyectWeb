@@ -44,6 +44,13 @@ public class Student extends ProfileU {
     )
     private Career career;
 
+    @Column(
+            name = "availableCredits",
+            nullable = false,
+            columnDefinition = "INT"
+    )
+    private int availableCredits;
+
     @ToString.Exclude
     @OneToMany(
             targetEntity = Attendance.class,

@@ -28,34 +28,6 @@ public class FinalNoteController {
         return ResponseEntity.ok(finalNoteService.getAll());
     }
 
-    //Get the report performance by id of academic record
-    @GetMapping("/performance/{id}")
-    public ResponseEntity<?> getPerformance(@PathVariable Long id) {
-        try{
-            return ResponseEntity.ok().body(finalNoteService.getReport(id));
-        }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-/*    //Get the proyection to pass by academic record id
-    @GetMapping("/report/{id}")
-    public ResponseEntity<?> getReport(@PathVariable Long id) {
-        try{
-            return ResponseEntity.ok().body(finalNoteService.getProyectNote(id));
-        }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-*/
-    //Get the group performance by group id
-    @GetMapping("/group-average/{id}")
-    public ResponseEntity<?> getGroupPerformance(@PathVariable Long id) {
-        try{
-            return ResponseEntity.ok().body(finalNoteService.getGroupPerformance(id));
-        }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
 
     //Get the Course final note by stundent and group id
     @GetMapping("/definitive/{idStudent}/{idGroup}")
