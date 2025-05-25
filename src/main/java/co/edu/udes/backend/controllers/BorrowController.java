@@ -38,10 +38,10 @@ public class BorrowController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody List<BorrowDTO> dtos){
+    public ResponseEntity<?> create(@RequestBody BorrowDTO dtos){
         try{
-            List<Borrow> entities = borrowMapper.toEntityList(dtos);
-            return ResponseEntity.ok(borrowService.createMultiple(entities));
+            Borrow entities = borrowMapper.toEntity(dtos);
+            return ResponseEntity.ok(borrowService.create(entities));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
