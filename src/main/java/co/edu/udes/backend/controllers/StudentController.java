@@ -39,10 +39,10 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody List<StudentDTO> dtos){
+    public ResponseEntity<?> create(@RequestBody StudentDTO dto){
         try{
-            List<Student> entities = studentMapper.toEntityList(dtos);
-            return ResponseEntity.ok(studentService.createMultiple(entities));
+            Student entities = studentMapper.toEntity(dto);
+            return ResponseEntity.ok(studentService.create(entities));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }

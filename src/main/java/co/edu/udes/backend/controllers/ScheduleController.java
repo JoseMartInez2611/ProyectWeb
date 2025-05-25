@@ -31,10 +31,10 @@ public class ScheduleController {
 
     // create schedule
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody List<ScheduleDTO> dtos){
+    public ResponseEntity<?> create(@RequestBody ScheduleDTO dto){
         try{
-            List<Schedule> entities = scheduleMapper.toEntityList(dtos);
-            return ResponseEntity.ok(scheduleService.createMultiple(entities));
+            Schedule entities = scheduleMapper.toEntity(dto);
+            return ResponseEntity.ok(scheduleService.create(entities));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }

@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -17,5 +15,4 @@ public class RoomDTO {
     private String number;
     private String floor;
     private char building;
-    private List<AcademicResourceDTO> resources;
 }

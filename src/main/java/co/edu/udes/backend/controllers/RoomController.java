@@ -48,11 +48,11 @@ public class RoomController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody List<RoomDTO> dtos){
+    public ResponseEntity<?> create(@RequestBody RoomDTO dto){
 
         try{
-            List<Room> entities = roomMapper.toEntityList(dtos);
-            return ResponseEntity.ok(roomService.createMultiple(entities));
+            Room room = roomMapper.toEntity(dto);
+            return ResponseEntity.ok(roomService.create(room));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
@@ -77,6 +77,15 @@ public class RoomController {
             return ResponseEntity.noContent().build();
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/buildings")
+    public ResponseEntity<List<Character>> getBuildings() {
+        try {
+            return ResponseEntity.ok(roomService.getBuildings());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 }
