@@ -31,10 +31,10 @@ public class LessonController {
 
     // create lesson
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody List<LessonDTO> dtos){
+    public ResponseEntity<?> create(@RequestBody LessonDTO dto){
         try{
-            List<Lesson> entities = lessonMapper.toEntityList(dtos);
-            return ResponseEntity.ok(lessonService.createMultiple(entities));
+            Lesson entities = lessonMapper.toEntity(dto);
+            return ResponseEntity.ok(lessonService.create(entities));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }

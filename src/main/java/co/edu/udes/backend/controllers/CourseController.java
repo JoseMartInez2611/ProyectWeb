@@ -30,10 +30,10 @@ public class CourseController {
 
     // create course rest api
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody List<CourseDTO> dtos){
+    public ResponseEntity<?> create(@RequestBody CourseDTO dto){
         try{
-            List<Course> entities = courseMapper.toEntityList(dtos);
-            return ResponseEntity.ok(courseService.createMultiple(entities));
+            Course entities = courseMapper.toEntity(dto);
+            return ResponseEntity.ok(courseService.create(entities));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }

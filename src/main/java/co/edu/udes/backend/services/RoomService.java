@@ -75,6 +75,16 @@ public class RoomService {
         String concat = room.getBuilding()+"-"+room.getFloor()+ room.getNumber();
         AcademicResource recursos = new AcademicResource(0L, concat, "Área especializada para impartir y difundir el conocimiento.", "Salon", true, room);
         academicResourceService.create(recursos);
+    }
 
+    public List<Character> getBuildings(){
+        List<Room> rooms = roomRepository.findAll();
+        List<Character> buildings = new ArrayList<>();
+        for (Room room : rooms) {
+            if (!buildings.contains(room.getBuilding())) {
+                buildings.add(room.getBuilding());
+            }
+        }
+        return buildings;
     }
 }

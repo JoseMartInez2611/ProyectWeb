@@ -30,10 +30,10 @@ public class CareerController {
 
     // Create absence justification
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody List<CareerDTO> dtos){
+    public ResponseEntity<?> create(@RequestBody CareerDTO dto){
         try{
-            List<Career> entities = careerMapper.toEntityList(dtos);
-            return ResponseEntity.ok(careerService.createMultiple(entities));
+            Career entities = careerMapper.toEntity(dto);
+            return ResponseEntity.ok(careerService.create(entities));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending " + e.getMessage());
         }

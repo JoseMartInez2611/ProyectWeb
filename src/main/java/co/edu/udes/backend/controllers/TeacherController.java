@@ -52,15 +52,15 @@ public class TeacherController {
 
     /**
      * Endpoint para crear uno o varios docentes.
-     * @param dtos Una lista de TeacherDTO en el cuerpo de la petición (JSON).
+     * @param dto Una lista de TeacherDTO en el cuerpo de la petición (JSON).
      * @return ResponseEntity con la lista de TeacherDTO de los docentes creados y estado OK (200),
      * o estado BAD_REQUEST (400) si los datos enviados son incorrectos.
      */
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody List<TeacherDTO> dtos){
+    public ResponseEntity<?> create(@RequestBody TeacherDTO dto){
         try{
-            List<Teacher> entities = teacherMapper.toEntityList(dtos);
-            return ResponseEntity.ok(teacherService.createMultiple(entities));
+            Teacher entities = teacherMapper.toEntity(dto);
+            return ResponseEntity.ok(teacherService.create(entities));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }

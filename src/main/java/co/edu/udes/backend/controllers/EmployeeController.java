@@ -39,12 +39,12 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody List<EmployeeDTO> dtoList) {
+    public ResponseEntity<?> create(@RequestBody EmployeeDTO dto) {
         try {
 
-            List<Employee> profileUList = employeeMapper.toEntityList(dtoList);
+            Employee profileU = employeeMapper.toEntity(dto);
 
-            List<EmployeeDTO> createdUsers = employeeService.createMultiple(profileUList); // Modifica el servicio
+            EmployeeDTO createdUsers = employeeService.create(profileU); // Modifica el servicio
 
             return ResponseEntity.ok(createdUsers); // Devuelve DTOs
         } catch (Exception e) {

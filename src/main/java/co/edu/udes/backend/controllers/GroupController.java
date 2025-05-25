@@ -30,10 +30,10 @@ public class GroupController {
 
     // create group
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody List<GroupDTO> dtos){
+    public ResponseEntity<?> create(@RequestBody GroupDTO dto){
         try{
-            List<Group> entities = groupMapper.toEntityList(dtos);
-            return ResponseEntity.ok(groupService.createMultiple(entities));
+            Group entities = groupMapper.toEntity(dto);
+            return ResponseEntity.ok(groupService.create(entities));
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
         }
