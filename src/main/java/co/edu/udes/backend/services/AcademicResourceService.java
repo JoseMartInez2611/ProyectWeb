@@ -21,7 +21,7 @@ public class AcademicResourceService {
     private AcademicResourceMapper academicResourceMapper;
 
     public List<AcademicResourceDTO> getAll() {
-        List<AcademicResource> academicResources = academicResourceRepository.findAll();
+        List<AcademicResource> academicResources = academicResourceRepository.getAllDistinctByCategory("Salon");
         return academicResourceMapper.toDtoList(academicResources);
     }
 

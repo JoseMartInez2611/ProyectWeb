@@ -24,4 +24,7 @@ public interface AcademicResourceRepository extends JpaRepository<AcademicResour
     List<AcademicResource> getAllRooms();
 
     List<AcademicResource> findAllByCategory(String category);
+
+    @Query("SELECT ar FROM AcademicResource ar WHERE ar.category != :category")
+    List<AcademicResource> getAllDistinctByCategory(@Param("category") String category);
 }

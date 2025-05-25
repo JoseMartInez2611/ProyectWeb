@@ -3,6 +3,7 @@ package co.edu.udes.backend.controllers;
 import co.edu.udes.backend.dto.AuthRequestDTO;
 import co.edu.udes.backend.dto.AuthResponseDTO;
 import co.edu.udes.backend.services.ProfileUDetailServiceImpl;
+import co.edu.udes.backend.services.ProfileUService;
 import co.edu.udes.backend.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +19,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final ProfileUService profileUService;
+    private final AuthenticationManager authenticationManager;
+    private final ProfileUDetailServiceImpl userDetailsService;
+    private final JwtUtil jwtUtil;
 
     @Autowired
-    private ProfileUDetailServiceImpl userDetailsService;
-
-    @Autowired
-    private JwtUtil jwtUtil;
+    public AuthController(
+            ProfileUService profileUService,
+            AuthenticationManager authenticationManager,
+            ProfileUDetailServiceImpl userDetailsService,
+            JwtUtil jwtUtil
+    ) {
+        this.profileUService = profileUService;
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO authRequest) {
-        // Auth the credentials
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authRequest.getUserName(),
@@ -37,13 +46,12 @@ public class AuthController {
                 )
         );
 
-        // get the user
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUserName());
-
-        // generate the token
         final String jwt = jwtUtil.generateToken(userDetails);
+        final String fullName = profileUService.getFullname(authRequest.getUserName());
+        final Long id = profileUService.getIdByUsername(authRequest.getUserName());
+        final String role = String.valueOf(profileUService.getRoleName(id));
 
-        // get the token on a DTO
-        return ResponseEntity.ok(new AuthResponseDTO(jwt));
+        return ResponseEntity.ok(new AuthResponseDTO(jwt, fullName, role, id));
     }
 }
