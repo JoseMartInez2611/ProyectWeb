@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface AcademicRegistrationRepository extends JpaRepository<AcademicRegistration, Long> {
     List<AcademicRegistration> findByStudentId(Long studentId);
+    List<AcademicRegistration> findByGroupId(Long groupId);
     List<AcademicRegistration> findByGroupIdAndAcademicPeriodId(Long groupId, Long academicPeriodId);
     List<AcademicRegistration> findByStudentIdAndAcademicPeriodId(Long studentId, Long academicPeriodId);
     boolean existsByStudentIdAndGroupId(Long studentId, Long groupId);

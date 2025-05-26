@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/teachers")
@@ -164,4 +163,12 @@ public class TeacherController {
         return ResponseEntity.ok(lessonsInfo);
     }
 
+    @GetMapping("/{teacherId}/groups")
+    public ResponseEntity<?> getTeacherGroups(@PathVariable Long teacherId) {
+        try {
+            return ResponseEntity.ok(teacherService.getTeacherGroups(teacherId));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

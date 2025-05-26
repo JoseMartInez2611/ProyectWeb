@@ -47,6 +47,7 @@ public class StudentService {
     public StudentDTO create(Student student) {
         student.setRole(roleRepository.findById(3L)
                 .orElseThrow(() -> new RuntimeException("Role not found")));
+        student.setPassword(new BCryptPasswordEncoder().encode(student.getPassword()));
         student.setEnable(true);
         student.setAccountNonExpired(true);
         student.setAccountNonLocked(true);

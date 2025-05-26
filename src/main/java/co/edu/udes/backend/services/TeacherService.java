@@ -1,9 +1,11 @@
 package co.edu.udes.backend.services;
 
+import co.edu.udes.backend.dto.GroupDTO;
 import co.edu.udes.backend.dto.ScheduleInfoDTO;
 import co.edu.udes.backend.dto.TeacherDTO;
 import co.edu.udes.backend.dto.inheritanceDTO.EvaluationDTO;
 import co.edu.udes.backend.mappers.EvaluationMapper;
+import co.edu.udes.backend.mappers.GroupMapper;
 import co.edu.udes.backend.mappers.TeacherMapper;
 import co.edu.udes.backend.models.*;
 import co.edu.udes.backend.models.inheritance.Evaluation;
@@ -14,11 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +33,8 @@ public class TeacherService {
     private TeacherMapper teacherMapper; // Mapper para convertir entre la entidad Teacher y el DTO TeacherDTO
     @Autowired
     private final EvaluationMapper evaluationMapper; // Mapper para convertir entre la entidad Evaluation y el DTO EvaluationDTO
+    @Autowired
+    private final GroupMapper gorupMapper; // Mapper para convertir entre la entidad Group y el DTO GroupDTO
     private final RoleRepository roleRepository;
     private static final List<String> DAY_ORDER = List.of(
             "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"
@@ -67,7 +69,7 @@ public class TeacherService {
     public TeacherDTO create(Teacher teacher) {
         teacher.setRole(roleRepository.findById(2L)
                 .orElseThrow(() -> new RuntimeException("Role not found")));
-
+        teacher.setPassword(new BCryptPasswordEncoder().encode(teacher.getPassword()));
         teacher.setEnable(true);
         teacher.setAccountNonExpired(true);
         teacher.setAccountNonLocked(true);
@@ -280,6 +282,13 @@ public class TeacherService {
         );
 
         return scheduleInfoDTOList;
+    }
+
+    public List<GroupDTO> getTeacherGroups(Long teacherId) {
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new RuntimeException("Docente no encontrado con el ID: " + teacherId));
+        List<Group> courses = teacher.getGroups();
+        return gorupMapper.toDtoList(courses);
     }
 
 }

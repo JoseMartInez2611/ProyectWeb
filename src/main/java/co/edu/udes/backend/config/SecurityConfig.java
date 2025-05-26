@@ -81,12 +81,13 @@ public class SecurityConfig {
         http.requestMatchers(HttpMethod.GET, "/api/v1/question/**").hasAnyRole("ADMIN", "TEACHER");
         http.requestMatchers(HttpMethod.GET, "/api/v1/report/**").hasAnyRole("ADMIN", "STUDENT", "TEACHER", "EMPLOYEE");
         http.requestMatchers(HttpMethod.GET, "/api/v1/room/**").hasAnyRole("ADMIN", "STUDENT", "TEACHER", "EMPLOYEE");
-        http.requestMatchers(HttpMethod.GET, "/api/v1/schedules/**").hasAnyRole("ADMIN");
-        http.requestMatchers(HttpMethod.GET, "/api/v1/student/**").hasAnyRole("ADMIN", "EMPLOYEE");
+        http.requestMatchers(HttpMethod.GET, "/api/v1/schedules/**").hasAnyRole("ADMIN", "TEACHER");
+        http.requestMatchers(HttpMethod.GET, "/api/v1/student/**").hasAnyRole("ADMIN", "EMPLOYEE", "STUDENT", "TEACHER");
         http.requestMatchers(HttpMethod.GET, "/api/v1/student/{id}/schedule").hasAnyRole("ADMIN", "STUDENT");
-        http.requestMatchers(HttpMethod.GET, "/api/v1/teachers/**").hasAnyRole("ADMIN", "EMPLOYEE");
+        http.requestMatchers(HttpMethod.GET, "/api/v1/teachers/**").hasAnyRole("ADMIN", "EMPLOYEE", "TEACHER");
         http.requestMatchers(HttpMethod.GET, "/api/v1/teachers/{teacherId}/evaluations").hasAnyRole("ADMIN", "TEACHER");
         http.requestMatchers(HttpMethod.GET, "/api/v1/teachers/{teacherId}/schedule").hasAnyRole("ADMIN", "TEACHER");
+        http.requestMatchers(HttpMethod.GET, "/api/v1/teachers/{teacherId}/groups").hasAnyRole("ADMIN", "TEACHER");
 
 
         //POST

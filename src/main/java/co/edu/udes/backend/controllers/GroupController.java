@@ -72,4 +72,22 @@ public class GroupController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @GetMapping("/students/{id}")
+    public ResponseEntity<?> getStudentsByGroupId(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(groupService.getStudentsByGroupId(id));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/lessons/{id}")
+    public ResponseEntity<?> getLessonsByGroupId(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(groupService.getLessonsByGroupId(id));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

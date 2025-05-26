@@ -39,7 +39,7 @@ public class EmployeeService {
     }
 
     public EmployeeDTO create(Employee employee) {
-
+        employee.setPassword(new BCryptPasswordEncoder().encode(employee.getPassword()));
         employee.setRole(roleRepository.findById(4L)
                 .orElseThrow(() -> new RuntimeException("Role not found")));
         employee.setEnable(true);
