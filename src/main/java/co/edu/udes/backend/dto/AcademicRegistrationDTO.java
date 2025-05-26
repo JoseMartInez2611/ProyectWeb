@@ -5,15 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class AcademicRegistrationDTO {
 
-    private long id;
+    private Long id;
     private long studentId;
     public long groupId;
     private long academicPeriodId;

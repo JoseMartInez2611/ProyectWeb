@@ -30,12 +30,12 @@ public class AcademicRegistrationController {
 
     // create academic registration rest api
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody List<AcademicRegistrationDTO> dtos){
+    public ResponseEntity<?> create(@RequestBody AcademicRegistrationDTO dto){
         try{
-            List<AcademicRegistration> entities = academicRegistrationMapper.toEntityList(dtos);
-            return ResponseEntity.ok(academicRegistrationService.createMultiple(entities));
+            AcademicRegistration entities = academicRegistrationMapper.toEntity(dto);
+            return ResponseEntity.ok(academicRegistrationService.create(entities));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Please check the data you are sending" + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
