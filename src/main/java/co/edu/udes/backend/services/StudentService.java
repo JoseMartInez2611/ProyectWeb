@@ -103,11 +103,12 @@ public class StudentService {
 
         if (referenceDate.isBefore(LocalDate.of(year, 6, 1))) {
             academicPeriod = academicPeriodRepository.findByAcademicYearAndPeriod(year, 'A');
+
         } else {
             academicPeriod = academicPeriodRepository.findByAcademicYearAndPeriod(year, 'B');
         }
 
-        List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findByGroupIdAndAcademicPeriodId(id, academicPeriod.getId());
+        List<AcademicRegistration> academicRegistrations = academicRegistrationRepository.findByStudentIdAndAcademicPeriodId(id, academicPeriod.getId());
         List<ScheduleInfoDTO> scheduleInfoDTOList = new ArrayList<>();
 
         for (AcademicRegistration academicRegistration : academicRegistrations) {
@@ -118,6 +119,7 @@ public class StudentService {
             for (Lesson lesson : lessons) {
                 Schedule schedule = lesson.getSchedule();
                 Room room = lesson.getClassroom();
+                Teacher teacher = lesson.getGroup().getTeacher();
 
                 ScheduleInfoDTO scheduleInfoDTO = new ScheduleInfoDTO();
                 scheduleInfoDTO.setCourseName(course.getName());
@@ -125,6 +127,7 @@ public class StudentService {
                 scheduleInfoDTO.setDay(schedule.getDayOfWeek().getDay());
                 scheduleInfoDTO.setStartTime(schedule.getStartHour());
                 scheduleInfoDTO.setEndTime(schedule.getEndHour());
+                scheduleInfoDTO.setNameTeacher(teacher.getFirstName()+ " " + teacher.getLastName());
 
                 scheduleInfoDTOList.add(scheduleInfoDTO);
             }
@@ -134,7 +137,6 @@ public class StudentService {
                 .comparing((ScheduleInfoDTO dto) -> DAY_ORDER.indexOf(dto.getDay()))
                 .thenComparing(ScheduleInfoDTO::getStartTime)
         );
-
         return scheduleInfoDTOList;
     }
 }

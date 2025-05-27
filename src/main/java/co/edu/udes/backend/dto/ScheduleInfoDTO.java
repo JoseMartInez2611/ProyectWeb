@@ -1,5 +1,6 @@
 package co.edu.udes.backend.dto;
 
+import co.edu.udes.backend.models.Teacher;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,4 +18,5 @@ public class ScheduleInfoDTO {
     private String day;
     private LocalTime startTime;
     private LocalTime endTime;
+    private String nameTeacher;
 }

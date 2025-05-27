@@ -71,6 +71,7 @@ public class StudentController {
         }
     }
 
+
     @GetMapping("/{id}/schedule")
     public ResponseEntity<?> getSchedule(@PathVariable Long id) {
         try{
