@@ -103,6 +103,12 @@ public class TeacherService {
         teacherRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Teacher not found with id: " + id));
         teacher.setId(id);
+        teacher.setEnable(true);
+        teacher.setAccountNonExpired(true);
+        teacher.setAccountNonLocked(true);
+        teacher.setCredentialsNonExpired(true);
+        teacher.setRole(roleRepository.findById(2L)
+                .orElseThrow(() -> new RuntimeException("Role not found")));
         return teacherMapper.toDto(teacherRepository.save(teacher));
     }
 

@@ -76,6 +76,12 @@ public class StudentService {
         studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
         student.setId(id);
+        student.setEnable(true);
+        student.setAccountNonExpired(true);
+        student.setAccountNonLocked(true);
+        student.setCredentialsNonExpired(true);
+        student.setRole(roleRepository.findById(3L)
+                .orElseThrow(() -> new RuntimeException("Role not found")));
         return studentMapper.toDto(studentRepository.save(student));
 
     }

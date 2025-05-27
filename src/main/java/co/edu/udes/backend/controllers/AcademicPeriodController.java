@@ -46,4 +46,13 @@ public class AcademicPeriodController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @GetMapping("/current")
+    public ResponseEntity<?> getCurrentAcademicPeriod() {
+        try {
+            return ResponseEntity.ok(academicPeriodService.getCurrentAcademicPeriod());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

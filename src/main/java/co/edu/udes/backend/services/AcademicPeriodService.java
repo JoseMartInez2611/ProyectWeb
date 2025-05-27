@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -29,5 +30,23 @@ public class AcademicPeriodService {
 
     public AcademicPeriodDTO create(AcademicPeriod academicPeriod) {
         return academicPeriodMapper.toDto(academicPeriodRepository.save(academicPeriod));
+    }
+
+    public AcademicPeriodDTO getCurrentAcademicPeriod(){
+        LocalDate referenceDate = LocalDate.now();
+        int year = referenceDate.getYear();
+        AcademicPeriod academicPeriod = null;
+
+        if (referenceDate.isBefore(LocalDate.of(year, 6, 1))) {
+            academicPeriod = academicPeriodRepository.findByAcademicYearAndPeriod(year, 'A');
+        } else {
+            academicPeriod = academicPeriodRepository.findByAcademicYearAndPeriod(year, 'B');
+        }
+
+        if (academicPeriod == null) {
+            throw new RuntimeException("No current academic period found for the reference date: " + referenceDate);
+        }
+
+        return academicPeriodMapper.toDto(academicPeriod);
     }
 }
