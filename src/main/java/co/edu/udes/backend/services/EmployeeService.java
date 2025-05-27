@@ -58,6 +58,12 @@ public class EmployeeService {
         employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
         employee.setId(id);
+        employee.setEnable(true);
+        employee.setAccountNonExpired(true);
+        employee.setAccountNonLocked(true);
+        employee.setCredentialsNonExpired(true);
+        employee.setRole(roleRepository.findById(4L)
+                .orElseThrow(() -> new RuntimeException("Role not found")));
         return employeeMapper.toDto(employeeRepository.save(employee));
     }
 
